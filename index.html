@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEXERA - ECE Symposium</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================
+           BASE & CURSOR
+           ========================================== */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #050a1f;
+            color: #e0e0e0;
+            overflow-x: hidden; 
+            cursor: none;
+        }
+
+        /* Custom Cursor */
+        .cursor-dot, .cursor-circle {
+            position: fixed; top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%; z-index: 9999; pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background: white; box-shadow: 0 0 10px #60a5fa; }
+        .cursor-circle {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(96, 165, 250, 0.5);
+            transition: width 0.2s, height 0.2s, background-color 0.2s;
+        }
+        body.hovering .cursor-circle {
+            width: 60px; height: 60px;
+            background-color: rgba(96, 165, 250, 0.1);
+            border-color: #60a5fa; mix-blend-mode: screen;
+        }
+
+        /* ==========================================
+           BACKGROUNDS
+           ========================================== */
+        #nebula-canvas {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; pointer-events: none;
+            background: linear-gradient(to bottom, #2e0936 0%, #0f172a 40%, #000810 100%);
+        }
+
+        .glow-background {
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            width: 120vw; height: 120vw; z-index: 0; pointer-events: none;
+            mix-blend-mode: screen; opacity: 0.6;
+            background: radial-gradient(ellipse 60% 50% at 40% 40%, rgba(76, 116, 250, 0.3), transparent 70%),
+                        radial-gradient(circle at 70% 60%, rgba(120, 80, 255, 0.25), transparent 50%);
+            filter: blur(40px);
+        }
+
+        /* ==========================================
+           HUD & UI ELEMENTS
+           ========================================== */
+        .tech-font { font-family: 'Share Tech Mono', monospace; }
+        .orbitron { font-family: 'Orbitron', sans-serif; }
+
+        .hud-corner {
+            position: fixed; width: 30px; height: 30px;
+            border: 2px solid rgba(96, 165, 250, 0.3);
+            z-index: 50; pointer-events: none; transition: all 0.5s ease;
+        }
+        .tl { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
+        .tr { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
+        .bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
+        .br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+        
+        .scan-line {
+            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
+            background: rgba(96, 165, 250, 0.2);
+            box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
+            animation: scan 6s linear infinite; z-index: 40; pointer-events: none;
+        }
+        @keyframes scan { 0% { top: -10%; opacity: 0; } 50% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
+
+        /* ==========================================
+           CARD STYLES (UNIFIED "COSMIC GLASS" + 3D TILT)
+           ========================================== */
+        
+        .event-card {
+            position: relative;
+            display: flex; flex-direction: column;
+            min-height: 280px; 
+            overflow: hidden; 
+            background-color: rgba(5, 10, 31, 0.4); 
+            border-radius: 20px;
+            /* Important: We remove transition on transform to make JS tilt instant */
+            transition: opacity 0.5s, box-shadow 0.3s;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        
+        .event-card:hover {
+            z-index: 10;
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+        }
+
+        /* UNIFIED OVERLAY STRUCTURE */
+        /* All cards get a gradient overlay ::before and an inner glow ::after */
+        
+        .event-card::before {
+            content: ''; position: absolute; inset: 0; z-index: 0;
+            transition: opacity 0.4s ease;
+            opacity: 0.8;
+        }
+        .event-card::after {
+            content: ''; position: absolute; inset: 0; pointer-events: none;
+            border-radius: 20px;
+            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05); /* Unified Internal Glow */
+            z-index: 1;
+        }
+
+        /* --- 1. TECHNICAL: Cyan/Blue Cosmic Glass --- */
+        .card-tech::before {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, transparent 40%, transparent 60%, rgba(59, 130, 246, 0.15) 100%);
+        }
+        .card-tech:hover::before {
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, transparent 40%, transparent 60%, rgba(59, 130, 246, 0.3) 100%);
+        }
+
+        /* --- 2. NON-TECHNICAL: Pink/Purple Cosmic Glass --- */
+        .card-non-tech::before {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, transparent 40%, transparent 60%, rgba(139, 92, 246, 0.15) 100%);
+        }
+        .card-non-tech:hover::before {
+            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, transparent 40%, transparent 60%, rgba(139, 92, 246, 0.3) 100%);
+        }
+
+        /* --- 3. WORKSHOP: Emerald/Teal Cosmic Glass --- */
+        .card-workshop::before {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, transparent 40%, transparent 60%, rgba(14, 165, 233, 0.15) 100%);
+        }
+        .card-workshop:hover::before {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, transparent 40%, transparent 60%, rgba(14, 165, 233, 0.3) 100%);
+        }
+
+        /* Content Z-Index */
+        .card-content {
+            position: relative;
+            z-index: 10;
+            transform: translateZ(20px); /* Pops text out in 3D */
+        }
+
+        /* ==========================================
+           HEADER ANIMATIONS & UTILS
+           ========================================== */
+        header {
+            min-height: 90vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            position: relative; padding: 2rem; z-index: 10;
+        }
+
+        #header-content {
+            transition: transform 0.1s linear, opacity 0.1s linear, filter 0.1s linear;
+            will-change: transform, opacity, filter;
+        }
+
+        .logo-placeholder {
+            width: 80px; height: 80px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            display: flex; align-items: center; justify-content: center;
+            margin-bottom: 2rem;
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.2);
+        }
+
+        .crisp-title {
+            background: linear-gradient(to bottom, #ffffff 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 0 25px rgba(59,130,246,0.5));
+        }
+
+        /* Animations */
+        .anim-logo { opacity: 0; animation: logoReveal 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+        @keyframes logoReveal { from { opacity: 0; transform: scale(0.8); filter: blur(10px); } to { opacity: 1; transform: scale(1); filter: blur(0); } }
+
+        .anim-text-slide { opacity: 0; animation: textSlideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
+        @keyframes textSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .anim-title { opacity: 0; animation: cinematicTitle 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.2s forwards; }
+        @keyframes cinematicTitle {
+            from { opacity: 0; letter-spacing: -0.2em; filter: blur(20px); transform: scale(1.1); }
+            to { opacity: 1; letter-spacing: -0.05em; filter: blur(0); transform: scale(1); }
+        }
+        .anim-btn { opacity: 0; animation: simpleFade 1s ease 2s forwards; }
+        @keyframes simpleFade { to { opacity: 1; } }
+
+        .filter-btn {
+            background: transparent; border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa;
+            position: relative; overflow: hidden; transition: all 0.4s ease;
+        }
+        .filter-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%;
+            background: #2563eb; z-index: -1; transition: width 0.3s ease;
+        }
+        .filter-btn:hover::before, .filter-btn.active::before { width: 100%; }
+        .filter-btn:hover, .filter-btn.active { 
+            color: white; border-color: #60a5fa; box-shadow: 0 0 20px rgba(37, 99, 235, 0.4); letter-spacing: 1px;
+        }
+        
+        .animate-fade-in { animation: fadeInScale 0.4s ease-out forwards; }
+        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .glass-panel { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(59, 130, 246, 0.2); }
+        .marquee-container { overflow: hidden; white-space: nowrap; mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent); }
+        .marquee-content { display: inline-flex; gap: 4rem; animation: scroll 20s linear infinite; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* ==========================================
+           REPLAYABLE ENTRANCE ANIMATIONS
+           ========================================== */
+        .reveal-container { opacity: 1; }
+        
+        .reveal-child {
+            opacity: 0;
+            transform: translateY(50px);
+            filter: blur(8px);
+            transition: all 0.5s ease-out; 
+        }
+        .reveal-container.visible .interactable.event-card:hover {
+    transition: box-shadow 0.3s, opacity 0.5s !important; 
+    /* We purposely left out 'transform' here. 
+       This removes the 0.8s lag and makes movement instant. */
+}
+        .reveal-container.visible .reveal-child {
+            opacity: 1;
+            transform: translateY(0);
+            filter: blur(0);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-container.visible .reveal-child:nth-child(1) { transition-delay: 0.1s; }
+        .reveal-container.visible .reveal-child:nth-child(2) { transition-delay: 0.2s; }
+        .reveal-container.visible .reveal-child:nth-child(3) { transition-delay: 0.3s; }
+        .reveal-container.visible .reveal-child:nth-child(4) { transition-delay: 0.4s; }
+        .reveal-container.visible .reveal-child:nth-child(5) { transition-delay: 0.5s; }
+
+        @media (max-width: 768px) {
+            .cursor-dot, .cursor-circle { display: none; } body { cursor: auto; }
+            .hud-corner { width: 15px; height: 15px; }
+        }
+    </style>
+</head>
+
+<body class="relative">
+
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
+
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
+    <div class="scan-line"></div>
+
+    <canvas id="nebula-canvas"></canvas>
+    <div class="glow-background"></div>
+
+    <nav id="main-nav" class="fixed top-6 left-6 z-50">
+        <button id="menu-btn" class="interactable flex items-center justify-center h-12 w-12 rounded-full hover:bg-white/10 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"/>
+            </svg>
+        </button>
+
+        <div id="menu-popup" class="glass-panel absolute left-0 top-14 w-48 rounded-xl p-2 flex flex-col space-y-1 opacity-0 pointer-events-none transition-all duration-300 transform scale-90 origin-top-left">
+            <a href="#" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Home</a>
+            <a href="#about" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Nexus</a>
+            <a href="#events" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Events</a>
+            <a href="#sponsors" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Sponsors</a>
+        </div>
+    </nav>
+
+    <header id="home"> 
+        <div id="header-content" class="text-center z-10 flex flex-col items-center">
+            
+            <div class="logo-placeholder anim-logo interactable">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-blue-400/60" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+            </div>
+
+            <div class="anim-text-slide">
+                <h2 class="text-xs md:text-sm font-bold tracking-[0.2em] text-blue-400 uppercase mb-2 tech-font">
+                    Coimbatore Institute of Technology
+                </h2>
+                <h3 class="text-sm md:text-base font-semibold tracking-wide text-gray-400 uppercase mb-6">
+                    Department of Electronics & Communication Engineering
+                </h3>
+            </div>
+
+            <h1 class="anim-title text-6xl md:text-8xl lg:text-9xl font-black orbitron tracking-tighter crisp-title mb-6">
+                NEXERA
+            </h1>
+            
+            <div class="anim-btn flex flex-col items-center space-y-20">
+                <p class="text-blue-200/70 max-w-md mx-auto text-sm md:text-base leading-relaxed font-light">
+                   <!-- quote -->
+                </p>
+                <a href="#events" class="interactable group relative px-8 py-3 rounded-full bg-transparent border border-blue-400 text-blue-400 font-semibold overflow-hidden transition-all hover:text-white mt-4 hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
+                    <div class="absolute inset-0 w-0 bg-blue-600 transition-all duration-[250ms] ease-out group-hover:w-full opacity-90"></div>
+                    <span class="relative z-10 flex items-center gap-2">
+                        Explore Events
+                    </span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-20">
+        
+        <section id="about" class="container mx-auto px-6 py-24 reveal-container">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/3 relative text-center md:text-right reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white orbitron">ABOUT US</h2>
+                </div>
+
+                <div class="w-full md:w-2/3 text-left">
+                    <p class="text-gray-300 text-lg leading-relaxed font-light border-l-2 border-blue-500/50 pl-6 mb-8 reveal-child">
+                        Step into the realm of innovation with <span class="text-blue-400 font-semibold">NEXERA</span>. 
+                        This isn't just an event; it's a compilation of the brightest minds in electronics and communication.
+                        We are debugging reality and programming the future.
+                    </p>
+                    
+                    <div class="flex gap-8 reveal-child justify-center md:justify-start">
+                        <div>
+                            <h4 class="text-3xl font-bold text-white mb-1 orbitron">10+</h4>
+                            <p class="text-xs text-blue-400 uppercase tracking-wider tech-font">Events</p>
+                        </div>
+                        <div>
+                            <h4 class="text-3xl font-bold text-white mb-1 orbitron">50k+</h4>
+                            <p class="text-xs text-purple-400 uppercase tracking-wider tech-font">Prize pool</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Events Section -->
+        <section id="events" class="container mx-auto px-6 py-12 min-h-screen">
+            <div class="text-center mb-12 reveal-container">
+                <h2 class="text-3xl md:text-5xl font-bold text-white orbitron mb-2 reveal-child">EVENTS</h2>                
+                <div class="flex:none justify-center gap-3 mt-8 flex-wrap reveal-child">
+                    <button class="interactable filter-btn active px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="all">ALL</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="tech">TECHNICAL</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="non-tech">NON-TECH</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="workshop">WORKSHOPS</button>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 reveal-container" id="events-grid">              
+                
+                <!-- TECHNICAL CARD -->
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                             <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">TECH_01</span>
+                             <svg class="w-6 h-6 text-cyan-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Circuit Debugging</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Isolate the anomaly. Repair the node. A test of pure hardware logic.</p>
+                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
+                            <span class="text-xs font-mono">Register Now</span>
+                            <span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TECHNICAL CARD -->
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-purple-400 bg-purple-900/30 px-2 py-0.5 rounded w-max">FLAGSHIP</span>
+                            <svg class="w-6 h-6 text-purple-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Paper Presentation</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Broadcast your thesis. Validate your research against the panel.</p>
+                        <div class="mt-auto border-t border-purple-500/30 pt-4 flex justify-between items-center group-hover:text-purple-300 transition-colors">
+                            <span class="text-xs font-mono">Register Now</span>
+                            <span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TECHNICAL CARD -->
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">ROBOTICS</span>
+                            <svg class="w-6 h-6 text-cyan-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.384-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Robo Soccer</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Automated units engage in tactical sport. Strategy meets mechanics.</p>
+                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
+                            <span class="text-xs font-mono">Register Now</span>
+                            <span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NON-TECHNICAL CARD (Cosmic Glass) -->
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">CREATIVE</span>
+                            <svg class="w-6 h-6 text-pink-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Lens Master</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Capture the frequency of the event. Visual documentation protocol.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">Register Now</span>
+                            <span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- WORKSHOP CARD -->
+                 <div class="reveal-child interactable event-card tilt-card card-workshop group cursor-pointer" data-category="workshop">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                             <span class="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded w-max">TRAINING</span>
+                             <svg class="w-6 h-6 text-emerald-500/80" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">IoT Grid</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Interface with the ESP32 node. Establish global connectivity.</p>
+                        <div class="mt-auto border-t border-emerald-500/30 pt-4 flex justify-between items-center group-hover:text-emerald-300 transition-colors">
+                            <span class="text-xs font-mono">Register Now</span>
+                            <span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+             </div>
+        </section>
+
+        <section id="sponsors" class="py-16 border-t border-blue-900/30 relative reveal-container">
+            <div class="absolute inset-0 bg-blue-900/5 skew-y-3 transform origin-bottom-left -z-10"></div>
+            <div class="container mx-auto px-6 reveal-child">
+                <h2 class="text-2xl font-bold text-center mb-8 text-gray-500 uppercase tracking-[0.5em] tech-font">OUR SPONSORS</h2>
+                <div class="marquee-container w-full mask-linear">
+                    <div class="marquee-content items-center">
+                        <div class="h-12 w-32 border border-white/10 bg-white/5 rounded flex items-center justify-center text-xs text-white/30 font-mono">CORP_01</div>
+                        <div class="h-12 w-32 border border-white/10 bg-white/5 rounded flex items-center justify-center text-xs text-white/30 font-mono">CORP_02</div>
+                        <div class="h-12 w-32 border border-white/10 bg-white/5 rounded flex items-center justify-center text-xs text-white/30 font-mono">CORP_03</div>
+                        <div class="h-12 w-32 border border-white/10 bg-white/5 rounded flex items-center justify-center text-xs text-white/30 font-mono">CORP_04</div>
+                        <div class="h-12 w-32 border border-white/10 bg-white/5 rounded flex items-center justify-center text-xs text-white/30 font-mono">CORP_05</div>
+                        <div class="h-12 w-32 border border-white/10 bg-white/5 rounded flex items-center justify-center text-xs text-white/30 font-mono">CORP_06</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer id="contact" class="pt-20 pb-10 relative z-20 glass-panel border-t border-blue-500/20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+                    <div class="flex flex-col items-center md:items-start">
+                        <h4 class="text-blue-400 font-bold mb-4 uppercase tracking-wider text-xs tech-font">Transmission</h4>
+                        <a href="mailto:info@nexera.com" class="interactable text-gray-400 hover:text-white transition-colors text-sm">info@nexera.com</a>
+                        <span class="text-gray-400 mt-2 text-sm font-mono">FREQ: +91 98765 43210</span>
+                    </div>
+                    <div class="flex flex-col items-center md:items-end">
+                        <h4 class="text-blue-400 font-bold mb-4 uppercase tracking-wider text-xs tech-font">Social Uplink</h4>
+                        <div class="flex space-x-4">
+                            <div class="interactable w-8 h-8 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all flex items-center justify-center cursor-pointer">IG</div>
+                            <div class="interactable w-8 h-8 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all flex items-center justify-center cursor-pointer">LN</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-12 text-gray-700 text-[10px] uppercase tracking-widest">
+                    System Version 2024.3 // All systems nominal.
+                </div>
+            </div>
+        </footer>
+        
+    </main>
+
+    <script>
+        // --- 1. NEBULA ANIMATION (Background) ---
+        (function initNebula() {
+            const canvas = document.getElementById('nebula-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height, particles = [], mistParticles = [];
+            const colors = { white: 'rgba(255, 255, 255, 0.9)', cyan: 'rgba(64, 224, 208, 0.8)', blue: 'rgba(65, 105, 225, 0.8)' };
+
+            function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; initParticles(); }
+            window.addEventListener('resize', resize);
+            const random = (min, max) => Math.random() * (max - min) + min;
+
+            function createMistSprite(color) {
+                const s = 256, c = document.createElement('canvas'), x = c.getContext('2d'), g = x.createRadialGradient(128,128,0,128,128,128);
+                c.width=c.height=s; g.addColorStop(0, color); g.addColorStop(1, 'transparent');
+                x.fillStyle=g; x.beginPath(); x.arc(128,128,128,0,Math.PI*2); x.fill(); return c;
+            }
+            const mist1 = createMistSprite('rgba(200, 50, 150, 0.15)'), mist2 = createMistSprite('rgba(100, 50, 255, 0.1)');
+
+            class Mist {
+                constructor() { this.init(); }
+                init() { this.x=random(0,width); this.y=random(0,height); this.v={x:random(-1,1),y:random(-1,1)}; this.s=Math.random()>0.5?mist1:mist2; }
+                update() { this.x+=this.v.x; this.y+=this.v.y; if(this.x<-200)this.x=width+200; if(this.x>width+200)this.x=-200; if(this.y<-200)this.y=height+200; if(this.y>height+200)this.y=-200; }
+                draw() { ctx.drawImage(this.s, this.x-150, this.y-150, 300, 300); }
+            }
+            class Sparkle {
+                constructor() { this.init(); }
+                init() { this.x=random(0,width); this.y=random(0,height); this.size=random(0.5,2.5); this.v={x:random(-2,2),y:random(-2,2)}; this.c=Math.random()>0.9?colors.white:Math.random()>0.6?colors.cyan:colors.blue; this.a=random(0.2,1); this.d=Math.random()>0.5?1:-1; }
+                update() { this.x+=this.v.x; this.y+=this.v.y; this.a+=0.05*this.d; if(this.a>=1){this.a=1;this.d=-1}else if(this.a<=0.1){this.a=0.1;this.d=1} if(this.x<0)this.x=width; if(this.x>width)this.x=0; if(this.y<0)this.y=height; if(this.y>height)this.y=0; }
+                draw() { ctx.globalAlpha=this.a; ctx.fillStyle=this.c; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
+            }
+            function initParticles() { particles=[]; mistParticles=[]; for(let i=0;i<6;i++) mistParticles.push(new Mist()); for(let i=0;i<80;i++) particles.push(new Sparkle()); }
+            function animate() { ctx.clearRect(0,0,width,height); mistParticles.forEach(p=>{p.update();p.draw()}); ctx.globalCompositeOperation='lighter'; particles.forEach(p=>{p.update();p.draw()}); ctx.globalCompositeOperation='source-over'; requestAnimationFrame(animate); }
+            resize(); animate();
+        })();
+
+        // --- 2. UI LOGIC & ANIMATIONS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Cursor Logic
+            const cursorDot = document.querySelector('.cursor-dot');
+            const cursorCircle = document.querySelector('.cursor-circle');
+            let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX; mouseY = e.clientY;
+                cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px';
+            });
+
+            function animateCursor() {
+                let dx = mouseX - cursorX; let dy = mouseY - cursorY;
+                cursorX += dx * 0.15; cursorY += dy * 0.15;
+                cursorCircle.style.left = cursorX + 'px'; cursorCircle.style.top = cursorY + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // Hover States
+            const interactables = document.querySelectorAll('.interactable');
+            interactables.forEach(el => {
+                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+            });
+
+            // 3D Tilt Effect
+            const cards = document.querySelectorAll('.tilt-card');
+            cards.forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((y - centerY) / centerY) * -20; // Max tilt 8deg
+                    const rotateY = ((x - centerX) / centerX) * 20;
+                    
+                    // Lift up slightly (scale) and tilt
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    // Reset
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+
+            // Menu Popup
+            const menuBtn = document.getElementById('menu-btn');
+            const menuPopup = document.getElementById('menu-popup');
+            menuBtn.addEventListener('click', (e) => { 
+                e.stopPropagation(); 
+                menuPopup.classList.toggle('opacity-0'); menuPopup.classList.toggle('pointer-events-none');
+                menuPopup.classList.toggle('scale-90'); menuPopup.classList.toggle('scale-100');
+            });
+            document.addEventListener('click', (e) => { 
+                if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) {
+                    menuPopup.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
+                    menuPopup.classList.remove('scale-100');
+                }
+            });
+
+            // Filters
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            const eventCards = document.querySelectorAll('.event-card');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const filter = btn.getAttribute('data-filter');
+                    eventCards.forEach(card => {
+                        card.classList.remove('animate-fade-in'); void card.offsetWidth;
+                        if (filter === 'all' || card.getAttribute('data-category') === filter) {
+                            card.style.display = 'flex'; card.classList.add('animate-fade-in');
+                        } else { card.style.display = 'none'; }
+                    });
+                });
+            });
+
+            // --- 3. HEADER FADE & REVEAL (Cleaned up) ---
+            window.addEventListener('scroll', () => {
+                const scrolled = window.scrollY;
+                const headerContent = document.getElementById('header-content');
+                
+                // Only start effects after scrolling 100px
+                const startEffectAt = 100;
+
+                if (scrolled > startEffectAt) {
+                    const effectiveScroll = scrolled - startEffectAt;
+                    // Opacity fade
+                    const opacity = 1 - (effectiveScroll / 800);
+                    // Scale effect (no blur anymore)
+                    const scale = 1 - (effectiveScroll / 2500);
+                    
+                    headerContent.style.opacity = opacity > 0 ? opacity : 0;
+                    headerContent.style.transform = `translateY(${effectiveScroll * 0.4}px) scale(${scale})`;
+                } else {
+                    headerContent.style.opacity = 1;
+                    headerContent.style.transform = 'translateY(0) scale(1)';
+                }
+            });
+
+            // Reversible Staggered Reveal
+            const observerOptions = { threshold: 0.15 };
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    } else {
+                        entry.target.classList.remove('visible');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal-container').forEach(section => observer.observe(section));
+        });
+    </script>
+</body>
+</html>
