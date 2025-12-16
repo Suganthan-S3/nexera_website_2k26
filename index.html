@@ -3,305 +3,479 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Code Debugging 2026</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>NEXERA - ECE Symposium</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Poppins:wght@400;600&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
 
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        brand: {
-                            dark: '#0f172a',
-                            purple: '#7c3aed',
-                            cyan: '#06b6d4',
-                            pink: '#ec4899'
-                        }
-                    },
-                    animation: {
-                        'blob': 'blob 7s infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
+    <link rel="stylesheet" href="style.css">
 
     <style>
-        /* --- Base & Reset --- */
-        body {
-            background-color: #020617;
-            color: #e2e8f0;
-            font-family: 'Inter', sans-serif;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        /* --- Animated Background Mesh --- */
-        .bg-mesh {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            z-index: -1;
-            background: 
-                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.4), transparent 25%),
-                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.25), transparent 25%);
-        }
-
-        /* Moving Blobs */
-        .shape-blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            z-index: -1;
-            animation: blob 10s infinite cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #4c1d95; animation-delay: 0s; }
-        .blob-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: #0891b2; animation-delay: 2s; }
-        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #be185d; animation-delay: 4s; opacity: 0.3; }
-
-        /* --- Title Glow Effect (Replaces Glitch) --- */
-        .glow-text {
-            font-family: 'Orbitron', sans-serif;
-            background: linear-gradient(to bottom, #ffffff, #94a3b8);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
-            letter-spacing: 4px;
-        }
-
-        /* --- Glassmorphism Cards --- */
-        .glass-panel {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        /* --- Shimmer Button --- */
-        .shimmer-btn {
-            background: linear-gradient(90deg, #7c3aed, #2563eb);
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-        
-        .shimmer-btn::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%;
-            width: 50%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-            transform: skewX(-20deg);
-            animation: shimmer 3s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            20% { left: 200%; }
-            100% { left: 200%; }
-        }
-
-        /* --- Entrance Animations --- */
-        .fade-in-up {
-            animation: fadeInUp 0.8s ease-out forwards;
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-
-        @keyframes fadeInUp {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- Scroll Bar --- */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
-
+        /* ADDING MISSING WORKSHOP STYLE FOR DIFFERENTIATION */
+        .card-workshop::before { background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, transparent 40%, transparent 60%, rgba(14, 165, 233, 0.15) 100%); }
+        .card-workshop:hover::before { background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, transparent 40%, transparent 60%, rgba(14, 165, 233, 0.3) 100%); }
     </style>
 </head>
 
-<body>
+<body class="relative">
 
-    <div class="shape-blob blob-1"></div>
-    <div class="shape-blob blob-2"></div>
-    <div class="shape-blob blob-3"></div>
-    <div class="bg-mesh"></div>
+    <div class="cursor-dot"></div>
+    <div class="cursor-circle"></div>
 
-    <div class="max-w-[1400px] mx-auto px-5 py-10 lg:py-16">
+    <div class="hud-corner tl"></div>
+    <div class="hud-corner tr"></div>
+    <div class="hud-corner bl"></div>
+    <div class="hud-corner br"></div>
+    <div class="scan-line"></div>
+
+    <canvas id="nebula-canvas"></canvas>
+    <div class="glow-background"></div>
+
+    <nav id="main-nav" class="fixed top-6 left-6 z-50">
+        <button id="menu-btn" class="interactable flex items-center justify-center h-12 w-12 rounded-full hover:bg-white/10 transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"/>
+            </svg>
+        </button>
+
+        <div id="menu-popup" class="glass-panel absolute left-0 top-14 w-48 rounded-xl p-2 flex flex-col space-y-1 opacity-0 pointer-events-none transition-all duration-300 transform scale-90 origin-top-left">
+            <a href="#about" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Nexus</a>
+            <a href="#events" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Events</a>
+            <a href="#sponsors" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Sponsors</a>
+        </div>
+    </nav>
+
+    <header id="home"> 
+        <div id="header-content" class="text-center z-10 flex flex-col items-center">
+            <div class="anim-text-slide">
+                <h2 class="text-xs md:text-sm font-bold tracking-[0.2em] text-blue-400 uppercase mb-2 tech-font">
+                    Coimbatore Institute of Technology
+                </h2>
+                <h3 class="text-sm md:text-base font-semibold tracking-wide text-gray-400 uppercase mb-6">
+                    Department of Electronics & Communication Engineering
+                </h3>
+            </div>
+            <h1 class="anim-title text-6xl md:text-8xl lg:text-9xl font-black orbitron tracking-tighter crisp-title mb-6">
+                NEXERA
+            </h1>
+            <div class="anim-btn flex flex-col items-center space-y-20">
+                <a href="#events" class="interactable group relative px-8 py-3 rounded-full bg-transparent border border-blue-400 text-blue-400 font-semibold overflow-hidden transition-all hover:text-white mt-4 hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
+                    <div class="absolute inset-0 w-0 bg-blue-600 transition-all duration-[250ms] ease-out group-hover:w-full opacity-90"></div>
+                    <span class="relative z-10 flex items-center gap-2">Explore Events</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-20">
         
-        <header class="text-center mb-12 fade-in-up">
-            <div class="mb-4">
-                <h1 class="glow-text text-5xl md:text-7xl lg:text-8xl font-black uppercase">DEBUGGING</h1>
+        <section id="about" class="container mx-auto px-6 py-24 reveal-container">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="w-full md:w-1/3 relative text-center md:text-right reveal-child">
+                    <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white orbitron">ABOUT US</h2>
+                </div>
+                <div class="w-full md:w-2/3 text-left">
+                    <p class="text-gray-300 text-lg leading-relaxed font-light border-l-2 border-blue-500/50 pl-6 mb-8 reveal-child">
+                        Step into the realm of innovation with <span class="text-blue-400 font-semibold">NEXERA</span>. 
+                        This isn't just an event; it's a compilation of the brightest minds in electronics and communication.
+                        We are debugging reality and programming the future.
+                    </p>
+                    <div class="flex gap-8 reveal-child justify-center md:justify-start">
+                        <div>
+                            <h4 class="text-3xl font-bold text-white mb-1 orbitron">10+</h4>
+                            <p class="text-xs text-blue-400 uppercase tracking-wider tech-font">Events</p>
+                        </div>
+                        <div>
+                            <h4 class="text-3xl font-bold text-white mb-1 orbitron">50k+</h4>
+                            <p class="text-xs text-purple-400 uppercase tracking-wider tech-font">Prize pool</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="events" class="container mx-auto px-6 py-12 min-h-screen">
+            <div class="text-center mb-12 reveal-container">
+                <h2 class="text-3xl md:text-5xl font-bold text-white orbitron mb-2 reveal-child">EVENTS</h2>                
+                <div class="flex:none justify-center gap-3 mt-8 flex-wrap reveal-child">
+                    <button class="interactable filter-btn active px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="all">ALL</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="tech">TECHNICAL</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="non-tech">NON-TECHNI</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="workshop">WORKSHOPS</button>
+                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="flagship">FLAGSHIP</button>
+                </div>
             </div>
             
-        </header>
+            <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 reveal-container" id="events-grid">                
+                
+                <div class="reveal-child interactable event-card tilt-card card-workshop group cursor-pointer" data-category="workshop">
+                     <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                             <span class="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded w-max">TRAINING</span>
+                             <i class="fas fa-wifi text-emerald-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">IoT Grid</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Interface with the ESP32 node. Establish global connectivity.</p>
+                        <div class="mt-auto border-t border-emerald-500/30 pt-4 flex justify-between items-center group-hover:text-emerald-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
 
-        <div class="flex flex-col lg:flex-row gap-10 items-start relative z-10">
+                <div class="reveal-child interactable event-card tilt-card card-flagship group cursor-pointer" data-category="flagship">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-yellow-400 bg-yellow-900/30 px-2 py-0.5 rounded w-max">CODEFEST</span>
+                            <i class="fas fa-laptop-code text-yellow-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Hackathon</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">24-hour grueling test of endurance. Build to survive.</p>
+                        <div class="mt-auto border-t border-yellow-500/30 pt-4 flex justify-between items-center group-hover:text-yellow-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">HARDWARE</span>
+                            <i class="fas fa-bolt text-cyan-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Circuit Wars</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Battle of the breadboards. Debug complex circuits.</p>
+                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">MYSTERY</span>
+                            <i class="fas fa-search text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Treasure Hunt</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Solve the murder case scenario and find the treasure.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-flagship group cursor-pointer" data-category="flagship">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-yellow-400 bg-yellow-900/30 px-2 py-0.5 rounded w-max">ROBOTICS</span>
+                            <i class="fas fa-robot text-yellow-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Robo Soccer</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Automated units engage in tactical sport.</p>
+                        <div class="mt-auto border-t border-yellow-500/30 pt-4 flex justify-between items-center group-hover:text-yellow-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">AI/ML</span>
+                            <i class="fas fa-brain text-cyan-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Prompt Verse</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Master the art of AI communication.</p>
+                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">GAMING</span>
+                            <i class="fas fa-bullseye text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Carrom</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Strike and pocket. Showcase your finger dexterity.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-flagship group cursor-pointer" data-category="flagship">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-yellow-400 bg-yellow-900/30 px-2 py-0.5 rounded w-max">ROBOTICS</span>
+                            <i class="fas fa-hand-rock text-yellow-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Pick N Place</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Precision control required. Maneuver to pick objects.</p>
+                        <div class="mt-auto border-t border-yellow-500/30 pt-4 flex justify-between items-center group-hover:text-yellow-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">STRATEGY</span>
+                            <i class="fas fa-chess-knight text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Chess</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Checkmate your opponent in this battle of wits.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">CIRCUITS</span>
+                            <i class="fas fa-microchip text-cyan-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Lab Lockdown</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Escape the laboratory by solving technical puzzles.</p>
+                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">TRIVIA</span>
+                            <i class="fas fa-question text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">General Quiz</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Rapid-fire quiz covering social science and current affairs.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">SOFTWARE</span>
+                            <i class="fas fa-code text-cyan-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Coding Marathon</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Solve algorithmic challenges continuously.</p>
+                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">MANAGEMENT</span>
+                            <i class="fas fa-gavel text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">IPL Auction</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Build your dream team. Strategize your budget.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-flagship group cursor-pointer" data-category="flagship">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-yellow-400 bg-yellow-900/30 px-2 py-0.5 rounded w-max">FLAGSHIP</span>
+                            <i class="fas fa-file-alt text-yellow-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Paper Presentation</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Present your innovative ideas for the problem statement.</p>
+                        <div class="mt-auto border-t border-yellow-500/30 pt-4 flex justify-between items-center group-hover:text-yellow-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">ESPORTS</span>
+                            <i class="fas fa-gamepad text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Free Fire</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Battle Royale. Survival of the fittest.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-flagship group cursor-pointer" data-category="flagship">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-yellow-400 bg-yellow-900/30 px-2 py-0.5 rounded w-max">ROBOTICS</span>
+                            <i class="fas fa-microchip text-yellow-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Line Rush</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Follow the line by your RC to win. </p>
+                        <div class="mt-auto border-t border-yellow-500/30 pt-4 flex justify-between items-center group-hover:text-yellow-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
+                    <div class="p-6 flex:none flex-col h-full card-content">
+                        <div class="flex justify-between items-start mb-4">
+                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">ESPORTS</span>
+                            <i class="fas fa-futbol text-pink-500/80 text-xl"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">E-Football</h3>
+                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Virtual pitch glory. 1v1 football simulation.</p>
+                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
+                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+        </section>
+
+        <footer id="contact" class="pt-20 pb-10 relative z-20 glass-panel border-t border-blue-500/20">
+            <div class="container mx-auto px-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
+                    <div class="flex flex-col items-center md:items-start">
+                        <h4 class="text-blue-400 font-bold mb-4 uppercase tracking-wider text-xs tech-font">Transmission</h4>
+                        <a href="mailto:info@nexera.com" class="interactable text-gray-400 hover:text-white transition-colors text-sm">info@nexera.com</a>
+                        <span class="text-gray-400 mt-2 text-sm font-mono">FREQ: +91 98765 43210</span>
+                    </div>
+                    <div class="flex flex-col items-center md:items-end">
+                        <h4 class="text-blue-400 font-bold mb-4 uppercase tracking-wider text-xs tech-font">Social Uplink</h4>
+                        <div class="flex space-x-4">
+                                <a href="#" target="_blank" class="interactable w-8 h-8 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all flex items-center justify-center">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" target="_blank" class="interactable w-8 h-8 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all flex items-center justify-center">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-center mt-12 text-gray-700 text-[10px] uppercase tracking-widest">
+                    System Version 2024.3 // All systems nominal.
+                </div>
+            </div>
+        </footer>
+        
+    </main>
+
+    <!-- Event Modal -->
+    <div id="event-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-sm">
+        <div id="modal-content-wrapper" class="relative max-h-[90vh] overflow-y-auto custom-scrollbar animate-scale-up">
+            <div class="modal-bg-mesh-tech modal-bg-mesh hidden"></div>
+            <div class="modal-stars-bg modal-bg-stars hidden"></div>
+            <div class="modal-bg-flagship hidden"></div>
+            <div class="modal-blob-tech-1 modal-blob-tech hidden"></div>
+            <div class="modal-blob-tech-2 modal-blob-tech hidden"></div>
+            <div class="modal-blob-tech-3 modal-blob-tech hidden"></div>
+            <div class="modal-blob-nebula-1 modal-blob-nebula hidden"></div>
+            <div class="modal-blob-nebula-2 modal-blob-nebula hidden"></div>
+            <div class="modal-blob-nebula-3 modal-blob-nebula hidden"></div>
+            <div class="modal-blob-flagship-1 modal-blob-flagship hidden"></div>
+            <div class="modal-blob-flagship-2 modal-blob-flagship hidden"></div>
+            <div class="modal-blob-flagship-3 modal-blob-flagship hidden"></div>
             
-            <aside class="w-full lg:w-[35%] flex flex-col gap-6 lg:sticky lg:top-10 fade-in-up delay-100">
+            <div class="max-w-[1400px] mx-auto px-5 py-10 lg:py-16 relative z-10">
+                <button id="close-modal" class="absolute top-4 right-4 text-white text-3xl hover:text-gray-300 transition-colors z-20">&times;</button>
                 
-                <div class="w-full h-[450px] rounded-2xl bg-cover bg-center shadow-2xl border border-white/10 group overflow-hidden relative" 
-                     style="background-image: url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop');">
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-80"></div>
-                    <div class="absolute bottom-5 left-5 text-white">
-                        <span class="bg-purple-600 text-xs font-bold px-2 py-1 rounded uppercase">Season 4</span>
-                        <h2 class="text-2xl font-orbitron font-bold mt-2">Code Arena</h2>
-                    </div>
+                <div class="flex flex-col lg:flex-row gap-6 items-start">
+                    <aside class="w-full lg:w-[35%] flex flex-col gap-6 lg:sticky lg:top-10">
+                        <div id="modal-image" class="w-full h-[450px] rounded-3xl bg-cover bg-center shadow-2xl border group overflow-hidden relative">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-90"></div>
+                            <div class="absolute bottom-6 left-6 text-white">
+                                <span id="modal-badge" class="bg-blue-600 text-xs font-bold px-2 py-1 rounded uppercase"></span>
+                                <h2 id="modal-subtitle" class="text-2xl font-bold mt-2"></h2>
+                            </div>
+                        </div>
+                        <div class="glass-panel p-6 rounded-3xl space-y-5">
+                            <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
+                                <div class="w-10 h-10 rounded-lg bg-blue-900/50 flex items-center justify-center text-blue-400 border border-blue-500/30">
+                                    <i class="fas fa-calendar-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold">Date</p>
+                                    <p id="modal-date" class="text-xs">TBA</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
+                                <div class="w-10 h-10 rounded-lg bg-green-900/50 flex items-center justify-center text-green-400 border border-green-500/30">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold">Time</p>
+                                    <p id="modal-time" class="text-xs">TBA</p>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
+                                <div class="w-10 h-10 rounded-lg bg-purple-900/50 flex items-center justify-center text-purple-400 border border-purple-500/30">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div>
+                                    <p class="text-sm font-semibold">Venue</p>
+                                    <p id="modal-venue" class="text-xs">Campus Grounds</p>
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <main class="w-full flex-1 glass-panel p-6 md:p-10 rounded-[40px] relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-600 via-cyan-500 to-sky-400"></div>
+                        <h1 id="modal-title" class="text-4xl md:text-5xl lg:text-6xl font-black uppercase leading-tight mb-4"></h1>
+                        <div class="flex justify-between items-center mb-6">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                                <span class="text-sm font-semibold text-gray-300">Live Event</span>
+                            </div>
+                            <button class="text-gray-500/40 hover:text-gray-400 transition-colors duration-300 hover:scale-110">
+                                <i class="fas fa-share-alt text-xl"></i>
+                            </button>
+                        </div>
+                        <h2 class="font-bold text-3xl md:text-4xl text-white mb-6 leading-tight">About The Event</h2>
+                        <p id="modal-description" class="text-lg text-gray-100/80 leading-relaxed mb-6"></p>
+                        <div class="grid md:grid-cols-2 gap-6 mb-12">
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-blue-500">
+                                <h3 class="text-xl font-bold text-white mb-4">Rules & Guidelines</h3>
+                                <ul id="modal-rules" class="text-gray-300 space-y-2"></ul>
+                            </div>
+                            <div class="glass-panel p-6 rounded-xl border-l-4 border-green-500">
+                                <h3 class="text-xl font-bold text-white mb-4">Prizes</h3>
+                                <ul id="modal-prizes" class="text-gray-300 space-y-2"></ul>
+                            </div>
+                        </div>
+                        <button class="cosmic-btn w-full sm:w-auto px-12 py-5 rounded-full text-white font-black text-lg tracking-widest uppercase flex items-center justify-center gap-3 group">
+                            Register Now <i class="fas fa-rocket group-hover:translate-x-1 transition-transform"></i>
+                        </button>
+                    </main>
                 </div>
-
-                <div class="glass-panel p-6 rounded-2xl space-y-4">
-                    <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
-                        <div class="w-10 h-10 rounded-lg bg-purple-900/50 flex items-center justify-center text-purple-400 border border-purple-500/30">
-                            <i class="fas fa-calendar-alt"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Date</p>
-                            <p class="font-semibold">Feb 04, 2026</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
-                        <div class="w-10 h-10 rounded-lg bg-cyan-900/50 flex items-center justify-center text-cyan-400 border border-cyan-500/30">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Location</p>
-                            <p class="font-semibold">Tech Auditorium, Block A</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
-                        <div class="w-10 h-10 rounded-lg bg-pink-900/50 flex items-center justify-center text-pink-400 border border-pink-500/30">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <div>
-                            <p class="text-xs text-gray-400 uppercase">Team Size</p>
-                            <p class="font-semibold">Individual or Duo</p>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
-            <main class="w-full flex-1 glass-panel p-6 md:p-10 rounded-3xl border border-white/10 relative overflow-hidden fade-in-up delay-200">
-                
-                <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
-
-                <div class="flex justify-between items-center mb-8">
-                    <div class="flex items-center gap-3">
-                        <span class="px-3 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold tracking-wider uppercase">
-                            Technical
-                        </span>
-                    </div>
-                    <i class="fa-solid fa-heart text-2xl text-white/20 cursor-pointer hover:text-pink-500 hover:scale-110 transition-all duration-300" onclick="this.classList.toggle('text-pink-500'); this.classList.toggle('text-white/20')"></i>
-                </div>
-
-                <h2 class="font-orbitron text-3xl md:text-5xl font-bold text-white mb-6">About The Event</h2>
-                
-                <p class="text-lg text-cyan-100 font-light leading-relaxed mb-6">
-                    Dive into the chaotic world of broken syntax and logical fallacies. <span class="text-white font-medium">Code Debugging 2026</span> is not just about finding errors; it's about optimizing algorithms under extreme pressure.
-                </p>
-
-                <p class="text-slate-400 leading-7 mb-10">
-                    This competition challenges participants to showcase their efficiency, logical thinking, and real-time problem-solving skills. Whether you code in C++, Python, or Java, your ability to spot the anomaly is your only weapon.
-                </p>
-
-                <div class="grid md:grid-cols-2 gap-6 mb-12">
-                    
-                    <div class="glass-panel p-6 rounded-xl border-l-4 border-purple-500">
-                        <h3 class="font-orbitron text-xl mb-4 text-white flex items-center gap-2">
-                            <i class="fas fa-clipboard-check text-purple-400"></i> Criteria
-                        </h3>
-                        <ul class="space-y-3 text-sm text-slate-300">
-                            <li class="flex items-start">
-                                <span class="text-purple-500 mr-2">▹</span>
-                                Proficiency in C, C++, Java, or Python.
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-purple-500 mr-2">▹</span>
-                                Code efficiency & logic > Brute force.
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-purple-500 mr-2">▹</span>
-                                No external libraries allowed.
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-purple-500 mr-2">▹</span>
-                                Plagiarism leads to disqualification.
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="glass-panel p-6 rounded-xl border-l-4 border-cyan-500">
-                        <h3 class="font-orbitron text-xl mb-4 text-white flex items-center gap-2">
-                            <i class="fas fa-gavel text-cyan-400"></i> Rules
-                        </h3>
-                        <ul class="space-y-3 text-sm text-slate-300">
-                            <li class="flex items-start">
-                                <span class="text-cyan-500 mr-2">▹</span>
-                                No internet access during rounds.
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-cyan-500 mr-2">▹</span>
-                                Electronic gadgets strictly prohibited.
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-cyan-500 mr-2">▹</span>
-                                Report to venue 15 mins prior.
-                            </li>
-                            <li class="flex items-start">
-                                <span class="text-cyan-500 mr-2">▹</span>
-                                Judge's decision is final.
-                            </li>
-                        </ul>
-                    </div>
-
-                </div>
-
-                <button class="shimmer-btn w-full sm:w-auto px-10 py-4 rounded-full text-white font-bold tracking-widest uppercase hover:scale-105 shadow-lg shadow-purple-500/30">
-                    Initialize Registration <i class="fas fa-arrow-right ml-2"></i>
-                </button>
-
-            </main>
+            </div>
         </div>
     </div>
 
-    <footer class="border-t border-white/10 bg-slate-900/80 backdrop-blur-md mt-10">
-        <div class="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-bolt text-purple-500 text-xl"></i>
-                <span class="font-orbitron font-bold text-lg">TechNova</span>
-            </div>
-            <div class="text-slate-500 text-sm">
-                &copy; 2026 Dept of Mech. All Systems Operational.
-            </div>
-            <div class="flex gap-4">
-                <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-github"></i></a>
-                <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-discord"></i></a>
-                <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-            </div>
-        </div>
-    </footer>
-
+    <script src="script.js"></script>
 </body>
 </html>
-
