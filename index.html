@@ -3,1229 +3,304 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>NEXERA - ECE Symposium</title>
-    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Debugging 2026</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            purple: '#7c3aed',
+                            cyan: '#06b6d4',
+                            pink: '#ec4899'
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
-        /* ==========================================
-           1. ORIGINAL MAIN PAGE STYLES (NEON/BRIGHT)
-           ========================================== */
+        /* --- Base & Reset --- */
         body {
+            background-color: #020617;
+            color: #e2e8f0;
             font-family: 'Inter', sans-serif;
-            background-color: #050a1f; /* Original Dark Blue */
-            color: #e0e0e0;
-            overflow-x: hidden; 
-            cursor: none;
-        }
-
-        /* Custom Cursor */
-        .cursor-dot, .cursor-circle {
-            position: fixed; top: 0; left: 0;
-            transform: translate(-50%, -50%);
-            border-radius: 50%; z-index: 9999; pointer-events: none;
-        }
-        .cursor-dot { width: 8px; height: 8px; background: white; box-shadow: 0 0 10px #60a5fa; }
-        .cursor-circle {
-            width: 40px; height: 40px;
-            border: 1px solid rgba(96, 165, 250, 0.5);
-            transition: width 0.2s, height 0.2s, background-color 0.2s;
-        }
-        body.hovering .cursor-circle {
-            width: 60px; height: 60px;
-            background-color: rgba(96, 165, 250, 0.1);
-            border-color: #60a5fa; mix-blend-mode: screen;
-        }
-
-        /* Backgrounds */
-        #nebula-canvas {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; pointer-events: none;
-            background: linear-gradient(to bottom, #2e0936 0%, #0f172a 40%, #000810 100%);
-        }
-
-        .glow-background {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            width: 120vw; height: 120vw; z-index: 0; pointer-events: none;
-            mix-blend-mode: screen; opacity: 0.6;
-            background: radial-gradient(ellipse 60% 50% at 40% 40%, rgba(76, 116, 250, 0.3), transparent 70%),
-                        radial-gradient(circle at 70% 60%, rgba(120, 80, 255, 0.25), transparent 50%);
-            filter: blur(40px);
-        }
-
-        /* Fonts & HUD */
-        .tech-font { font-family: 'Share Tech Mono', monospace; }
-        .orbitron { font-family: 'Orbitron', sans-serif; }
-
-        .hud-corner {
-            position: fixed; width: 30px; height: 30px;
-            border: 2px solid rgba(96, 165, 250, 0.3);
-            z-index: 50; pointer-events: none;
-        }
-        .tl { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
-        .tr { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
-        .bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
-        .br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
-        
-        .scan-line {
-            position: fixed; top: 0; left: 0; width: 100%; height: 2px;
-            background: rgba(96, 165, 250, 0.2);
-            box-shadow: 0 0 10px rgba(96, 165, 250, 0.5);
-            animation: scan 6s linear infinite; z-index: 40; pointer-events: none;
-        }
-        @keyframes scan { 0% { top: -10%; opacity: 0; } 50% { opacity: 1; } 100% { top: 110%; opacity: 0; } }
-
-        /* ==========================================
-           ORIGINAL CARD STYLES (NEON GLOW)
-           ========================================== */
-        
-        .event-card {
+            overflow-x: hidden;
             position: relative;
-            display: flex; flex-direction: column;
-            min-height: 280px; 
-            overflow: hidden; 
-            background-color: rgba(5, 10, 31, 0.4); 
-            border-radius: 20px;
-            transition: opacity 0.5s, box-shadow 0.3s;
-            transform-style: preserve-3d;
-            perspective: 1000px;
-            border: none;
-        }
-        
-        .event-card:hover {
-            z-index: 10;
-            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
         }
 
-        .event-card::before {
-            content: ''; position: absolute; inset: 0; z-index: 0;
-            transition: opacity 0.4s ease; opacity: 0.8;
-        }
-        .event-card::after {
-            content: ''; position: absolute; inset: 0; pointer-events: none;
-            border-radius: 20px;
-            box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
-            z-index: 1;
-        }
-        /* --- ADD THIS TO YOUR CSS TO FIX THE TILT --- */
-        .event-card.tilt-card:hover {
-            /* Important: Exclude 'transform' from transition so JS tilt is instant */
-            transition: box-shadow 0.3s, opacity 0.5s !important;
-        }
-        /* Neon Tech (Blue/Cyan) */
-        .card-tech::before {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.15) 0%, transparent 40%, transparent 60%, rgba(59, 130, 246, 0.15) 100%);
-        }
-        .card-tech:hover::before {
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.3) 0%, transparent 40%, transparent 60%, rgba(59, 130, 246, 0.3) 100%);
+        /* --- Animated Background Mesh --- */
+        .bg-mesh {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: 
+                radial-gradient(circle at 15% 50%, rgba(76, 29, 149, 0.4), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(6, 182, 212, 0.25), transparent 25%);
         }
 
-        /* Neon Non-Tech (Pink/Purple) */
-        .card-non-tech::before {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.15) 0%, transparent 40%, transparent 60%, rgba(139, 92, 246, 0.15) 100%);
+        /* Moving Blobs */
+        .shape-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.6;
+            z-index: -1;
+            animation: blob 10s infinite cubic-bezier(0.4, 0, 0.2, 1);
         }
-        .card-non-tech:hover::before {
-            background: linear-gradient(135deg, rgba(236, 72, 153, 0.3) 0%, transparent 40%, transparent 60%, rgba(139, 92, 246, 0.3) 100%);
-        }
+        .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #4c1d95; animation-delay: 0s; }
+        .blob-2 { bottom: -10%; right: -10%; width: 500px; height: 500px; background: #0891b2; animation-delay: 2s; }
+        .blob-3 { top: 40%; left: 40%; width: 400px; height: 400px; background: #be185d; animation-delay: 4s; opacity: 0.3; }
 
-        /* Neon Workshop (Emerald) */
-        .card-workshop::before {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, transparent 40%, transparent 60%, rgba(14, 165, 233, 0.15) 100%);
-        }
-        .card-workshop:hover::before {
-            background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, transparent 40%, transparent 60%, rgba(14, 165, 233, 0.3) 100%);
-        }
-
-        .card-content { position: relative; z-index: 10; transform: translateZ(20px); }
-
-        /* ==========================================
-           HEADER & ANIMATIONS
-           ========================================== */
-        header {
-            min-height: 90vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            position: relative; padding: 2rem; z-index: 10;
-        }
-        .crisp-title {
-            background: linear-gradient(to bottom, #ffffff 0%, #3b82f6 100%);
+        /* --- Title Glow Effect (Replaces Glitch) --- */
+        .glow-text {
+            font-family: 'Orbitron', sans-serif;
+            background: linear-gradient(to bottom, #ffffff, #94a3b8);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 25px rgba(59,130,246,0.5));
-        }
-        .anim-title { opacity: 0; animation: cinematicTitle 1.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.2s forwards; }
-        @keyframes cinematicTitle {
-            from { opacity: 0; letter-spacing: -0.2em; filter: blur(20px); transform: scale(1.1); }
-            to { opacity: 1; letter-spacing: -0.05em; filter: blur(0); transform: scale(1); }
-        }
-        .anim-text-slide { opacity: 0; animation: textSlideUp 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.8s forwards; }
-        @keyframes textSlideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .anim-btn { opacity: 0; animation: simpleFade 1s ease 2s forwards; }
-        @keyframes simpleFade { to { opacity: 1; } }
-
-        .filter-btn {
-            background: transparent; border: 1px solid rgba(59, 130, 246, 0.3); color: #60a5fa;
-            position: relative; overflow: hidden; transition: all 0.4s ease;
-        }
-        .filter-btn::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 0; height: 100%;
-            background: #2563eb; z-index: -1; transition: width 0.3s ease;
-        }
-        .filter-btn:hover::before, .filter-btn.active::before { width: 100%; }
-        .filter-btn:hover, .filter-btn.active { 
-            color: white; border-color: #60a5fa; box-shadow: 0 0 20px rgba(37, 99, 235, 0.4); letter-spacing: 1px;
+            color: transparent;
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+            letter-spacing: 4px;
         }
 
-        .animate-fade-in { animation: fadeInScale 0.4s ease-out forwards; }
-        @keyframes fadeInScale { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-        
-        .glass-panel { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(59, 130, 246, 0.2); }
-        
-        /* Updated Reveal Logic to Fix Resize Bug */
-        .reveal-container { opacity: 1; }
-        .reveal-child { opacity: 0; transform: translateY(50px); filter: blur(8px); transition: all 0.5s ease-out; }
-        .reveal-container.visible .reveal-child { opacity: 1; transform: translateY(0); filter: blur(0); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
-        .reveal-container.visible .reveal-child:nth-child(1) { transition-delay: 0.1s; }
-        .reveal-container.visible .reveal-child:nth-child(2) { transition-delay: 0.2s; }
-        .reveal-container.visible .reveal-child:nth-child(3) { transition-delay: 0.3s; }
-        .reveal-container.visible .reveal-child:nth-child(4) { transition-delay: 0.4s; }
+        /* --- Glassmorphism Cards --- */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
 
-        /* ==========================================
-           2. NEW MODAL STYLES (DULLER/PROFESSIONAL)
-           ========================================== */
-        
-        /* Modal Scroll & Animation */
-        #modal-content-wrapper { width: 100%; max-width: 1400px; margin: 0 auto; } /* Increased max-width for bigger poster */
-        .animate-scale-up { animation: scaleUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        @keyframes scaleUp { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
-        
-        /* Modal Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; border-radius: 10px; }
-
-        /* Loader */
-        .modal-loader { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 50; }
-        .loader-ring { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
-
-        /* --- MODAL THEMES (Specific to Modal ID) --- */
-        
-        /* Tech Theme: Slate/Steel Blue */
-        #event-modal .theme-tech .accent-text { color: #7dd3fc; } 
-        #event-modal .theme-tech .accent-bg { background-color: rgba(15, 23, 42, 0.8); }
-        #event-modal .theme-tech .accent-border { border-color: rgba(56, 189, 248, 0.2); }
-        #event-modal .theme-tech .loader-ring { border-left-color: #38bdf8; }
-        #event-modal .theme-tech .glass-panel { background: #0f172a; border: 1px solid rgba(148, 163, 184, 0.1); }
-        #event-modal .theme-tech .gradient-btn { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
-        #event-modal .theme-tech .gradient-btn:hover { background: #334155; color: #f1f5f9; border-color: #475569; }
-
-        /* Non-Tech Theme: Muted Rose/Indigo */
-        #event-modal .theme-non-tech .accent-text { color: #f472b6; }
-        #event-modal .theme-non-tech .accent-bg { background-color: rgba(30, 10, 40, 0.8); }
-        #event-modal .theme-non-tech .accent-border { border-color: rgba(244, 114, 182, 0.2); }
-        #event-modal .theme-non-tech .loader-ring { border-left-color: #f472b6; }
-        #event-modal .theme-non-tech .glass-panel { background: #1a1025; border: 1px solid rgba(244, 114, 182, 0.1); }
-        #event-modal .theme-non-tech .gradient-btn { background: #2e1065; color: #c4b5fd; border: 1px solid #4c1d95; }
-        #event-modal .theme-non-tech .gradient-btn:hover { background: #4c1d95; color: #ede9fe; border-color: #6d28d9; }
-
-        /* ==========================================
-        INFINITE MARQUEE (SEAMLESS LOOP)
-        ========================================== */
-        .marquee-container {
-            overflow: hidden;
-            white-space: nowrap;
+        /* --- Shimmer Button --- */
+        .shimmer-btn {
+            background: linear-gradient(90deg, #7c3aed, #2563eb);
             position: relative;
-            display: flex;
-            align-items: center;
-            mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%);
-        }
-
-        .marquee-content {
-            display: flex;
-            gap: 4rem; 
-            animation: scroll 30s linear infinite;
-            min-width: 100%;
-            flex-shrink: 0; 
-            padding-right: 4rem; 
-        }
-
-        .marquee-container:hover .marquee-content {
-            animation-play-state: paused;
-        }
-
-        @keyframes scroll {
-            from { transform: translateX(0); }
-            to { transform: translateX(-100%); }
+            overflow: hidden;
+            transition: all 0.3s ease;
         }
         
+        .shimmer-btn::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transform: skewX(-20deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
+        }
+
+        /* --- Entrance Animations --- */
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
         
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Scroll Bar --- */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #475569; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #7c3aed; }
+
     </style>
 </head>
 
-<body class="relative">
+<body>
 
-    <div class="cursor-dot"></div>
-    <div class="cursor-circle"></div>
+    <div class="shape-blob blob-1"></div>
+    <div class="shape-blob blob-2"></div>
+    <div class="shape-blob blob-3"></div>
+    <div class="bg-mesh"></div>
 
-    <div class="hud-corner tl"></div>
-    <div class="hud-corner tr"></div>
-    <div class="hud-corner bl"></div>
-    <div class="hud-corner br"></div>
-    <div class="scan-line"></div>
-
-    <canvas id="nebula-canvas"></canvas>
-    <div class="glow-background"></div>
-
-    <nav id="main-nav" class="fixed top-6 left-6 z-50">
-        <button id="menu-btn" class="interactable flex items-center justify-center h-12 w-12 rounded-full hover:bg-white/10 transition-colors">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h10"/>
-            </svg>
-        </button>
-
-        <div id="menu-popup" class="glass-panel absolute left-0 top-14 w-48 rounded-xl p-2 flex flex-col space-y-1 opacity-0 pointer-events-none transition-all duration-300 transform scale-90 origin-top-left">
-            <a href="#about" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Nexus</a>
-            <a href="#events" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Events</a>
-            <a href="#sponsors" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Sponsors</a>
-        </div>
-    </nav>
-
-    <header id="home"> 
-        <div id="header-content" class="text-center z-10 flex flex-col items-center">
-            <div class="anim-text-slide">
-                <h2 class="text-xs md:text-sm font-bold tracking-[0.2em] text-blue-400 uppercase mb-2 tech-font">
-                    Coimbatore Institute of Technology
-                </h2>
-                <h3 class="text-sm md:text-base font-semibold tracking-wide text-gray-400 uppercase mb-6">
-                    Department of Electronics & Communication Engineering
-                </h3>
-            </div>
-            <h1 class="anim-title text-6xl md:text-8xl lg:text-9xl font-black orbitron tracking-tighter crisp-title mb-6">
-                NEXERA
-            </h1>
-            <div class="anim-btn flex flex-col items-center space-y-20">
-                <p class="text-blue-200/70 max-w-md mx-auto text-sm md:text-base leading-relaxed font-light">
-                    </p>
-                <a href="#events" class="interactable group relative px-8 py-3 rounded-full bg-transparent border border-blue-400 text-blue-400 font-semibold overflow-hidden transition-all hover:text-white mt-4 hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
-                    <div class="absolute inset-0 w-0 bg-blue-600 transition-all duration-[250ms] ease-out group-hover:w-full opacity-90"></div>
-                    <span class="relative z-10 flex items-center gap-2">Explore Events</span>
-                </a>
-            </div>
-        </div>
-    </header>
-
-    <main class="relative z-20">
+    <div class="max-w-[1400px] mx-auto px-5 py-10 lg:py-16">
         
-        <section id="about" class="container mx-auto px-6 py-24 reveal-container">
-            <div class="flex flex-col md:flex-row items-center gap-12">
-                <div class="w-full md:w-1/3 relative text-center md:text-right reveal-child">
-                    <h2 class="text-3xl md:text-5xl font-bold mb-6 text-white orbitron">ABOUT US</h2>
-                </div>
-                <div class="w-full md:w-2/3 text-left">
-                    <p class="text-gray-300 text-lg leading-relaxed font-light border-l-2 border-blue-500/50 pl-6 mb-8 reveal-child">
-                        Step into the realm of innovation with <span class="text-blue-400 font-semibold">NEXERA</span>. 
-                        This isn't just an event; it's a compilation of the brightest minds in electronics and communication.
-                        We are debugging reality and programming the future.
-                    </p>
-                    <div class="flex gap-8 reveal-child justify-center md:justify-start">
-                        <div>
-                            <h4 class="text-3xl font-bold text-white mb-1 orbitron">10+</h4>
-                            <p class="text-xs text-blue-400 uppercase tracking-wider tech-font">Events</p>
-                        </div>
-                        <div>
-                            <h4 class="text-3xl font-bold text-white mb-1 orbitron">50k+</h4>
-                            <p class="text-xs text-purple-400 uppercase tracking-wider tech-font">Prize pool</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="events" class="container mx-auto px-6 py-12 min-h-screen">
-            <div class="text-center mb-12 reveal-container">
-                <h2 class="text-3xl md:text-5xl font-bold text-white orbitron mb-2 reveal-child">EVENTS</h2>                
-                <div class="flex:none justify-center gap-3 mt-8 flex-wrap reveal-child">
-                    <button class="interactable filter-btn active px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="all">ALL</button>
-                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="tech">TECHNICAL</button>
-                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="non-tech">NON-TECH</button>
-                    <button class="interactable filter-btn px-6 py-2 rounded-full font-semibold text-sm tracking-wide" data-filter="workshop">WORKSHOPS</button>
-                </div>
+        <header class="text-center mb-12 fade-in-up">
+            <div class="mb-4">
+                <h1 class="glow-text text-5xl md:text-7xl lg:text-8xl font-black uppercase">DEBUGGING</h1>
             </div>
             
-            <div class="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-8 reveal-container" id="events-grid">                
+        </header>
+
+        <div class="flex flex-col lg:flex-row gap-10 items-start relative z-10">
+            
+            <aside class="w-full lg:w-[35%] flex flex-col gap-6 lg:sticky lg:top-10 fade-in-up delay-100">
                 
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">FLAGSHIP</span>
-                            <i class="fas fa-file-alt text-cyan-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Paper Presentation</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Present your innovative ideas for the problem statement.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
+                <div class="w-full h-[450px] rounded-2xl bg-cover bg-center shadow-2xl border border-white/10 group overflow-hidden relative" 
+                     style="background-image: url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop');">
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 to-transparent opacity-80"></div>
+                    <div class="absolute bottom-5 left-5 text-white">
+                        <span class="bg-purple-600 text-xs font-bold px-2 py-1 rounded uppercase">Season 4</span>
+                        <h2 class="text-2xl font-orbitron font-bold mt-2">Code Arena</h2>
                     </div>
                 </div>
 
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">ROBOTICS</span>
-                            <i class="fas fa-robot text-cyan-500/80 text-xl"></i>
+                <div class="glass-panel p-6 rounded-2xl space-y-4">
+                    <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
+                        <div class="w-10 h-10 rounded-lg bg-purple-900/50 flex items-center justify-center text-purple-400 border border-purple-500/30">
+                            <i class="fas fa-calendar-alt"></i>
                         </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Robo Soccer</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Automated units engage in tactical sport. Strategy meets mechanics.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase">Date</p>
+                            <p class="font-semibold">Feb 04, 2026</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
+                        <div class="w-10 h-10 rounded-lg bg-cyan-900/50 flex items-center justify-center text-cyan-400 border border-cyan-500/30">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase">Location</p>
+                            <p class="font-semibold">Tech Auditorium, Block A</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 text-gray-300 hover:text-white transition-colors">
+                        <div class="w-10 h-10 rounded-lg bg-pink-900/50 flex items-center justify-center text-pink-400 border border-pink-500/30">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400 uppercase">Team Size</p>
+                            <p class="font-semibold">Individual or Duo</p>
                         </div>
                     </div>
                 </div>
+            </aside>
 
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">ROBOTICS</span>
-                            <i class="fas fa-hand-rock text-cyan-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Pick N Place</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Precision control required. Maneuver your bot to pick specific objects.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">CIRCUITS</span>
-                            <i class="fas fa-microchip text-cyan-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Lab Lockdown</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Escape the laboratory by solving technical puzzles.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">HARDWARE</span>
-                            <i class="fas fa-bolt text-cyan-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Circuit Wars</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Battle of the breadboards. Debug complex circuits.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">AI/ML</span>
-                            <i class="fas fa-brain text-cyan-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Prompt Verse</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Master the art of AI communication.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-tech group cursor-pointer" data-category="tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-cyan-400 bg-cyan-900/30 px-2 py-0.5 rounded w-max">SOFTWARE</span>
-                            <i class="fas fa-code text-cyan-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Coding Marathon</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Solve algorithmic challenges continuously.</p>
-                        <div class="mt-auto border-t border-cyan-500/30 pt-4 flex justify-between items-center group-hover:text-cyan-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">STRATEGY</span>
-                            <i class="fas fa-chess-knight text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Chess</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Checkmate your opponent in this battle of wits.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">GAMING</span>
-                            <i class="fas fa-bullseye text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Carrom</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Strike and pocket. Showcase your finger dexterity.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">MYSTERY</span>
-                            <i class="fas fa-search text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Treasure Hunt</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Solve the murder case scenario and find the hidden treasure.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">TRIVIA</span>
-                            <i class="fas fa-question text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">General Quiz</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Rapid-fire quiz covering social science and current affairs.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">MANAGEMENT</span>
-                            <i class="fas fa-gavel text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">IPL Auction</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Build your dream team. Strategize your budget.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">ESPORTS</span>
-                            <i class="fas fa-gamepad text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">Free Fire</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Battle Royale. Survival of the fittest.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-non-tech group cursor-pointer" data-category="non-tech">
-                    <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                            <span class="text-[10px] font-bold tracking-widest text-pink-400 bg-pink-900/30 px-2 py-0.5 rounded w-max">ESPORTS</span>
-                            <i class="fas fa-futbol text-pink-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">E-Football</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Virtual pitch glory. 1v1 football simulation.</p>
-                        <div class="mt-auto border-t border-pink-500/30 pt-4 flex justify-between items-center group-hover:text-pink-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="reveal-child interactable event-card tilt-card card-workshop group cursor-pointer" data-category="workshop">
-                     <div class="p-6 flex:none flex-col h-full card-content">
-                        <div class="flex justify-between items-start mb-4">
-                             <span class="text-[10px] font-bold tracking-widest text-emerald-400 bg-emerald-900/30 px-2 py-0.5 rounded w-max">TRAINING</span>
-                             <i class="fas fa-wifi text-emerald-500/80 text-xl"></i>
-                        </div>
-                        <h3 class="text-2xl font-bold text-white mb-2 font-orbitron drop-shadow-md">IoT Grid</h3>
-                        <p class="text-gray-300 text-sm mb-6 flex-grow leading-relaxed font-medium">Interface with the ESP32 node. Establish global connectivity.</p>
-                        <div class="mt-auto border-t border-emerald-500/30 pt-4 flex justify-between items-center group-hover:text-emerald-300 transition-colors">
-                            <span class="text-xs font-mono">View Details</span><span class="text-xl">→</span>
-                        </div>
-                    </div>
-                </div>
-
-             </div>
-        </section>
-
-        <section id="sponsors" class="py-16 border-t border-blue-900/30 relative reveal-container">
-            <div class="absolute inset-0 bg-blue-900/5 skew-y-3 transform origin-bottom-left -z-10"></div>
-            <div class="container mx-auto px-6 reveal-child">
-                <h2 class="text-2xl font-bold text-center mb-12 text-slate-500 uppercase tracking-[0.5em] tech-font">SPONSORS</h2>
+            <main class="w-full flex-1 glass-panel p-6 md:p-10 rounded-3xl border border-white/10 relative overflow-hidden fade-in-up delay-200">
                 
-                <div class="marquee-container w-full">
+                <div class="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/20 to-transparent"></div>
+
+                <div class="flex justify-between items-center mb-8">
+                    <div class="flex items-center gap-3">
+                        <span class="px-3 py-1 rounded-full border border-purple-500/30 bg-purple-500/10 text-purple-400 text-xs font-bold tracking-wider uppercase">
+                            Technical
+                        </span>
+                    </div>
+                    <i class="fa-solid fa-heart text-2xl text-white/20 cursor-pointer hover:text-pink-500 hover:scale-110 transition-all duration-300" onclick="this.classList.toggle('text-pink-500'); this.classList.toggle('text-white/20')"></i>
+                </div>
+
+                <h2 class="font-orbitron text-3xl md:text-5xl font-bold text-white mb-6">About The Event</h2>
+                
+                <p class="text-lg text-cyan-100 font-light leading-relaxed mb-6">
+                    Dive into the chaotic world of broken syntax and logical fallacies. <span class="text-white font-medium">Code Debugging 2026</span> is not just about finding errors; it's about optimizing algorithms under extreme pressure.
+                </p>
+
+                <p class="text-slate-400 leading-7 mb-10">
+                    This competition challenges participants to showcase their efficiency, logical thinking, and real-time problem-solving skills. Whether you code in C++, Python, or Java, your ability to spot the anomaly is your only weapon.
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-6 mb-12">
                     
-                    <div class="marquee-content items-center">
-                        
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
+                    <div class="glass-panel p-6 rounded-xl border-l-4 border-purple-500">
+                        <h3 class="font-orbitron text-xl mb-4 text-white flex items-center gap-2">
+                            <i class="fas fa-clipboard-check text-purple-400"></i> Criteria
+                        </h3>
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start">
+                                <span class="text-purple-500 mr-2">▹</span>
+                                Proficiency in C, C++, Java, or Python.
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-500 mr-2">▹</span>
+                                Code efficiency & logic > Brute force.
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-500 mr-2">▹</span>
+                                No external libraries allowed.
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-purple-500 mr-2">▹</span>
+                                Plagiarism leads to disqualification.
+                            </li>
+                        </ul>
                     </div>
 
-                    <div class="marquee-content items-center">
-                        
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-                    </div>
-
-                    <div class="marquee-content items-center">
-                        
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
-
-                        <a href="#" target="_blank" class="sponsor-link">
-                            <img src="#" alt="#" class="sponsor-logo">
-                        </a>
+                    <div class="glass-panel p-6 rounded-xl border-l-4 border-cyan-500">
+                        <h3 class="font-orbitron text-xl mb-4 text-white flex items-center gap-2">
+                            <i class="fas fa-gavel text-cyan-400"></i> Rules
+                        </h3>
+                        <ul class="space-y-3 text-sm text-slate-300">
+                            <li class="flex items-start">
+                                <span class="text-cyan-500 mr-2">▹</span>
+                                No internet access during rounds.
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-cyan-500 mr-2">▹</span>
+                                Electronic gadgets strictly prohibited.
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-cyan-500 mr-2">▹</span>
+                                Report to venue 15 mins prior.
+                            </li>
+                            <li class="flex items-start">
+                                <span class="text-cyan-500 mr-2">▹</span>
+                                Judge's decision is final.
+                            </li>
+                        </ul>
                     </div>
 
                 </div>
-            </div>
-        </section>
 
-        <footer id="contact" class="pt-20 pb-10 relative z-20 glass-panel border-t border-blue-500/20">
-            <div class="container mx-auto px-6">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-10 items-start">
-                    <div class="flex flex-col items-center md:items-start">
-                        <h4 class="text-blue-400 font-bold mb-4 uppercase tracking-wider text-xs tech-font">Transmission</h4>
-                        <a href="mailto:info@nexera.com" class="interactable text-gray-400 hover:text-white transition-colors text-sm">info@nexera.com</a>
-                        <span class="text-gray-400 mt-2 text-sm font-mono">FREQ: +91 98765 43210</span>
-                    </div>
-                    <div class="flex flex-col items-center md:items-end">
-                        <h4 class="text-blue-400 font-bold mb-4 uppercase tracking-wider text-xs tech-font">Social Uplink</h4>
-                        <div class="flex space-x-4">
-                            <div class="flex space-x-4">
-                                <a href="https://www.instagram.com/nexera_cit?igsh=amYyOW9tczhrbnVi" target="_blank" class="interactable w-8 h-8 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all flex items-center justify-center">
-                                    <i class="fab fa-instagram"></i>
-                                </a>
+                <button class="shimmer-btn w-full sm:w-auto px-10 py-4 rounded-full text-white font-bold tracking-widest uppercase hover:scale-105 shadow-lg shadow-purple-500/30">
+                    Initialize Registration <i class="fas fa-arrow-right ml-2"></i>
+                </button>
 
-                                <a href="https://linkedin.com/in/your_profile" target="_blank" class="interactable w-8 h-8 border border-white/20 rounded-full hover:bg-white hover:text-black transition-all flex items-center justify-center">
-                                    <i class="fab fa-linkedin-in"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="text-center mt-12 text-gray-700 text-[10px] uppercase tracking-widest">
-                    System Version 2024.3 // All systems nominal.
-                </div>
-            </div>
-        </footer>
-        
-    </main>
-
-    <div id="event-modal" class="fixed inset-0 z-[100] hidden transition-opacity duration-300 opacity-0 font-sans" aria-hidden="true">
-    
-        <div class="absolute inset-0 bg-black/90 backdrop-blur-md" id="modal-backdrop"></div>
-
-        <button id="close-modal" class="fixed top-4 right-4 z-[120] text-slate-400 hover:text-white bg-slate-800 hover:bg-red-500/80 p-2 rounded-full transition-all backdrop-blur-sm border border-slate-700">
-            <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-
-        <div id="modal-loader" class="modal-loader hidden">
-            <div class="loader-ring"></div>
-            <p class="text-slate-500 text-xs mt-3 tracking-[0.2em] animate-pulse">LOADING DATA...</p>
-        </div>
-
-        <div id="modal-scroll-container" class="absolute inset-0 overflow-y-auto custom-scrollbar opacity-0 transition-opacity duration-500">
-            <div id="modal-theme-wrapper" class="min-h-screen w-full flex flex-col items-center py-16 px-4 md:px-8 theme-tech transition-colors duration-500">
-                
-                <div id="modal-content-wrapper" class="w-full max-w-[1400px] relative animate-scale-up">
-                    
-                    <section class="text-center mb-6 md:mb-10">
-                        <h1 id="m-event-name" class="text-3xl md:text-5xl lg:text-7xl font-bold text-slate-200 font-orbitron tracking-wider uppercase drop-shadow-lg break-words">
-                            EVENT TITLE
-                        </h1>
-                        <div class="h-1 w-24 bg-slate-700 mx-auto mt-4 rounded-full"></div>
-                    </section>
-
-                    <div class="flex flex-col lg:flex-row gap-6 lg:gap-10">
-                        
-                        <!-- Left Column (Description) - Order 2 on Mobile, Order 1 on Desktop -->
-                         <div class="flex-[2] min-w-0 order-2 lg:order-1"> 
-                            <div class="glass-panel rounded-2xl p-5 md:p-8 text-slate-300">
-                                
-                                <div class="flex justify-between items-start mb-6">
-                                    <div id="m-event-type" class="text-xs md:text-sm font-bold tracking-[0.2em] accent-text accent-bg px-3 py-1.5 rounded font-tech uppercase border accent-border">
-                                        TECHNICAL
-                                    </div>
-                                    <div class="text-xs font-mono text-slate-500 mt-1">ID: EVT_2026</div>
-                                </div>
-
-                                <h3 id="m-event-summary" class="text-lg md:text-2xl font-bold text-slate-100 mb-4 font-orbitron">
-                                    Summary goes here...
-                                </h3>
-                                <p id="m-event-desc" class="text-sm md:text-base text-slate-400 leading-relaxed mb-8 font-light border-l-2 border-slate-700 pl-4">
-                                    Full description text...
-                                </p>
-
-                                <h2 class="text-xl md:text-2xl font-bold text-slate-200 mb-4 font-orbitron border-b border-slate-700 pb-2">Rounds</h2>
-                                <div id="m-rounds-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                                    </div>
-
-                                <h2 class="text-xl md:text-2xl font-bold text-slate-200 mb-4 font-orbitron border-b border-slate-700 pb-2">Rules</h2>
-                                <div class="bg-slate-900/50 rounded-xl p-4 border border-slate-800 mb-8">
-                                    <ul id="m-rules-list" class="list-disc pl-5 space-y-2 text-sm md:text-base text-slate-400">
-                                        </ul>
-                                </div>
-
-                                <button class="gradient-btn w-full md:w-auto justify-center group text-slate-300 font-bold tracking-wide uppercase">
-                                    Register Now
-                                    <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Right Column (Poster & Schedule) - Order 1 on Mobile, Order 2 on Desktop -->
-                        <div class="flex-[1] flex flex-col gap-6 min-w-0 order-1 lg:order-2">
-                            
-                            <!-- Poster moved to top of right column -->
-                            <div id="m-poster" class="h-96 md:h-[500px] w-full bg-cover bg-center rounded-2xl shadow-lg border border-slate-700 relative overflow-hidden group bg-slate-900">
-                                <div class="absolute inset-0 flex items-center justify-center text-slate-600 font-mono text-xs uppercase tracking-widest">
-                                    [ Event Poster ]
-                                </div>
-                            </div>
-                            
-                            <div class="glass-panel rounded-2xl p-6 text-slate-300 h-auto">
-                                <h2 class="text-xl font-bold mb-4 font-orbitron flex items-center gap-2 text-slate-200">
-                                    <i class="fas fa-clock text-slate-500"></i> Schedule
-                                </h2>
-                                <div id="m-schedule-container" class="space-y-5">
-                                    </div>
-                            </div>
-
-                        </div>
-                    </div> 
-                </div>
-            </div>
+            </main>
         </div>
     </div>
 
-    <script>
-        // --- 1. BACKGROUND & PARTICLES (ORIGINAL BRIGHT) ---
-        (function initNebula() {
-            const canvas = document.getElementById('nebula-canvas');
-            const ctx = canvas.getContext('2d');
-            let width, height, particles = [], mistParticles = [];
-            // Original Bright Colors
-            const colors = { white: 'rgba(255, 255, 255, 0.9)', cyan: 'rgba(64, 224, 208, 0.8)', blue: 'rgba(65, 105, 225, 0.8)' };
+    <footer class="border-t border-white/10 bg-slate-900/80 backdrop-blur-md mt-10">
+        <div class="max-w-[1400px] mx-auto px-6 py-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-bolt text-purple-500 text-xl"></i>
+                <span class="font-orbitron font-bold text-lg">TechNova</span>
+            </div>
+            <div class="text-slate-500 text-sm">
+                &copy; 2026 Dept of Mech. All Systems Operational.
+            </div>
+            <div class="flex gap-4">
+                <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-github"></i></a>
+                <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-discord"></i></a>
+                <a href="#" class="text-slate-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+            </div>
+        </div>
+    </footer>
 
-            function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; initParticles(); }
-            window.addEventListener('resize', resize);
-            const random = (min, max) => Math.random() * (max - min) + min;
-
-            function createMistSprite(color) {
-                const s = 256, c = document.createElement('canvas'), x = c.getContext('2d'), g = x.createRadialGradient(128,128,0,128,128,128);
-                c.width=c.height=s; g.addColorStop(0, color); g.addColorStop(1, 'transparent');
-                x.fillStyle=g; x.beginPath(); x.arc(128,128,128,0,Math.PI*2); x.fill(); return c;
-            }
-            const mist1 = createMistSprite('rgba(200, 50, 150, 0.15)'), mist2 = createMistSprite('rgba(100, 50, 255, 0.1)');
-
-            class Mist {
-                constructor() { this.init(); }
-                init() { this.x=random(0,width); this.y=random(0,height); this.v={x:random(-1,1),y:random(-1,1)}; this.s=Math.random()>0.5?mist1:mist2; }
-                update() { this.x+=this.v.x; this.y+=this.v.y; if(this.x<-200)this.x=width+200; if(this.x>width+200)this.x=-200; if(this.y<-200)this.y=height+200; if(this.y>height+200)this.y=-200; }
-                draw() { ctx.drawImage(this.s, this.x-150, this.y-150, 300, 300); }
-            }
-            class Sparkle {
-                constructor() { this.init(); }
-                init() { this.x=random(0,width); this.y=random(0,height); this.size=random(0.5,2.5); this.v={x:random(-2,2),y:random(-2,2)}; this.c=Math.random()>0.9?colors.white:Math.random()>0.6?colors.cyan:colors.blue; this.a=random(0.2,1); this.d=Math.random()>0.5?1:-1; }
-                update() { this.x+=this.v.x; this.y+=this.v.y; this.a+=0.05*this.d; if(this.a>=1){this.a=1;this.d=-1}else if(this.a<=0.1){this.a=0.1;this.d=1} if(this.x<0)this.x=width; if(this.x>width)this.x=0; if(this.y<0)this.y=height; if(this.y>height)this.y=0; }
-                draw() { ctx.globalAlpha=this.a; ctx.fillStyle=this.c; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
-            }
-            function initParticles() { particles=[]; mistParticles=[]; for(let i=0;i<6;i++) mistParticles.push(new Mist()); for(let i=0;i<80;i++) particles.push(new Sparkle()); }
-            function animate() { ctx.clearRect(0,0,width,height); mistParticles.forEach(p=>{p.update();p.draw()}); ctx.globalCompositeOperation='lighter'; particles.forEach(p=>{p.update();p.draw()}); ctx.globalCompositeOperation='source-over'; requestAnimationFrame(animate); }
-            resize(); animate();
-        })();
-
-        // --- 2. GENERAL UI LOGIC ---
-        document.addEventListener('DOMContentLoaded', () => {
-            
-            // Cursor
-            const cursorDot = document.querySelector('.cursor-dot');
-            const cursorCircle = document.querySelector('.cursor-circle');
-            let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-            document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px'; });
-            function animateCursor() {
-                let dx = mouseX - cursorX; let dy = mouseY - cursorY; cursorX += dx * 0.15; cursorY += dy * 0.15;
-                cursorCircle.style.left = cursorX + 'px'; cursorCircle.style.top = cursorY + 'px'; requestAnimationFrame(animateCursor);
-            }
-            animateCursor();
-
-            // Hover States
-            document.querySelectorAll('.interactable').forEach(el => {
-                el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-                el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-            });
-
-            // 3D Tilt with Filter Compatibility
-            const cards = document.querySelectorAll('.tilt-card');
-            cards.forEach(card => {
-                card.addEventListener('mousemove', (e) => {
-                    // Prevent tilt if animation is running to avoid conflict
-                    if(card.classList.contains('animate-fade-in')) return;
-
-                    const rect = card.getBoundingClientRect(); const x = e.clientX - rect.left; const y = e.clientY - rect.top;
-                    const centerX = rect.width / 2; const centerY = rect.height / 2;
-                    const rotateX = ((y - centerY) / centerY) * -20; const rotateY = ((x - centerX) / centerX) * 20;
-                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
-                });
-                card.addEventListener('mouseleave', () => { 
-                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)'; 
-                });
-            });
-
-            // Menu
-            const menuBtn = document.getElementById('menu-btn'); const menuPopup = document.getElementById('menu-popup');
-            menuBtn.addEventListener('click', (e) => { e.stopPropagation(); menuPopup.classList.toggle('opacity-0'); menuPopup.classList.toggle('pointer-events-none'); menuPopup.classList.toggle('scale-90'); menuPopup.classList.toggle('scale-100'); });
-            document.addEventListener('click', (e) => { if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) { menuPopup.classList.add('opacity-0', 'pointer-events-none', 'scale-90'); menuPopup.classList.remove('scale-100'); } });
-
-            // Filters (Robust Fix for Tilt)
-            const filterBtns = document.querySelectorAll('.filter-btn'); 
-            const eventCards = document.querySelectorAll('.event-card');
-            
-            filterBtns.forEach(btn => {
-                btn.addEventListener('click', () => {
-                    // 1. Visual updates for buttons
-                    filterBtns.forEach(b => b.classList.remove('active')); 
-                    btn.classList.add('active');
-                    
-                    const filter = btn.getAttribute('data-filter');
-                    
-                    eventCards.forEach(card => {
-                        // 2. Stop any ongoing animations immediately
-                        card.classList.remove('animate-fade-in');
-                        
-                        // 3. Trigger Reflow (Restart animation capability)
-                        void card.offsetWidth; 
-                        
-                        const category = card.getAttribute('data-category');
-                        
-                        // 4. Reset core styles
-                        card.style.opacity = '1';
-                        
-                        if (filter === 'all' || category === filter) {
-                            card.style.display = 'flex'; 
-                            card.classList.add('animate-fade-in');
-                            
-                            // 5. Cleanup after animation ends
-                            setTimeout(() => { 
-                                card.classList.remove('animate-fade-in'); 
-                                // CLEAR the transform so the Tilt script can take over cleanly
-                                card.style.transform = ''; 
-                            }, 400); // 400ms matches the CSS animation duration
-                        } else { 
-                            card.style.display = 'none'; 
-                        }
-                    });
-                });
-            });
-
-            // Scroll Header Effect
-            window.addEventListener('scroll', () => {
-                const scrolled = window.scrollY; const headerContent = document.getElementById('header-content'); const startEffectAt = 100;
-                if (scrolled > startEffectAt) {
-                    const effectiveScroll = scrolled - startEffectAt; const opacity = 1 - (effectiveScroll / 800); const scale = 1 - (effectiveScroll / 2500);
-                    headerContent.style.opacity = opacity > 0 ? opacity : 0; headerContent.style.transform = `translateY(${effectiveScroll * 0.4}px) scale(${scale})`;
-                } else { headerContent.style.opacity = 1; headerContent.style.transform = 'translateY(0) scale(1)'; }
-            });
-
-            // Reveal Animation (FIXED RESIZE BUG)
-            // Once visible, it stays visible. The 'else' block was removing the class on resize.
-            const observer = new IntersectionObserver((entries) => { 
-                entries.forEach(entry => { 
-                    if (entry.isIntersecting) { 
-                        entry.target.classList.add('visible'); 
-                        // Optional: observer.unobserve(entry.target); 
-                    } 
-                }); 
-            }, { threshold: 0.1 }); // Lowered threshold slightly for better mobile experience
-            document.querySelectorAll('.reveal-container').forEach(section => observer.observe(section));
-        });
-
-        // --- 3. EVENT DATA ---
-        const genericSchedule = [
-            { icon: "fa-calendar-alt", label: "Date", value: "05 February, 2026", sub: "9:00 AM" },
-            { icon: "fa-map-marker-alt", label: "Venue", value: "TBA", sub: "Main Block" },
-            { icon: "fa-user-tie", label: "Coordinator", value: "Prof. X", sub: "+91 98765 43210" }
-        ];
-        const genericRules = ["Decision of judges is final.", "Bring valid college ID.", "Strictly follow timings."];
-
-        const eventDatabase = {
-            "Paper Presentation": { 
-                type: "TECHNICAL", 
-                title: "Paper Presentation", 
-                summary: "Showcase your research.", 
-                desc: "A premier platform for students to present technical papers on emerging technologies. Participants will be judged on innovation, clarity, and presentation style.", 
-                rounds: [
-                    { name: "Phase 1", title: "Abstract Submission", desc: "Submit your abstract online (Max 250 words)." },
-                    { name: "Phase 2", title: "Final Presentation", desc: "Selected teams present their paper (8 mins + 2 mins Q&A)." }
-                ],
-                rules: ["Max 3 members per team.", "IEEE format mandatory.", "Bring soft copy in pendrive."],
-                schedule: genericSchedule 
-            },
-            "Robo Soccer": { 
-                type: "TECHNICAL", 
-                title: "Robo Soccer", 
-                summary: "Bots on the field.", 
-                desc: "Experience the thrill of football with robots. Manual or automated bots compete to score goals in a dedicated arena.", 
-                rounds: [
-                    { name: "Round 1", title: "League Stage", desc: "Teams compete in groups. Top 2 qualify." },
-                    { name: "Round 2", title: "Knockout", desc: "Sudden death matches for the semi-finals." }
-                ],
-                rules: ["Bot dimensions: 30x30cm.", "Max weight: 5kg.", "Wired/Wireless allowed."],
-                schedule: genericSchedule 
-            },
-            "Pick N Place": { 
-                type: "TECHNICAL", 
-                title: "Pick N Place", 
-                summary: "Precision Robotics.", 
-                desc: "Test your bot's gripper accuracy. Transport cubes from source to destination zones while overcoming obstacles.", 
-                rounds: [
-                    { name: "Round 1", title: "Obstacle Course", desc: "Navigate track without touching borders." },
-                    { name: "Round 2", title: "The Job", desc: "Pick and place maximum blocks in 3 mins." }
-                ],
-                rules: ["Points for each block placed.", "Penalty for touching walls."],
-                schedule: genericSchedule 
-            },
-            "Lab Lockdown": { 
-                type: "TECHNICAL", 
-                title: "Lab Lockdown", 
-                summary: "Circuit Escape Room.", 
-                desc: "You are locked in a lab. Solve technical riddles and debug circuits to find the code to open the door.", 
-                rounds: [
-                    { name: "Level 1", title: "Component Identification", desc: "Identify components to get clues." },
-                    { name: "Level 2", title: "Circuit Debug", desc: "Fix the connection to reveal the code." }
-                ],
-                rules: ["No mobile phones.", "Basic components provided."],
-                schedule: genericSchedule 
-            },
-            "Circuit Wars": { 
-                type: "TECHNICAL", 
-                title: "Circuit Wars", 
-                summary: "Hardware Debugging.", 
-                desc: "A race against time to design and debug analog/digital circuits on a breadboard.", 
-                rounds: [
-                    { name: "Round 1", title: "Circuit Fix", desc: "Find the error in the given circuit." },
-                    { name: "Round 2", title: "Design Challenge", desc: "Build a circuit for the given output waveform." }
-                ],
-                rules: ["Multimeters provided.", "Neatness carries points."],
-                schedule: genericSchedule 
-            },
-            "Prompt Verse": { 
-                type: "TECHNICAL", 
-                title: "Prompt Verse", 
-                summary: "AI Prompt Engineering.", 
-                desc: "Unleash your creativity using Generative AI. Craft specific prompts to generate images or code snippets.", 
-                rounds: [
-                    { name: "Round 1", title: "Image Gen", desc: "Recreate a target image using prompts." },
-                    { name: "Round 2", title: "Code Gen", desc: "Generate optimized code for a logic puzzle." }
-                ],
-                rules: ["Specific tools provided.", "No internet searching allowed."],
-                schedule: genericSchedule 
-            },
-            "Coding Marathon": { 
-                type: "TECHNICAL", 
-                title: "Coding Marathon", 
-                summary: "Algorithmic Sprint.", 
-                desc: "6 hours of continuous coding. Solve data structure and algorithmic problems of increasing difficulty.", 
-                rounds: [
-                    { name: "Sprint", title: "Rapid Fire", desc: "10 easy problems in 1 hour." },
-                    { name: "Marathon", title: "Deep Dive", desc: "5 hard problems in 3 hours." }
-                ],
-                rules: ["Languages: C, C++, Python, Java.", "Plagiarism check active."],
-                schedule: genericSchedule 
-            },
-            "Chess": { 
-                type: "NON-TECHNICAL", 
-                title: "Chess", 
-                summary: "Grandmaster Challenge.", 
-                desc: "Strategic board game tournament. Prove your tactical prowess on the 64 squares.", 
-                rounds: [
-                    { name: "Round 1", title: "Blitz", desc: "5 min rapid games." },
-                    { name: "Round 2", title: "Classic", desc: "15 min + 10s increment." }
-                ],
-                rules: ["FIDE rules apply.", "Touch-move rule active."],
-                schedule: genericSchedule 
-            },
-            "Carrom": { 
-                type: "NON-TECHNICAL", 
-                title: "Carrom", 
-                summary: "Striker's Arena.", 
-                desc: "Showcase your aim and rebounds in this classic indoor game tournament.", 
-                rounds: [
-                    { name: "Round 1", title: "Doubles", desc: "Team coordination test." },
-                    { name: "Round 2", title: "Singles", desc: "Solo skill test." }
-                ],
-                rules: ["Standard ICF rules.", "Referees decision final."],
-                schedule: genericSchedule 
-            },
-            "Treasure Hunt": { 
-                type: "NON-TECHNICAL", 
-                title: "Treasure Hunt", 
-                summary: "Campus Mystery.", 
-                desc: "Decipher clues, navigate the campus, and solve the murder mystery scenario to find the treasure.", 
-                rounds: [
-                    { name: "Phase 1", title: "Clue Chase", desc: "Find 5 hidden locations." },
-                    { name: "Phase 2", title: "The Reveal", desc: "Solve the final puzzle box." }
-                ],
-                rules: ["Teams of 4.", "Do not damage property."],
-                schedule: genericSchedule 
-            },
-            "General Quiz": { 
-                type: "NON-TECHNICAL", 
-                title: "General Quiz", 
-                summary: "Battle of Brains.", 
-                desc: "From pop culture to current affairs. A high-energy quiz for trivia enthusiasts.", 
-                rounds: [
-                    { name: "Round 1", title: "Written Prelims", desc: "20 questions, 10 minutes." },
-                    { name: "Round 2", title: "Stage Finale", desc: "Buzzer round for top 6 teams." }
-                ],
-                rules: ["No mobile phones.", "QM decision final."],
-                schedule: genericSchedule 
-            },
-            "IPL Auction": { 
-                type: "NON-TECHNICAL", 
-                title: "IPL Auction", 
-                summary: "Bidding War.", 
-                desc: "Use your virtual budget wisely to build the strongest cricket team based on stats.", 
-                rounds: [
-                    { name: "Round 1", title: "Cricket Quiz", desc: "Qualifier for auction spots." },
-                    { name: "Round 2", title: "The Auction", desc: "Live bidding simulation." }
-                ],
-                rules: ["Virtual budget 50 Cr.", "Must buy min 11 players."],
-                schedule: genericSchedule 
-            },
-            "Free Fire": { 
-                type: "NON-TECHNICAL", 
-                title: "Free Fire", 
-                summary: "Survival Squad.", 
-                desc: "Drop in, gear up, and survive. The last squad standing wins the chicken dinner.", 
-                rounds: [
-                    { name: "Map 1", title: "Bermuda", desc: "Classic battle royale." },
-                    { name: "Map 2", title: "Purgatory", desc: "Final showdown." }
-                ],
-                rules: ["Mobile only.", "No emulators/triggers."],
-                schedule: genericSchedule 
-            },
-            "E-Football": { 
-                type: "NON-TECHNICAL", 
-                title: "E-Football", 
-                summary: "Virtual Kickoff.", 
-                desc: "Console/Mobile football tournament. Control your favorite clubs to victory.", 
-                rounds: [
-                    { name: "Group", title: "League", desc: "Round robin matches." },
-                    { name: "Final", title: "Knockout", desc: "10 min matches, penalties if draw." }
-                ],
-                rules: ["Standard settings.", "No custom squads."],
-                schedule: genericSchedule 
-            },
-            "IoT Grid": { 
-                type: "WORKSHOP", 
-                title: "IoT Workshop", 
-                summary: "Smart Systems.", 
-                desc: "Learn to interface sensors with ESP32 and visualize data on the cloud.", 
-                rounds: [
-                    { name: "Session 1", title: "Basics", desc: "Arduino IDE & Sensor interfacing." },
-                    { name: "Session 2", title: "Cloud", desc: "MQTT & Dashboard creation." }
-                ],
-                rules: ["Laptops required.", "Kits provided."],
-                schedule: genericSchedule 
-            }
-        };
-
-        // --- 4. MODAL LOGIC (With Loading & History) ---
-        const modal = document.getElementById('event-modal');
-        const modalLoader = document.getElementById('modal-loader');
-        const modalScrollContainer = document.getElementById('modal-scroll-container');
-        const themeWrapper = document.getElementById('modal-theme-wrapper');
-
-        // Internal: Hide UI
-        function _hideModalUI() {
-            modal.classList.add('opacity-0');
-            setTimeout(() => {
-                modal.classList.add('hidden');
-                document.body.style.overflow = 'auto'; 
-            }, 300);
-        }
-
-        // Close Trigger
-        function closeModal() {
-            if (window.history.state && window.history.state.modalOpen) {
-                window.history.back(); // Triggers popstate
-            } else {
-                _hideModalUI();
-                history.replaceState(null, null, ' ');
-            }
-        }
-
-        // Browser Back Button Listener
-        window.addEventListener('popstate', (event) => {
-            if (!modal.classList.contains('hidden')) { _hideModalUI(); }
-        });
-
-        // Theme Helper
-        function applyTheme(category) {
-            // Reset base classes
-            themeWrapper.className = 'min-h-screen w-full flex flex-col items-center py-16 px-4 md:px-8 transition-colors duration-500';
-            const typeBadge = document.getElementById('m-event-type');
-            
-            const cat = category.toLowerCase();
-            if (cat.includes('tech') || cat.includes('coding') || cat.includes('robotics') || cat.includes('circuit') || cat.includes('flagship') || cat.includes('workshop')) {
-                themeWrapper.classList.add('theme-tech'); 
-                typeBadge.innerText = "TECHNICAL";
-            } else {
-                themeWrapper.classList.add('theme-non-tech'); 
-                typeBadge.innerText = "NON-TECHNICAL";
-            }
-        }
-
-        // OPEN MODAL
-        function openModal(eventName) {
-            // 1. Get Data
-            const data = eventDatabase[eventName] || eventDatabase["Paper Presentation"];
-            
-            // 2. Setup UI (Hidden Content, Visible Loader)
-            applyTheme(data.type);
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-            
-            modalLoader.classList.remove('hidden'); // Show Spinner
-            modalScrollContainer.classList.add('opacity-0'); // Hide Content initially
-            document.body.style.overflow = 'hidden';
-
-            // 3. Populate Data
-            document.getElementById('m-event-name').innerText = data.title;
-            document.getElementById('m-event-summary').innerText = data.summary;
-            document.getElementById('m-event-desc').innerText = data.desc;
-            document.getElementById('m-poster').style.backgroundImage = data.poster || ""; 
-
-            const roundsContainer = document.getElementById('m-rounds-container');
-            if(data.rounds && data.rounds.length > 0) {
-                roundsContainer.innerHTML = data.rounds.map(round => `
-                    <div class="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
-                        <span class="text-[10px] font-bold accent-text uppercase tracking-wider mb-1 block">${round.name}</span>
-                        <h4 class="text-lg font-bold text-slate-200 mb-1 font-orbitron">${round.title}</h4>
-                        <p class="text-xs text-slate-400 leading-relaxed">${round.desc}</p>
-                    </div>`).join('');
-                roundsContainer.parentElement.style.display = 'block';
-            } else { roundsContainer.parentElement.style.display = 'none'; }
-
-            document.getElementById('m-rules-list').innerHTML = data.rules.map(rule => `<li>${rule}</li>`).join('');
-            document.getElementById('m-schedule-container').innerHTML = data.schedule.map(item => `
-                <div class="flex items-start gap-4">
-                    <div class="schedule-icon w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 text-lg text-slate-500 bg-slate-800"><i class="fas ${item.icon}"></i></div>
-                    <div><p class="text-xs text-slate-500 uppercase tracking-widest font-bold">${item.label}</p><p class="text-sm md:text-base font-bold text-slate-300">${item.value}</p><p class="text-xs text-slate-500">${item.sub}</p></div>
-                </div>`).join('');
-
-            // 4. Push History
-            window.history.pushState({ modalOpen: true }, "", "#event-details");
-
-            // 5. Simulate Loading Delay (600ms)
-            setTimeout(() => {
-                modalLoader.classList.add('hidden'); // Hide Spinner
-                modalScrollContainer.classList.remove('opacity-0'); // Fade in Content
-            }, 600);
-        }
-
-        // Connect Listeners
-        document.querySelectorAll('.event-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if(e.target.closest('a') || e.target.closest('button')) return;
-                const title = card.querySelector('h3')?.innerText;
-                openModal(title);
-            });
-        });
-        
-        document.getElementById('close-modal').addEventListener('click', closeModal);
-        document.getElementById('modal-backdrop').addEventListener('click', closeModal);
-
-        
-    </script>
 </body>
 </html>
