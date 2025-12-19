@@ -37,16 +37,39 @@
 // --- 2. GENERAL UI LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Cursor
-    const cursorDot = document.querySelector('.cursor-dot');
-    const cursorCircle = document.querySelector('.cursor-circle');
-    let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-    document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; cursorDot.style.left = mouseX + 'px'; cursorDot.style.top = mouseY + 'px'; });
-    function animateCursor() {
-        let dx = mouseX - cursorX; let dy = mouseY - cursorY; cursorX += dx * 0.15; cursorY += dy * 0.15;
-        cursorCircle.style.left = cursorX + 'px'; cursorCircle.style.top = cursorY + 'px'; requestAnimationFrame(animateCursor);
+    // Inside your DOMContentLoaded block in script.js
+    if (window.matchMedia("(pointer: fine)").matches) {
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorCircle = document.querySelector('.cursor-circle');
+            // Replace the cursor animation section in script.js
+let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
+
+document.addEventListener('mousemove', (e) => { 
+    mouseX = e.clientX; 
+    mouseY = e.clientY; 
+    // Immediate movement for the dot to feel responsive
+    cursorDot.style.left = mouseX + 'px'; 
+    cursorDot.style.top = mouseY + 'px'; 
+});
+
+function animateCursor() {
+    // Increase the lerp factor slightly for better performance inside the modal
+    // Changing 0.15 to 0.2 makes the circle follow more tightly
+    let dx = mouseX - cursorX; 
+    let dy = mouseY - cursorY; 
+    
+    cursorX += dx * 0.2; 
+    cursorY += dy * 0.2;
+    
+    cursorCircle.style.transform = `translate3d(${cursorX - mouseX}px, ${cursorY - mouseY}px, 0)`;
+    // Using translate3d instead of top/left for the circle improves FPS
+    cursorCircle.style.left = mouseX + 'px';
+    cursorCircle.style.top = mouseY + 'px';
+    
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
     }
-    animateCursor();
 
     // Hover States
     document.querySelectorAll('.interactable').forEach(el => {
@@ -74,24 +97,31 @@ document.addEventListener('DOMContentLoaded', () => {
     menuBtn.addEventListener('click', (e) => { e.stopPropagation(); menuPopup.classList.toggle('opacity-0'); menuPopup.classList.toggle('pointer-events-none'); menuPopup.classList.toggle('scale-90'); menuPopup.classList.toggle('scale-100'); });
     document.addEventListener('click', (e) => { if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) { menuPopup.classList.add('opacity-0', 'pointer-events-none', 'scale-90'); menuPopup.classList.remove('scale-100'); } });
 
-    // Filters
-    const filterBtns = document.querySelectorAll('.filter-btn'); 
-    const eventCards = document.querySelectorAll('.event-card');
-    filterBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            filterBtns.forEach(b => b.classList.remove('active')); btn.classList.add('active');
-            const filter = btn.getAttribute('data-filter');
-            eventCards.forEach(card => {
-                card.classList.remove('animate-fade-in'); void card.offsetWidth; card.style.opacity = '1';
-                const category = card.getAttribute('data-category');
-                if (filter === 'all' || category === filter) {
-                    card.style.display = 'flex'; card.classList.add('animate-fade-in');
-                    setTimeout(() => { card.classList.remove('animate-fade-in'); card.style.transform = ''; }, 400);
-                } else { card.style.display = 'none'; }
-            });
+    // Locate the Filters section in your DOMContentLoaded block
+const filterBtns = document.querySelectorAll('.filter-btn'); 
+const eventCards = document.querySelectorAll('.event-card');
+
+filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active')); 
+        btn.classList.add('active');
+        
+        const filter = btn.getAttribute('data-filter');
+        
+        eventCards.forEach(card => {
+            const category = card.getAttribute('data-category');
+            
+            // Logic: Show if 'all' is selected OR if the category matches the filter
+            if (filter === 'all' || category === filter) {
+                card.style.display = 'flex';
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            } else { 
+                card.style.display = 'none'; 
+            }
         });
     });
-
+});
     // Modal Functionality
     const modal = document.getElementById('event-modal');
     const closeModalBtn = document.getElementById('close-modal');
@@ -103,217 +133,298 @@ document.addEventListener('DOMContentLoaded', () => {
     const modalPrizes = document.getElementById('modal-prizes');
     const modalImage = document.getElementById('modal-image');
 
-    // Event data (you can expand this with actual data)
+    // Updated Event Data with Prize Pool and Team Size
     const eventData = {
         'Paper Presentation': {
             title: 'Paper Presentation',
             subtitle: 'Innovation Showcase',
             badge: 'FLAGSHIP',
+            prizePool: '₹10,000+',
+            teamSize: '1-2 Members',
             description: 'Present your innovative ideas for the problem statement. Showcase your research and technical expertise in front of industry experts.',
             rules: ['Maximum 2 members per team', 'Presentation time: 10 minutes', 'Q&A session follows'],
-            prizes: ['1st Prize: ₹5000', '2nd Prize: ₹3000', '3rd Prize: ₹2000'],
             image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop'
         },
         'Hackathon': {
             title: 'Hackathon',
             subtitle: 'CodeFest Arena',
             badge: 'CODEFEST',
+            prizePool: '₹22,000+',
+            teamSize: '2-4 Members',
             description: '24-hour grueling test of endurance. Build innovative solutions to real-world problems.',
             rules: ['Team size: 2-4 members', '24 hours duration', 'Themes announced on spot'],
-            prizes: ['1st Prize: ₹10000', '2nd Prize: ₹7000', '3rd Prize: ₹5000'],
             image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop'
         },
         'Robo Soccer': {
             title: 'Robo Soccer',
             subtitle: 'Robotics Challenge',
             badge: 'ROBOTICS',
+            prizePool: '₹16,000+',
+            teamSize: 'Up to 4 Members',
             description: 'Automated units engage in tactical sport. Build and program robots for soccer competition.',
             rules: ['Robot size restrictions apply', 'Manual control allowed', 'Safety protocols mandatory'],
-            prizes: ['1st Prize: ₹8000', '2nd Prize: ₹5000', '3rd Prize: ₹3000'],
             image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop'
         },
         'Pick N Place': {
             title: 'Pick N Place',
             subtitle: 'Precision Robotics',
             badge: 'ROBOTICS',
+            prizePool: '₹12,500+',
+            teamSize: '1-3 Members',
             description: 'Precision control required. Maneuver robots to pick and place objects accurately.',
             rules: ['Time-based scoring', 'Accuracy is key', 'Multiple rounds'],
-            prizes: ['1st Prize: ₹6000', '2nd Prize: ₹4000', '3rd Prize: ₹2500'],
             image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop'
         },
         'Line Rush': {
             title: 'Line Rush',
             subtitle: 'RC Racing',
             badge: 'ROBOTICS',
+            prizePool: '₹8,000+',
+            teamSize: '1-2 Members',
             description: 'Follow the line by your RC to win. High-speed line following competition.',
-            rules: ['RC car specifications', 'Track layout provided', 'Fastest time wins'],
-            prizes: ['1st Prize: ₹4000', '2nd Prize: ₹2500', '3rd Prize: ₹1500'],
+            rules: ['RC car specifications apply', 'Track layout provided', 'Fastest time wins'],
             image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop'
         },
         'Lab Lockdown': {
             title: 'Lab Lockdown',
             subtitle: 'Circuit Puzzle',
             badge: 'CIRCUITS',
+            prizePool: '₹6,000+',
+            teamSize: 'Individual',
             description: 'Escape the laboratory by solving technical puzzles. Debug circuits and unlock the lab.',
             rules: ['Individual participation', 'Time limit: 30 minutes', 'Logic and knowledge required'],
-            prizes: ['1st Prize: ₹3000', '2nd Prize: ₹2000', '3rd Prize: ₹1000'],
             image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop'
         },
         'Circuit Wars': {
             title: 'Circuit Wars',
             subtitle: 'Hardware Battle',
             badge: 'HARDWARE',
+            prizePool: '₹10,000+',
+            teamSize: '2 Members',
             description: 'Battle of the breadboards. Debug complex circuits and win the war.',
             rules: ['Team of 2', 'Circuit debugging', 'Efficiency matters'],
-            prizes: ['1st Prize: ₹5000', '2nd Prize: ₹3000', '3rd Prize: ₹2000'],
             image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop'
         },
         'Prompt Verse': {
             title: 'Prompt Verse',
             subtitle: 'AI Mastery',
             badge: 'AI/ML',
+            prizePool: '₹8,000+',
+            teamSize: 'Individual',
             description: 'Master the art of AI communication. Craft perfect prompts for AI systems.',
             rules: ['Individual event', 'Prompt engineering', 'Creativity judged'],
-            prizes: ['1st Prize: ₹4000', '2nd Prize: ₹2500', '3rd Prize: ₹1500'],
             image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop'
         },
         'Coding Marathon': {
             title: 'Coding Marathon',
             subtitle: 'Algorithm Challenge',
             badge: 'SOFTWARE',
+            prizePool: '₹12,500+',
+            teamSize: '1-2 Members',
             description: 'Solve algorithmic challenges continuously. Test your coding endurance.',
             rules: ['Individual or team', 'Multiple problems', 'Time and correctness'],
-            prizes: ['1st Prize: ₹6000', '2nd Prize: ₹4000', '3rd Prize: ₹2500'],
             image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2070&auto=format&fit=crop'
         },
         'Treasure Hunt': {
             title: 'Treasure Hunt',
             subtitle: 'Mystery Quest',
             badge: 'MYSTERY',
+            prizePool: '₹16,000+',
+            teamSize: '4-6 Members',
             description: 'Solve the murder case scenario and find the treasure. Ultimate adventure game.',
             rules: ['Team of 4-6', 'Campus wide', 'Clues and riddles'],
-            prizes: ['1st Prize: ₹8000', '2nd Prize: ₹5000', '3rd Prize: ₹3000'],
             image: 'https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=2070&auto=format&fit=crop'
         },
+        // Add these to eventData in script.js
+'Coding Combo': {
+    title: 'CODING COMBO',
+    subtitle: 'THE FULL-STACK PATHWAY',
+    badge: 'ELITE BUNDLE',
+    description: 'Elevate your status to Elite Developer. This specialized protocol grants you simultaneous access to the 24H Hackathon and the Coding Marathon. Master both endurance and speed in a single uplink.',
+    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070'
+},
+'Circuit Combo': {
+    title: 'CIRCUIT COMBO',
+    subtitle: 'THE SILICON VORTEX',
+    badge: 'ELITE BUNDLE',
+    description: 'A dedicated uplink for Hardware Architects. Unlock both Circuit Wars and Lab Lockdown with one command. Debug the physical world and solve the laboratory mysteries in this high-voltage package.',
+    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070'
+},
         'Carrom': {
             title: 'Carrom',
             subtitle: 'Table Game',
             badge: 'GAMING',
+            prizePool: '₹3,000+',
+            teamSize: '1-2 Members',
             description: 'Strike and pocket. Showcase your finger dexterity in this classic game.',
             rules: ['Doubles or singles', 'Standard rules', 'Best of 3'],
-            prizes: ['1st Prize: ₹2000', '2nd Prize: ₹1000'],
             image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop'
         },
         'Chess': {
             title: 'Chess',
             subtitle: 'Mind Game',
             badge: 'STRATEGY',
+            prizePool: '₹6,000+',
+            teamSize: 'Individual',
             description: 'Checkmate your opponent in this battle of wits. Strategic thinking required.',
             rules: ['Standard chess rules', 'Time control', 'Tournament format'],
-            prizes: ['1st Prize: ₹3000', '2nd Prize: ₹2000', '3rd Prize: ₹1000'],
             image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=2070&auto=format&fit=crop'
         },
         'General Quiz': {
             title: 'General Quiz',
             subtitle: 'Knowledge Battle',
             badge: 'TRIVIA',
+            prizePool: '₹8,000+',
+            teamSize: '2-3 Members',
             description: 'Rapid-fire quiz covering social science and current affairs.',
             rules: ['Team of 2-3', 'Multiple rounds', 'Quick responses'],
-            prizes: ['1st Prize: ₹4000', '2nd Prize: ₹2500', '3rd Prize: ₹1500'],
             image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop'
         },
         'IPL Auction': {
             title: 'IPL Auction',
             subtitle: 'Cricket Strategy',
             badge: 'MANAGEMENT',
+            prizePool: '₹10,000+',
+            teamSize: '3-4 Members',
             description: 'Build your dream team. Strategize your budget in this cricket auction simulation.',
             rules: ['Team management', 'Budget constraints', 'Strategy wins'],
-            prizes: ['1st Prize: ₹5000', '2nd Prize: ₹3000', '3rd Prize: ₹2000'],
             image: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=2070&auto=format&fit=crop'
         },
         'Free Fire': {
             title: 'Free Fire',
             subtitle: 'Battle Royale',
             badge: 'ESPORTS',
+            prizePool: '₹22,000+',
+            teamSize: 'Squad (4)',
             description: 'Battle Royale. Survival of the fittest in this mobile gaming tournament.',
             rules: ['Squad matches', 'Ranked play', 'Fair play mandatory'],
-            prizes: ['1st Prize: ₹10000', '2nd Prize: ₹7000', '3rd Prize: ₹5000'],
             image: 'https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?q=80&w=2070&auto=format&fit=crop'
         },
         'E-Football': {
             title: 'E-Football',
             subtitle: 'Virtual Football',
             badge: 'ESPORTS',
+            prizePool: '₹12,500+',
+            teamSize: 'Individual',
             description: 'Virtual pitch glory. 1v1 football simulation tournament.',
             rules: ['FIFA game', 'Single matches', 'Skill demonstration'],
-            prizes: ['1st Prize: ₹6000', '2nd Prize: ₹4000', '3rd Prize: ₹2500'],
             image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop'
         },
         'IoT Grid': {
             title: 'IoT Grid',
             subtitle: 'Connected World',
             badge: 'TRAINING',
+            prizePool: 'Certification',
+            teamSize: 'Individual',
             description: 'Interface with the ESP32 node. Establish global connectivity in IoT workshop.',
             rules: ['Hands-on workshop', 'Basic electronics', 'Programming involved'],
-            prizes: ['Certificates', 'Best project award'],
             image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop'
         }
     };
 
-    eventCards.forEach(card => {
-        card.addEventListener('click', (e) => {
-            e.preventDefault();
-            const eventName = card.querySelector('h3').textContent.trim();
-            const category = card.getAttribute('data-category');
-            const data = eventData[eventName];
-            
-            if (data) {
-                // Set theme
-                modal.classList.remove('theme-tech', 'theme-non-tech', 'theme-flagship');
-                if (category === 'tech') {
-                    modal.classList.add('theme-tech');
-                    document.querySelectorAll('.modal-bg-mesh').forEach(el => el.classList.remove('hidden'));
-                    document.querySelectorAll('.modal-bg-stars, .modal-bg-flagship').forEach(el => el.classList.add('hidden'));
-                    document.querySelectorAll('.modal-blob-tech').forEach(el => el.classList.remove('hidden'));
-                    document.querySelectorAll('.modal-blob-nebula, .modal-blob-flagship').forEach(el => el.classList.add('hidden'));
-                } else if (category === 'non-tech') {
-                    modal.classList.add('theme-non-tech');
-                    document.querySelectorAll('.modal-bg-stars').forEach(el => el.classList.remove('hidden'));
-                    document.querySelectorAll('.modal-bg-mesh, .modal-bg-flagship').forEach(el => el.classList.add('hidden'));
-                    document.querySelectorAll('.modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
-                    document.querySelectorAll('.modal-blob-tech, .modal-blob-flagship').forEach(el => el.classList.add('hidden'));
-                } else if (category === 'flagship') {
-                    modal.classList.add('theme-flagship');
-                    document.querySelectorAll('.modal-bg-flagship').forEach(el => el.classList.remove('hidden'));
-                    document.querySelectorAll('.modal-bg-mesh, .modal-bg-stars').forEach(el => el.classList.add('hidden'));
-                    document.querySelectorAll('.modal-blob-flagship').forEach(el => el.classList.remove('hidden'));
-                    document.querySelectorAll('.modal-blob-tech, .modal-blob-nebula').forEach(el => el.classList.add('hidden'));
-                } else {
-                    // Default
-                    document.querySelectorAll('.modal-bg-mesh, .modal-bg-stars, .modal-bg-flagship, .modal-blob-tech, .modal-blob-nebula, .modal-blob-flagship').forEach(el => el.classList.add('hidden'));
-                }
+    // Rules Toggle Logic
+    const rulesBtn = document.getElementById('rules-toggle-btn');
+    const rulesContent = document.getElementById('rules-content');
+    const rulesIcon = document.getElementById('rules-icon');
 
-                // Populate content
-                modalTitle.textContent = data.title;
-                modalSubtitle.textContent = data.subtitle;
-                modalBadge.textContent = data.badge;
-                modalDescription.textContent = data.description;
-                modalImage.style.backgroundImage = `url('${data.image}')`;
-                
-                modalRules.innerHTML = data.rules.map(rule => `<li>${rule}</li>`).join('');
-                modalPrizes.innerHTML = data.prizes.map(prize => `<li>${prize}</li>`).join('');
-
-                // Show modal
-                modal.classList.remove('hidden');
-                document.body.style.overflow = 'hidden';
-            }
-        });
+    rulesBtn.addEventListener('click', () => {
+        const isOpen = rulesContent.style.maxHeight !== '0px' && rulesContent.style.maxHeight !== '';
+        
+        if (isOpen) {
+            rulesContent.style.maxHeight = '0px';
+            rulesIcon.style.transform = 'rotate(0deg)';
+        } else {
+            rulesContent.style.maxHeight = rulesContent.scrollHeight + 'px';
+            rulesIcon.style.transform = 'rotate(180deg)';
+        }
     });
 
+    // Important: Reset rules accordion when closing modal
+    const closeBtn = document.getElementById('close-modal');
+    closeBtn.addEventListener('click', () => {
+        rulesContent.style.maxHeight = '0px';
+        rulesIcon.style.transform = 'rotate(0deg)';
+    });
+
+   eventCards.forEach(card => {
+    card.addEventListener('click', () => {
+        const eventName = card.querySelector('h3').textContent.trim();
+        const category = card.getAttribute('data-category');
+        const data = eventData[eventName];
+        
+        if (data) {
+            const isCombo = (category === 'combo');
+
+            // --- 1. RESET ALL THEMES AND BACKGROUNDS ---
+            modal.classList.remove('theme-tech', 'theme-non-tech', 'theme-flagship', 'theme-combo');
+            document.querySelectorAll('.modal-bg-mesh, .modal-bg-stars, .modal-bg-flagship, .modal-blob-tech, .modal-blob-nebula, .modal-blob-flagship')
+                .forEach(el => el.classList.add('hidden'));
+
+            // --- 2. RESTORE VISIBILITY FOR STANDARD ELEMENTS ---
+            // If it's NOT a combo, show the rules and metadata sections
+            const standardElements = document.querySelectorAll('#rules-toggle-btn, #rules-content, .flex-wrap.gap-4, .grid-cols-1.md\\:grid-cols-3');
+            standardElements.forEach(el => el.style.display = isCombo ? 'none' : 'flex');
+
+            // --- 3. APPLY CATEGORY SPECIFIC THEMES & BACKGROUNDS ---
+            const regBtn = modal.querySelector('.cosmic-btn');
+            
+            if (category === 'tech') {
+                modal.classList.add('theme-tech');
+                document.querySelectorAll('.modal-bg-mesh-tech, .modal-blob-tech').forEach(el => el.classList.remove('hidden'));
+                regBtn.innerHTML = 'SECURE YOUR SPOT <i class="fas fa-bolt ml-2"></i>';
+            } 
+            else if (category === 'non-tech') {
+                modal.classList.add('theme-non-tech');
+                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
+                regBtn.innerHTML = 'SECURE YOUR SPOT <i class="fas fa-bolt ml-2"></i>';
+            } 
+            else if (category === 'flagship') {
+                modal.classList.add('theme-flagship');
+                document.querySelectorAll('.modal-bg-flagship, .modal-blob-flagship').forEach(el => el.classList.remove('hidden'));
+                regBtn.innerHTML = 'SECURE YOUR SPOT <i class="fas fa-bolt ml-2"></i>';
+            }
+            else if (category === 'combo') {
+                modal.classList.add('theme-combo');
+                // Combos use the Nebula/Star background for a premium feel
+                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
+                regBtn.innerHTML = 'INITIALIZE BUNDLE PROTOCOL <i class="fas fa-layer-group ml-2"></i>';
+            }
+
+            // --- 4. POPULATE CONTENT ---
+            modalTitle.textContent = data.title;
+            modalSubtitle.textContent = data.subtitle;
+            modalBadge.textContent = data.badge;
+            modalDescription.textContent = data.description;
+            modalImage.style.backgroundImage = `url('${data.image}')`;
+            
+            // Populate metadata only if not a combo
+            if (!isCombo) {
+                document.getElementById('modal-prize-pool').textContent = data.prizePool || 'TBA';
+                document.getElementById('modal-team-size').textContent = data.teamSize || 'TBA';
+                if (data.rules) {
+                    modalRules.innerHTML = data.rules.map(rule => `<li>${rule}</li>`).join('');
+                }
+            }
+
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    });
+});
     closeModalBtn.addEventListener('click', () => {
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
     });
+    closeModalBtn.addEventListener('mouseenter', () => {
+    document.body.classList.add('hovering');
+    // Optional: add a specific class to the cursor for the close button
+    document.querySelector('.cursor-circle').style.borderColor = '#ef4444';
+});
+
+closeModalBtn.addEventListener('mouseleave', () => {
+    document.body.classList.remove('hovering');
+    document.querySelector('.cursor-circle').style.borderColor = 'rgba(96, 165, 250, 0.5)';
+});
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
@@ -321,7 +432,27 @@ document.addEventListener('DOMContentLoaded', () => {
             document.body.style.overflow = 'auto';
         }
     });
+    
+    // Inside your DOMContentLoaded block
+    document.getElementById('close-modal').addEventListener('mouseenter', () => {
+        document.body.classList.add('hovering');
+    });
+    document.getElementById('close-modal').addEventListener('mouseleave', () => {
+        document.body.classList.remove('hovering');
+    });
 
+    // Timeline Intersection Observer
+    const timelineItems = document.querySelectorAll('.group\\/item');
+    const timelineObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, { threshold: 0.5 });
+
+    timelineItems.forEach(item => timelineObserver.observe(item));
+    
     // Scroll Header
     window.addEventListener('scroll', () => {
         const scrolled = window.scrollY; const headerContent = document.getElementById('header-content'); const startEffectAt = 100;
@@ -334,6 +465,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Reveal Animation
     const observer = new IntersectionObserver((entries) => { 
         entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); 
-    }, { threshold: 0.1 }); 
+    }, { threshold: 0.01 }); 
     document.querySelectorAll('.reveal-container').forEach(section => observer.observe(section));
 });
