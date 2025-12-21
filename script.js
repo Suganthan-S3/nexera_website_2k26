@@ -37,46 +37,6 @@
 // --- 2. GENERAL UI LOGIC ---
 document.addEventListener('DOMContentLoaded', () => {
     
-    // Inside your DOMContentLoaded block in script.js
-    if (window.matchMedia("(pointer: fine)").matches) {
-        const cursorDot = document.querySelector('.cursor-dot');
-        const cursorCircle = document.querySelector('.cursor-circle');
-            // Replace the cursor animation section in script.js
-let mouseX = 0, mouseY = 0, cursorX = 0, cursorY = 0;
-
-document.addEventListener('mousemove', (e) => { 
-    mouseX = e.clientX; 
-    mouseY = e.clientY; 
-    // Immediate movement for the dot to feel responsive
-    cursorDot.style.left = mouseX + 'px'; 
-    cursorDot.style.top = mouseY + 'px'; 
-});
-
-function animateCursor() {
-    // Increase the lerp factor slightly for better performance inside the modal
-    // Changing 0.15 to 0.2 makes the circle follow more tightly
-    let dx = mouseX - cursorX; 
-    let dy = mouseY - cursorY; 
-    
-    cursorX += dx * 0.2; 
-    cursorY += dy * 0.2;
-    
-    cursorCircle.style.transform = `translate3d(${cursorX - mouseX}px, ${cursorY - mouseY}px, 0)`;
-    // Using translate3d instead of top/left for the circle improves FPS
-    cursorCircle.style.left = mouseX + 'px';
-    cursorCircle.style.top = mouseY + 'px';
-    
-    requestAnimationFrame(animateCursor);
-}
-animateCursor();
-    }
-
-    // Hover States
-    document.querySelectorAll('.interactable').forEach(el => {
-        el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
-        el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
-    });
-
     // 3D Tilt
     const cards = document.querySelectorAll('.tilt-card');
     cards.forEach(card => {
@@ -408,6 +368,15 @@ filterBtns.forEach(btn => {
 
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            const wrapper = document.getElementById('modal-content-wrapper');
+    wrapper.style.opacity = '0';
+    wrapper.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+        wrapper.style.transition = 'all 0.6s cubic-bezier(0.22, 1, 0.36, 1)';
+        wrapper.style.opacity = '1';
+        wrapper.style.transform = 'translateY(0)';
+    }, 50);
         }
     });
 });
@@ -441,18 +410,51 @@ closeModalBtn.addEventListener('mouseleave', () => {
         document.body.classList.remove('hovering');
     });
 
-    // Timeline Intersection Observer
-    const timelineItems = document.querySelectorAll('.group\\/item');
-    const timelineObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
-        });
-    }, { threshold: 0.5 });
 
-    timelineItems.forEach(item => timelineObserver.observe(item));
+    // --- Combo Verification Logic ---
+const verifyModal = document.getElementById('combo-verify-modal');
+const closeVerifyBtn = document.getElementById('close-verify-btn');
+const goToComboBtn = document.getElementById('go-to-combo-btn');
+const eventModalRegBtn = document.querySelector('#event-modal .cosmic-btn');
+
+// List of event titles that trigger the check
+const comboTriggerEvents = ['Circuit Wars', 'Lab Lockdown', 'Coding Marathon', 'Prompt Verse'];
+
+eventModalRegBtn.addEventListener('click', (e) => {
+    const currentEventTitle = document.getElementById('modal-title').textContent.trim();
     
+    // Check if the current event is one of the targeted titles
+    if (comboTriggerEvents.includes(currentEventTitle)) {
+        e.preventDefault(); // Stop the immediate registration
+        verifyModal.classList.remove('hidden'); // Show the warning window
+    }
+});
+
+// 1. "Analyze Bundle Protocols" (Go to Combo Section)
+goToComboBtn.addEventListener('click', () => {
+    verifyModal.classList.add('hidden'); // Close warning
+    document.getElementById('event-modal').classList.add('hidden'); // Close event modal
+    document.body.style.overflow = 'auto'; // Restore scroll
+    
+    // Find the combo filter button and click it
+    const comboFilter = document.querySelector('.filter-btn[data-filter="combo"]');
+    if (comboFilter) {
+        comboFilter.click();
+        // Smooth scroll to events
+        document.getElementById('events').scrollIntoView({ behavior: 'smooth' });
+    }
+});
+
+// 2. "Abort Command" (Close window)
+closeVerifyBtn.addEventListener('click', () => {
+    verifyModal.classList.add('hidden');
+});
+
+// Optional: Close on backdrop click
+verifyModal.addEventListener('click', (e) => {
+    if (e.target === verifyModal) verifyModal.classList.add('hidden');
+});
+
     // Scroll Header
     window.addEventListener('scroll', () => {
         const scrolled = window.scrollY; const headerContent = document.getElementById('header-content'); const startEffectAt = 100;
@@ -463,8 +465,83 @@ closeModalBtn.addEventListener('mouseleave', () => {
     });
 
     // Reveal Animation
-    const observer = new IntersectionObserver((entries) => { 
-        entries.forEach(entry => { if (entry.isIntersecting) { entry.target.classList.add('visible'); } }); 
-    }, { threshold: 0.01 }); 
-    document.querySelectorAll('.reveal-container').forEach(section => observer.observe(section));
+    // --- Enhanced Reveal Observer ---
+const observerOptions = {
+    threshold: 0.15, // Trigger when 15% of the section is visible
+    rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the viewport
+};
+
+const observer = new IntersectionObserver((entries) => { 
+    entries.forEach(entry => { 
+        if (entry.isIntersecting) { 
+            entry.target.classList.add('visible'); 
+            // Optional: stop observing once shown to keep performance high
+            // observer.unobserve(entry.target); 
+        } 
+    }); 
+}, observerOptions); 
+
+document.querySelectorAll('.reveal-container').forEach(section => observer.observe(section));
+
+// Add this specific fix to your existing observer in script.js
+const footerObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+        }
+    });
+}, { threshold: 0.05, rootMargin: "0px 0px 100px 0px" }); // Triggers earlier
+
+document.querySelectorAll('footer.reveal-container').forEach(f => footerObserver.observe(f));
+
+// --- UNIFIED TIMELINE FILTER LOGIC ---
+const initTimeline = () => {
+    const timelineFilters = document.querySelectorAll('.timeline-filter-btn');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+
+    if (!timelineFilters.length) return;
+
+    // 1. Initial State: Function to apply filter
+    const applyFilter = (session) => {
+    timelineItems.forEach(item => {
+        const itemSession = item.getAttribute('data-session');
+        if (itemSession === session) {
+            // Remove hidden class first
+            item.classList.remove('hidden-node');
+            item.style.display = "block"; 
+            
+            // Trigger animation
+            requestAnimationFrame(() => {
+                item.style.opacity = "1";
+                item.style.transform = "translateY(0)";
+            });
+        } else {
+            // Hide completely
+            item.style.opacity = "0";
+            item.style.transform = "translateY(20px)";
+            item.classList.add('hidden-node');
+            item.style.display = "none";
+        }
+    });
+};
+
+    // 2. Set default view (Day 1 Forenoon)
+    applyFilter("d1-fn");
+
+    // 3. Click Logic
+    timelineFilters.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Update button styles
+            timelineFilters.forEach(f => f.classList.remove('active'));
+            btn.classList.add('active');
+
+            const selectedSession = btn.getAttribute('data-session');
+            applyFilter(selectedSession);
+        });
+    });
+};
+
+// Call the function inside your existing DOMContentLoaded
+initTimeline();
 });
+
