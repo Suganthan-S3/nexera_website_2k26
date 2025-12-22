@@ -101,6 +101,7 @@ filterBtns.forEach(btn => {
             badge: 'FLAGSHIP',
             prizePool: '₹10,000+',
             teamSize: '1-2 Members',
+            entryFee: '₹500 / team',
             description: 'Present your innovative ideas for the problem statement. Showcase your research and technical expertise in front of industry experts.',
             rules: ['Maximum 2 members per team', 'Presentation time: 10 minutes', 'Q&A session follows'],
             image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop'
@@ -150,36 +151,66 @@ filterBtns.forEach(btn => {
             subtitle: 'Circuit Puzzle',
             badge: 'CIRCUITS',
             prizePool: '₹6,000+',
-            teamSize: 'Individual',
+            regLink:'#',
+            teamSize: '2-3 Members',
+            entryFee: '₹200 / team',
             description: 'Escape the laboratory by solving technical puzzles. Debug circuits and unlock the lab.',
             rules: ['Individual participation', 'Time limit: 30 minutes', 'Logic and knowledge required'],
             image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop'
         },
         'Circuit Wars': {
-            title: 'Circuit Wars',
+            title: 'Circuit Chronicles: The Technical Gauntlet',
             subtitle: 'Hardware Battle',
             badge: 'HARDWARE',
-            prizePool: '₹10,000+',
-            teamSize: '2 Members',
-            description: 'Battle of the breadboards. Debug complex circuits and win the war.',
-            rules: ['Team of 2', 'Circuit debugging', 'Efficiency matters'],
-            image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop'
+            prizePool: '₹2,000+',
+            regLink: '',
+            teamSize: '2-3 Members',
+            entryFee: '₹200 / team',
+            description: 'A high-intensity, three-stage engineering challenge designed to test visual memory, diagnostic precision, and collaborative problem-solving. Teams must navigate through rapid-fire recalls and complex physical puzzles to prove their mastery over circuit theory and real-world electronics.',
+            rules: [
+                'Team Dynamics: Each team must consist of exactly 2–3 participants; report 10 minutes prior to start time.',
+                'Device Policy: Strict prohibition of mobile phones, smartwatches, and internet-enabled devices.',
+                'Blink & Think: A 25-minute rapid-fire round requiring teams to recall details of circuits or waveforms.',
+                'Fault Hunt: A 25-minute diagnostic round where teams must identify the maximum number of errors in a complex circuit.',
+                'Circuit Escape Room: A 40-minute immersive finale where solving electronics puzzles is the only way to win.',
+                'Integrity: All decisions by adjudicators are final; cross-team collaboration is strictly forbidden.'
+            ],
+            image: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Brindhaa M', phone: '+91 7845107141' },
+                { name: 'Dhanam S', phone: '+91 7094558947' },
+                { name: 'Yashiga D', phone: '+91 9994926161' }
+            ]
         },
         'Prompt Verse': {
             title: 'Prompt Verse',
             subtitle: 'AI Mastery',
             badge: 'AI/ML',
-            prizePool: '₹8,000+',
-            teamSize: 'Individual',
-            description: 'Master the art of AI communication. Craft perfect prompts for AI systems.',
-            rules: ['Individual event', 'Prompt engineering', 'Creativity judged'],
-            image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop'
+            prizePool: '₹2,000+',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfH_3tDdJz15R4BX4pjW7FkaXCVjUhzRQLLwEPTFHCWy5f2uQ/viewform?usp=header',
+            teamSize: '2 Members', // Updated from Individual to match your new rules
+            entryFee: '₹200 / team',
+            description: 'A fast-paced competition challenging teams to master AI prompt engineering through memory, speed, and creative precision. Teams must bridge the gap between human observation and digital generation across three increasingly difficult rounds.',
+            rules: [
+                'Teams & Tools: Exactly two members using text-only prompts; no image uploads or external edits allowed.',
+                'Submission: All files must be uploaded to the assigned Drive folder within 30 seconds; late entries are disqualified.',
+                'Round 1 (Precision): 10-image challenge testing direct observation and rapid memory recall.',
+                'Round 2 (Coordination): Split-vision challenge where partners describe separate image halves to generate a unified result.',
+                'Round 3 (Creative): On-the-spot thematic video generation and conceptual presentation.',
+            ],
+            image: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Prem kumar S', phone: '+91 90259 86911' },
+                { name: 'Divya G', phone: '+91 93423 73675' },
+                { name: 'Sasi M', phone: '+91 73971 77330' }
+            ]
         },
         'Coding Marathon': {
             title: 'Coding Marathon',
             subtitle: 'Algorithm Challenge',
             badge: 'SOFTWARE',
             prizePool: '₹12,500+',
+            regLink: 'https://link-here.com',
             teamSize: '1-2 Members',
             description: 'Solve algorithmic challenges continuously. Test your coding endurance.',
             rules: ['Individual or team', 'Multiple problems', 'Time and correctness'],
@@ -187,38 +218,71 @@ filterBtns.forEach(btn => {
         },
         'Treasure Hunt': {
             title: 'Treasure Hunt',
-            subtitle: 'Mystery Quest',
+            subtitle: 'Investigation Challenge',
             badge: 'MYSTERY',
-            prizePool: '₹16,000+',
-            teamSize: '4-6 Members',
-            description: 'Solve the murder case scenario and find the treasure. Ultimate adventure game.',
-            rules: ['Team of 4-6', 'Campus wide', 'Clues and riddles'],
-            image: 'https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=2070&auto=format&fit=crop'
+            prizePool: '₹1,500+',
+            teamSize: 'Teams',
+            regLink: '',
+            description: 'An immersive investigation-based challenge where participants analyze evidence, decode clues, and question assumptions to uncover hidden truths. The event tests critical thinking, observation, and decision-making under time pressure. Not all clues are reliable, making logical reasoning and judgment essential for success.',
+            rules: [
+                'Teams must stay together throughout the investigation.',
+                'Analyze clues logically, blind following of instructions may lead to dead ends.',
+                'Note: Some clues are intentionally misleading and may not lead to the solution.',
+                'Participants must manage time efficiently while choosing investigation paths.',
+                'Tampering with clues or sharing answers between teams is prohibited.',
+                'Correctly uncovering the truth with proper justification is required to win.',
+                'The event will run for 2 hours (2:00 PM – 4:00 PM).',
+                'The decision of the event coordinators is final and binding.'
+            ],
+            image: 'https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'SHREE VARSHA S', phone: '+91 6383301352' },
+                { name: 'SWATHILAKSHMI J', phone: '+91 6374625670' },
+                { name: 'VIDHUSHA B', phone: '+91 8610536117' }
+            ]
         },
         // Add these to eventData in script.js
 'Coding Combo': {
-    title: 'CODING COMBO',
-    subtitle: 'THE FULL-STACK PATHWAY',
-    badge: 'ELITE BUNDLE',
-    description: 'Elevate your status to Elite Developer. This specialized protocol grants you simultaneous access to the 24H Hackathon and the Coding Marathon. Master both endurance and speed in a single uplink.',
-    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070'
+    title: 'The Duo Pass',
+    subtitle: '',
+    badge: '',
+    regLink: 'https://link-here.com',
+description: 'The Duo Pass is a premium cross-disciplinary uplink designed for participants who balance creative prompt engineering with tactical board-game mastery. This specialized protocol bridges the gap between digital innovation and classic competitive strategy. By initializing this pass, you gain simultaneous access to Prompt Verse (AI Mastery) and the Coding Challenge (Algorithmic Logic), plus Carrom for precision.',    coordinators: [
+        { name: 'Sabreeshwaran', phone: '+91 8870247551' },
+        { name: '', phone: '+91 ' }
+    ]
 },
 'Circuit Combo': {
-    title: 'CIRCUIT COMBO',
+    title: 'Circuit Combo',
     subtitle: 'THE SILICON VORTEX',
     badge: 'ELITE BUNDLE',
+    regLink:'#',
     description: 'A dedicated uplink for Hardware Architects. Unlock both Circuit Wars and Lab Lockdown with one command. Debug the physical world and solve the laboratory mysteries in this high-voltage package.',
     image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070'
 },
+
         'Carrom': {
             title: 'Carrom',
             subtitle: 'Table Game',
             badge: 'GAMING',
-            prizePool: '₹3,000+',
-            teamSize: '1-2 Members',
-            description: 'Strike and pocket. Showcase your finger dexterity in this classic game.',
-            rules: ['Doubles or singles', 'Standard rules', 'Best of 3'],
-            image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop'
+            prizePool: '₹1,500+',
+            entryFee: '₹50 / team',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeCujORyc-wiRx917dg-GkGsuhCMMZVPHr4xo1_q3c2yINnfQ/viewform?usp=header',
+            teamSize: '2 Members',
+            description: 'A high-stakes, knockout-style tournament where mixed teams must demonstrate precision and speed within a strict 15-minute blitz window. Success depends on strategic puck control and scoring efficiency to outpace the opposition before the buzzer sounds.',
+            rules: [
+                'Match Duration: 15 minutes',
+                'Scoring: Black coin – 1 point',
+                'Scoring: White coin – 1 point',
+                'Scoring: Red coin (Queen) – 3 points (if pocketed by winning team)',
+                'Fouls, penalties, and special rules will be announced later'
+            ],
+            image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Sasikanth GM ', phone: '+91 8270265924' },
+                { name: 'Sharan Adithya S', phone: '+91 7548842533' },
+                { name: 'Karthick SR', phone: '+91 9080095947' }
+            ]
         },
         'Chess': {
             title: 'Chess',
@@ -226,39 +290,78 @@ filterBtns.forEach(btn => {
             badge: 'STRATEGY',
             prizePool: '₹6,000+',
             teamSize: 'Individual',
+            entryFee: '₹50 / team',
             description: 'Checkmate your opponent in this battle of wits. Strategic thinking required.',
             rules: ['Standard chess rules', 'Time control', 'Tournament format'],
             image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=2070&auto=format&fit=crop'
         },
-        'General Quiz': {
-            title: 'General Quiz',
+        'Quizify': {
+            title: 'Quizify',
             subtitle: 'Knowledge Battle',
             badge: 'TRIVIA',
             prizePool: '₹8,000+',
+            entryFee: '₹50 / team',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScrnKgmu8V4mpwp8e_qgt-_zdUhL9UYCrFaPr_rVVgDnPs_iQ/viewform?usp=header',
             teamSize: '2-3 Members',
-            description: 'Rapid-fire quiz covering social science and current affairs.',
-            rules: ['Team of 2-3', 'Multiple rounds', 'Quick responses'],
-            image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop'
+            description: 'Quizify is a general quiz hosted in 2 rounds. The quiz consists of questions from general fields such as current affairs, sports, movies, technology, business and many more.',
+            rules: ['Each team consists of 2-3 members.',
+                    'Individual participation is allowed.',
+                    'First round consists of 20 questions.',
+                    'Second round consists of 15 questions.',
+                    'The final score will be a consolidation of both rounds.'],
+            image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Kritheeka K', phone: '+91 9679523479' },
+                { name: 'Mithula C', phone: '+91 8056666226' },
+                { name: 'Sasikanth G M', phone: '+91 8270265924' }
+            ]
         },
         'IPL Auction': {
             title: 'IPL Auction',
-            subtitle: 'Cricket Strategy',
+            subtitle: 'The Strategic Face-off',
             badge: 'MANAGEMENT',
-            prizePool: '₹10,000+',
-            teamSize: '3-4 Members',
-            description: 'Build your dream team. Strategize your budget in this cricket auction simulation.',
-            rules: ['Team management', 'Budget constraints', 'Strategy wins'],
-            image: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=2070&auto=format&fit=crop'
+            prizePool: '₹1,500+',
+            teamSize: '3-5 Members',
+            entryFee: '₹99 / team',
+            regLink: '',
+            description: 'A high-stakes bidding war where teams must balance a massive budget with statistical analysis to build a champion roster. Participants will step into the shoes of franchise owners, using historical data and tactical foresight to outmaneuver rivals in a premium auction environment.',
+            rules: [
+                'Participation: Open to 12 teams with a mandatory composition of 3–5 members per squad.',
+                'Budgetary Constraints: Every team is allocated a virtual purse of ₹80 Crore; exceeding this limit results in disqualification.',
+                'Roster Requirements: Teams must secure a minimum of 8 players and a maximum of 10 players to complete their squad.',
+                'Player Valuation: Selection is guided by "Player Points" based on 5-year performance data from T20Is and the IPL.',
+                'Auction Protocol: Standard bidding increments apply; the highest bidder at the fall of the hammer secures the player.',
+                'Entry Requirement: A registration fee of ₹150 per team must be settled prior to the commencement.'
+            ],
+            image: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Dharun', phone: '+91 9361940800' },
+                { name: 'Abinanthan', phone: '+91 9344236570' },
+                { name: 'Afrith Ahmed', phone: '+91 63824 95941' }
+            ]
         },
         'Free Fire': {
             title: 'Free Fire',
-            subtitle: 'Battle Royale',
+            subtitle: 'BATTLE ROYALE TO CLASH SQUAD',
             badge: 'ESPORTS',
             prizePool: '₹22,000+',
-            teamSize: 'Squad (4)',
-            description: 'Battle Royale. Survival of the fittest in this mobile gaming tournament.',
-            rules: ['Squad matches', 'Ranked play', 'Fair play mandatory'],
-            image: 'https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?q=80&w=2070&auto=format&fit=crop'
+            teamSize: 'Squad (4 Members)',
+            entryFee: '₹50 / team',
+            description: 'Experience the ultimate test of combat prowess in a high-stakes transition from tactical Battle Royale to intense Clash Squad finishers. Teams must first master the art of survival and elimination on the large map to earn their place in the final high-speed close-quarters showdown. This dual-format tournament identifies the most versatile squad capable of dominating both long-range strategy and face-to-face combat.',
+            rules: [
+                'Qualifying Stage: Points Table System based on Placement and Elimination (Kill) points.',
+                'Revival Restriction: Use of Revive Cards or Revive Centers results in immediate disqualification.',
+                'Qualifying Advancement: Only the Top 4 teams from the points table advance to the Final Stage.',
+                'Final Stage (Clash Squad): Strictly Face-to-Face combat; no rooftop camping or Gloo Wall jumping.',
+                'Equipment (Finals): Gun Attributes, Loadouts, and Airdrops are completely disabled.',
+                'Gloo Wall Ethics: Breaking or destroying an opponent’s Gloo Wall is strictly prohibited and jumping into the gloo wall is also strictly prohibited.',
+                'Tactical Limits: Grenades are restricted; however, unlimited ammo and standard throwables are enabled.'
+            ],
+            image: 'https://images.unsplash.com/photo-1560419015-7c427e8ae5ba?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Kamalesh', phone: '+91 8220595213' },
+                { name: 'Jeyan babu', phone: '+91 7339356572' }
+            ]
         },
         'E-Football': {
             title: 'E-Football',
@@ -266,6 +369,7 @@ filterBtns.forEach(btn => {
             badge: 'ESPORTS',
             prizePool: '₹12,500+',
             teamSize: 'Individual',
+            entryFee: '₹50 / team',
             description: 'Virtual pitch glory. 1v1 football simulation tournament.',
             rules: ['FIFA game', 'Single matches', 'Skill demonstration'],
             image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop'
@@ -330,26 +434,19 @@ filterBtns.forEach(btn => {
             
             if (category === 'tech') {
                 modal.classList.add('theme-tech');
-                document.querySelectorAll('.modal-bg-mesh-tech, .modal-blob-tech').forEach(el => el.classList.remove('hidden'));
-                regBtn.innerHTML = 'SECURE YOUR SPOT <i class="fas fa-bolt ml-2"></i>';
-            } 
+                document.querySelectorAll('.modal-bg-mesh-tech, .modal-blob-tech').forEach(el => el.classList.remove('hidden'));            } 
             else if (category === 'non-tech') {
                 modal.classList.add('theme-non-tech');
-                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
-                regBtn.innerHTML = 'SECURE YOUR SPOT <i class="fas fa-bolt ml-2"></i>';
-            } 
+                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));            } 
             else if (category === 'flagship') {
                 modal.classList.add('theme-flagship');
-                document.querySelectorAll('.modal-bg-flagship, .modal-blob-flagship').forEach(el => el.classList.remove('hidden'));
-                regBtn.innerHTML = 'SECURE YOUR SPOT <i class="fas fa-bolt ml-2"></i>';
-            }
+                document.querySelectorAll('.modal-bg-flagship, .modal-blob-flagship').forEach(el => el.classList.remove('hidden'));            }
             else if (category === 'combo') {
                 modal.classList.add('theme-combo');
-                // Combos use the Nebula/Star background for a premium feel
-                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
-                regBtn.innerHTML = 'INITIALIZE BUNDLE PROTOCOL <i class="fas fa-layer-group ml-2"></i>';
+                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));                
+                // ADD THIS FIX HERE:
+                activeRegLink = data.regLink; 
             }
-
             // --- 4. POPULATE CONTENT ---
             modalTitle.textContent = data.title;
             modalSubtitle.textContent = data.subtitle;
@@ -357,15 +454,17 @@ filterBtns.forEach(btn => {
             modalDescription.textContent = data.description;
             modalImage.style.backgroundImage = `url('${data.image}')`;
             
-            // Populate metadata only if not a combo
+            // Inside the card click event listener in script.js
             if (!isCombo) {
                 document.getElementById('modal-prize-pool').textContent = data.prizePool || 'TBA';
                 document.getElementById('modal-team-size').textContent = data.teamSize || 'TBA';
+                document.getElementById('modal-entry-fee').textContent = data.entryFee || 'Free'; // Add this line
+                
                 if (data.rules) {
                     modalRules.innerHTML = data.rules.map(rule => `<li>${rule}</li>`).join('');
                 }
             }
-
+                        
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
             const wrapper = document.getElementById('modal-content-wrapper');
@@ -378,8 +477,26 @@ filterBtns.forEach(btn => {
         wrapper.style.transform = 'translateY(0)';
     }, 50);
         }
+
+        // Inside the card click event listener in script.js
+const coordContainer = document.getElementById('modal-coordinators');
+
+if (data.coordinators && data.coordinators.length > 0) {
+    coordContainer.innerHTML = data.coordinators.map(person => `
+        <div class="bg-white/5 p-3 rounded-xl border border-white/10">
+            <p class="text-white font-semibold text-sm">${person.name}</p>
+            <p class="text-blue-400 text-xs font-mono mt-1">
+                ${person.phone}
+            </p>
+        </div>
+    `).join('');
+} else {
+    coordContainer.innerHTML = '<p class="text-gray-500 text-sm italic">Coordinator details TBA</p>';
+}
     });
+    
 });
+
     closeModalBtn.addEventListener('click', () => {
         modal.classList.add('hidden');
         document.body.style.overflow = 'auto';
@@ -415,18 +532,43 @@ closeModalBtn.addEventListener('mouseleave', () => {
 const verifyModal = document.getElementById('combo-verify-modal');
 const closeVerifyBtn = document.getElementById('close-verify-btn');
 const goToComboBtn = document.getElementById('go-to-combo-btn');
+const proceedRegBtn = document.getElementById('proceed-reg-link');
 const eventModalRegBtn = document.querySelector('#event-modal .cosmic-btn');
 
-// List of event titles that trigger the check
+let activeRegLink = ""; // Temporary storage for the current event's link
 const comboTriggerEvents = ['Circuit Wars', 'Lab Lockdown', 'Coding Marathon', 'Prompt Verse'];
 
 eventModalRegBtn.addEventListener('click', (e) => {
+    // 1. Stop any default behavior
+    e.preventDefault(); 
+    e.stopPropagation();
     const currentEventTitle = document.getElementById('modal-title').textContent.trim();
+    const data = eventData[currentEventTitle];
     
-    // Check if the current event is one of the targeted titles
-    if (comboTriggerEvents.includes(currentEventTitle)) {
-        e.preventDefault(); // Stop the immediate registration
-        verifyModal.classList.remove('hidden'); // Show the warning window
+    if (data && data.regLink) {
+        activeRegLink = data.regLink;
+
+        // 2. Check if we should show the verification popup
+        if (comboTriggerEvents.includes(currentEventTitle)) {
+            verifyModal.classList.remove('hidden'); 
+            // The function stops here for these events. No window.open happens.
+        } else {
+            // 3. For normal events, redirect immediately
+            window.open(activeRegLink, '_blank');
+        }
+    }else {
+        // This will help you debug if a link is missing
+        console.error("Missing registration link for: " + data);
+        alert("Registration link for " + currentEventTitle + " is being updated. Please try again later.");
+    }
+});
+
+// 4. Handle redirection from the Verification Popup
+proceedRegBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    if (activeRegLink) {
+        window.open(activeRegLink, '_blank');
+        verifyModal.classList.add('hidden');
     }
 });
 
