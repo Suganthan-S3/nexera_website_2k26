@@ -99,7 +99,7 @@ filterBtns.forEach(btn => {
             title: 'Paper Presentation',
             subtitle: 'Innovation Showcase',
             badge: 'FLAGSHIP',
-            prizePool: '₹10,000+',
+            prizePool: '₹10,000',
             teamSize: '1-2 Members',
             entryFee: '₹500 / team',
             description: 'Present your innovative ideas for the problem statement. Showcase your research and technical expertise in front of industry experts.',
@@ -116,47 +116,99 @@ filterBtns.forEach(btn => {
             rules: ['Team size: 2-4 members', '24 hours duration', 'Themes announced on spot'],
             image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop'
         },
-        'Robo Soccer': {
-            title: 'Robo Soccer',
-            subtitle: 'Robotics Challenge',
+       'Robo Soccer': {
+            title: 'Cyber Kick: Robotic Football Challenge',
+            subtitle: 'ROBOVERSE SERIES',
             badge: 'ROBOTICS',
-            prizePool: '₹16,000+',
+            prizePool: '₹10,000',
+            entryFee: '₹150 / Team', 
+            rulebook: 'cyber_kick.docx',
             teamSize: 'Up to 4 Members',
-            description: 'Automated units engage in tactical sport. Build and program robots for soccer competition.',
-            rules: ['Robot size restrictions apply', 'Manual control allowed', 'Safety protocols mandatory'],
-            image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop'
-        },
-        'Pick N Place': {
-            title: 'Pick N Place',
-            subtitle: 'Precision Robotics',
-            badge: 'ROBOTICS',
-            prizePool: '₹12,500+',
-            teamSize: '1-3 Members',
-            description: 'Precision control required. Maneuver robots to pick and place objects accurately.',
-            rules: ['Time-based scoring', 'Accuracy is key', 'Multiple rounds'],
-            image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop'
+            description: 'Cyber Kick is an elite competitive arena where engineering meets athletic strategy. This event challenges teams to design and build manually controlled robots capable of high-speed maneuvers, precise ball handling, and tactical real-time gameplay. It serves as a rigorous test of system integration, wireless communication reliability, and operational stability under match conditions.',
+            rules: [
+                'Matches consist of two 180-second halves with a 30-second maintenance interval.',
+                'Robots must operate within a 30cm x 30cm x 30cm footprint and not exceed 4kg.',
+                'Mechanisms for grabbing, scooping, or lifting the ball are strictly prohibited; only pushing or hitting is allowed.',
+                'Excessive ramming or intentional attempts to damage an opponent’s bot will result in immediate disqualification.',
+                'A maximum of 3 restarts are permitted per match, with the timer remaining active throughout.',
+                'Note: Refer to "cyber_kick.docx" for full technical arena specifications.'
+            ],
+            image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Pooja N', phone: '+91 8220510532' },
+                { name: 'Gautham Raj H', phone: '+91 8668021608' }
+            ]
         },
         'Line Rush': {
-            title: 'Line Rush',
-            subtitle: 'RC Racing',
+            title: 'Maze Drift: Autonomous Navigation',
+            subtitle: 'ROBOVERSE SERIES',
             badge: 'ROBOTICS',
-            prizePool: '₹8,000+',
-            teamSize: '1-2 Members',
-            description: 'Follow the line by your RC to win. High-speed line following competition.',
-            rules: ['RC car specifications apply', 'Track layout provided', 'Fastest time wins'],
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop'
+            prizePool: '₹10,000',
+            entryFee: '₹150 / Team',
+            teamSize: 'Up to 5 Members',
+            rulebook: 'MAZEDRIFT-26-FINAL.pdf',
+            description: 'Maze Drift is a sophisticated autonomous robotics competition requiring participants to develop bots capable of high-precision line following and maze mapping. The challenge is divided into a "Dry Run" for environmental analysis and memory storage, followed by an "Actual Run" where the bot must calculate and execute the shortest possible path to the terminal zone in minimum time.',
+            rules: [
+                'The bot must reach the end zone black box within a 3-minute dry run window to qualify.',
+                'Autonomous units must fit within a 220mm x 220mm x 220mm dimension box.',
+                'Bots must be equipped with a red LED that illuminates upon sensing the terminal black box.',
+                'Maximum of 3 restarts are allowed; however, the timer will not be paused or reset.',
+                'Points are awarded for checkpoint crossing, successful dry runs, and shortest path optimization.',
+                'Note: Refer to "MAZEDRIFT-26-FINAL.pdf" for arena dimensions and logic rules.'
+            ],
+            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'GOBIKA NS', phone: '+91 9345531715' },
+                { name: 'BHUVAN RAJ M', phone: '+91 9677564359' }
+            ]
+        },
+        'Pick N Place': {
+            title: 'Lift-N-Shift: Precision Logistics',
+            subtitle: 'ROBOVERSE SERIES',
+            badge: 'ROBOTICS',
+            prizePool: '₹10,000',
+            entryFee: '₹150 / Team',
+            teamSize: '1-4 Members',
+            rulebook: 'pick_n_place.docx',
+            description: 'Lift-N-Shift is a flagship robotics challenge designed to evaluate mechanical ingenuity and manual precision. Participants must engineer a manually operated bot capable of sophisticated object handling, navigating a dynamic obstacle-filled arena, and accurately depositing blocks into designated high-value zones under strict time constraints.',
+            rules: [
+                'Successful crossing of the finish line after all deposits is mandatory for score validation.',
+                'Bots must not exceed dimensions of 300mm x 250mm x 300mm, including the gripper mechanism.',
+                'Blocks must be lifted and placed; dragging or sliding across the floor is strictly forbidden.',
+                'Onboard power supply must not exceed a potential difference of 15V DC.',
+                'Human intervention is strictly limited to repositioning the bot at designated checkpoints.',
+                'Note: Refer to "pick_n_place.docx" for detailed scoring and penalty criteria.'
+            ],
+            image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Shageetha Johnson A', phone: '+91 9360002955' },
+                { name: 'Raghubathi Raja T K', phone: '+91 9363170477' }
+            ]
         },
         'Lab Lockdown': {
-            title: 'Lab Lockdown',
-            subtitle: 'Circuit Puzzle',
+            title: 'Lab Lockdown: The Engineering Gauntlet',
+            subtitle: 'CIRCUIT ESCAPE CHALLENGE',
             badge: 'CIRCUITS',
-            prizePool: '₹6,000+',
-            regLink:'#',
-            teamSize: '2-3 Members',
-            entryFee: '₹200 / team',
-            description: 'Escape the laboratory by solving technical puzzles. Debug circuits and unlock the lab.',
-            rules: ['Individual participation', 'Time limit: 30 minutes', 'Logic and knowledge required'],
-            image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop'
+            prizePool: '₹2,000',
+            entryFee: '₹200 / Team', // Added entry fee as requested
+            regLink: '#',
+            teamSize: '3 Members',
+            description: 'Lab Lockdown is an elite technical simulation designed to evaluate engineering fundamentals, logical synthesis, and collaborative problem-solving across all disciplines. Participants are immersed in a high-pressure environment where they must decrypt technical locks and navigate a series of sequential challenges to successfully "unlock" the facility.',
+            rules: [
+                'Team Composition: Each squad must consist of exactly 3 members.',
+                'Round 1 (Observe & Decode): A high-stakes evaluation of cognitive recall and attention to detail under time pressure.',
+                'Round 2 (Resource Procurement): Teams must identify and secure specific electronic components required for the final phase.',
+                'Round 3 (System Synthesis): The terminal round requiring precision circuit building based on the previous round’s intelligence.',
+                'Zero-Device Policy: Mobile phones, smartwatches, and all electronic gadgets are strictly prohibited.',
+                'Punctuality: Teams must report to the station 15 minutes prior to the scheduled commencement.',
+                'Final Authority: All adjudicator and coordinator decisions are absolute and binding.'
+            ],
+            image: 'https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?q=80&w=2069&auto=format&fit=crop',
+            coordinators: [
+                { name: 'DILSAATH BEGUM S', phone: '+91 9679520411 ' },
+                { name: 'SUSHMITHA M', phone: '+91 8122242850' },
+                { name: 'ILAYASREE M', phone: '+91 8072303204' }
+            ]
         },
         'Circuit Wars': {
             title: 'Circuit Chronicles: The Technical Gauntlet',
@@ -186,7 +238,7 @@ filterBtns.forEach(btn => {
             title: 'Prompt Verse',
             subtitle: 'AI Mastery',
             badge: 'AI/ML',
-            prizePool: '₹2,000+',
+            prizePool: '₹2,000',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfH_3tDdJz15R4BX4pjW7FkaXCVjUhzRQLLwEPTFHCWy5f2uQ/viewform?usp=header',
             teamSize: '2 Members', // Updated from Individual to match your new rules
             entryFee: '₹200 / team',
@@ -209,7 +261,7 @@ filterBtns.forEach(btn => {
             title: 'Coding Marathon',
             subtitle: 'Algorithm Challenge',
             badge: 'SOFTWARE',
-            prizePool: '₹12,500+',
+            prizePool: '₹2,000',
             regLink: 'https://link-here.com',
             teamSize: '1-2 Members',
             description: 'Solve algorithmic challenges continuously. Test your coding endurance.',
@@ -220,7 +272,7 @@ filterBtns.forEach(btn => {
             title: 'Treasure Hunt',
             subtitle: 'Investigation Challenge',
             badge: 'MYSTERY',
-            prizePool: '₹1,500+',
+            prizePool: '₹1,500',
             teamSize: 'Teams',
             regLink: '',
             description: 'An immersive investigation-based challenge where participants analyze evidence, decode clues, and question assumptions to uncover hidden truths. The event tests critical thinking, observation, and decision-making under time pressure. Not all clues are reliable, making logical reasoning and judgment essential for success.',
@@ -236,7 +288,7 @@ filterBtns.forEach(btn => {
             ],
             image: 'https://images.unsplash.com/photo-1504333638930-c8787321eee0?q=80&w=2070&auto=format&fit=crop',
             coordinators: [
-                { name: 'SHREE VARSHA S', phone: '+91 6383301352' },
+                { name: 'SHARVESHWAR S', phone: '+91 7904240505' },
                 { name: 'SWATHILAKSHMI J', phone: '+91 6374625670' },
                 { name: 'VIDHUSHA B', phone: '+91 8610536117' }
             ]
@@ -247,7 +299,8 @@ filterBtns.forEach(btn => {
     subtitle: '',
     badge: '',
     regLink: 'https://link-here.com',
-description: 'The Duo Pass is a premium cross-disciplinary uplink designed for participants who balance creative prompt engineering with tactical board-game mastery. This specialized protocol bridges the gap between digital innovation and classic competitive strategy. By initializing this pass, you gain simultaneous access to Prompt Verse (AI Mastery) and the Coding Challenge (Algorithmic Logic), plus Carrom for precision.',    coordinators: [
+    description: 'The Duo Pass is a premium cross-disciplinary uplink designed for participants who balance creative prompt engineering with tactical board-game mastery. This specialized protocol bridges the gap between digital innovation and classic competitive strategy. By initializing this pass, you gain simultaneous access to Prompt Verse (AI Mastery) and the Coding Challenge (Algorithmic Logic), plus Carrom for precision.',    
+    coordinators: [
         { name: 'Sabreeshwaran', phone: '+91 8870247551' },
         { name: '', phone: '+91 ' }
     ]
@@ -265,7 +318,7 @@ description: 'The Duo Pass is a premium cross-disciplinary uplink designed for p
             title: 'Carrom',
             subtitle: 'Table Game',
             badge: 'GAMING',
-            prizePool: '₹1,500+',
+            prizePool: '₹1,500',
             entryFee: '₹50 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeCujORyc-wiRx917dg-GkGsuhCMMZVPHr4xo1_q3c2yINnfQ/viewform?usp=header',
             teamSize: '2 Members',
@@ -285,15 +338,27 @@ description: 'The Duo Pass is a premium cross-disciplinary uplink designed for p
             ]
         },
         'Chess': {
-            title: 'Chess',
-            subtitle: 'Mind Game',
+            title: 'Chess: The Grandmaster Protocol',
+            subtitle: 'STRATEGIC MIND GAME',
             badge: 'STRATEGY',
-            prizePool: '₹6,000+',
+            prizePool: '₹1,500',
+            entryFee: '₹50 / Participant',
             teamSize: 'Individual',
-            entryFee: '₹50 / team',
-            description: 'Checkmate your opponent in this battle of wits. Strategic thinking required.',
-            rules: ['Standard chess rules', 'Time control', 'Tournament format'],
-            image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=2070&auto=format&fit=crop'
+            description: 'Enter a high-stakes arena of foresight and cognitive endurance. This tournament is designed to test a player’s ability to calculate under pressure and outmaneuver rivals in a battle of pure logic. This event follows a competitive hierarchy system where every move dictates the path to victory or defeat.',
+            rules: [
+                'FIDE Standards: The latest FIDE Rules in force shall apply throughout the tournament.',
+                'Time Control: Each match is strictly timed at 20 minutes (10 minutes per player).',
+                'Registration: Both Online and On-Spot registrations are accepted.',
+                'Entry Protocol: A registration fee of ₹50 is mandatory for all participants.',
+                'Arbitration: The Arbiter’s decision is final and binding in all match scenarios.',
+                'Certification: Participation certificates will be awarded to all registered players.',
+                'Finality: Prize distribution will take place immediately at the conclusion of the event.'
+            ],
+            image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Kanishkar S', phone: '7418994553' },
+                { name: 'Suganthan S', phone: '8668043389' }
+            ]
         },
         'Quizify': {
             title: 'Quizify',
@@ -453,7 +518,24 @@ description: 'The Duo Pass is a premium cross-disciplinary uplink designed for p
             modalBadge.textContent = data.badge;
             modalDescription.textContent = data.description;
             modalImage.style.backgroundImage = `url('${data.image}')`;
-            
+
+            const rulebookContainer = document.getElementById('rulebook-container');
+            const rulebookLink = document.getElementById('modal-rulebook-link');
+
+            if (data.rulebook) {
+                rulebookContainer.classList.remove('hidden'); 
+                rulebookLink.href = data.rulebook;
+                
+                const icon = rulebookLink.querySelector('i');
+                if (data.rulebook.endsWith('.docx')) {
+                    icon.className = 'fas fa-file-word text-blue-400 text-xl group-hover:scale-110 transition-transform';
+                } else {
+                    icon.className = 'fas fa-file-pdf text-red-400 text-xl group-hover:scale-110 transition-transform';
+                }
+            } else {
+                rulebookContainer.classList.add('hidden'); 
+            }
+
             // Inside the card click event listener in script.js
             if (!isCombo) {
                 document.getElementById('modal-prize-pool').textContent = data.prizePool || 'TBA';
@@ -536,7 +618,7 @@ const proceedRegBtn = document.getElementById('proceed-reg-link');
 const eventModalRegBtn = document.querySelector('#event-modal .cosmic-btn');
 
 let activeRegLink = ""; // Temporary storage for the current event's link
-const comboTriggerEvents = ['Circuit Wars', 'Lab Lockdown', 'Coding Marathon', 'Prompt Verse'];
+const comboTriggerEvents = ['Circuit Wars', 'Lab Lockdown', 'Coding Marathon', 'Prompt Verse', 'Carrom'];
 
 eventModalRegBtn.addEventListener('click', (e) => {
     // 1. Stop any default behavior
