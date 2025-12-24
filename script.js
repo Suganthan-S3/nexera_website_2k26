@@ -148,7 +148,7 @@ filterBtns.forEach(btn => {
             entryFee: '₹150 / Team',
             teamSize: 'Up to 5 Members',
             regLink: 'https://forms.gle/VsK9cbYpfSDF9qZf9',
-            rulebook: 'MAZEDRIFT-26-FINAL.pdf',
+            rulebook: 'MAZEDRIFT.pdf',
             description: 'Maze Drift is a sophisticated autonomous robotics competition requiring participants to develop bots capable of high-precision line following and maze mapping. The challenge is divided into a "Dry Run" for environmental analysis and memory storage, followed by an "Actual Run" where the bot must calculate and execute the shortest possible path to the terminal zone in minimum time.',
             rules: [
                 'The bot must reach the end zone black box within a 3-minute dry run window to qualify.',
@@ -156,7 +156,7 @@ filterBtns.forEach(btn => {
                 'Bots must be equipped with a red LED that illuminates upon sensing the terminal black box.',
                 'Maximum of 3 restarts are allowed; however, the timer will not be paused or reset.',
                 'Points are awarded for checkpoint crossing, successful dry runs, and shortest path optimization.',
-                'Note: Refer to "MAZEDRIFT-26-FINAL.pdf" for arena dimensions and logic rules.'
+                'Note: Refer to "MAZEDRIFT.pdf" for arena dimensions and logic rules.'
             ],
             image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop',
             coordinators: [
@@ -172,7 +172,7 @@ filterBtns.forEach(btn => {
             entryFee: '₹150 / Team',
             teamSize: '1-4 Members',
             regLink: 'https://forms.gle/rCNZyKSWk5rh7nZx9',
-            rulebook: 'pick_n_place.docx',
+            rulebook: 'pick n place.docx',
             description: 'Lift-N-Shift is a flagship robotics challenge designed to evaluate mechanical ingenuity and manual precision. Participants must engineer a manually operated bot capable of sophisticated object handling, navigating a dynamic obstacle-filled arena, and accurately depositing blocks into designated high-value zones under strict time constraints.',
             rules: [
                 'Successful crossing of the finish line after all deposits is mandatory for score validation.',
@@ -180,7 +180,7 @@ filterBtns.forEach(btn => {
                 'Blocks must be lifted and placed; dragging or sliding across the floor is strictly forbidden.',
                 'Onboard power supply must not exceed a potential difference of 15V DC.',
                 'Human intervention is strictly limited to repositioning the bot at designated checkpoints.',
-                'Note: Refer to "pick_n_place.docx" for detailed scoring and penalty criteria.'
+                'Note: Refer to "pick n place.docx" for detailed scoring and penalty criteria.'
             ],
             image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop',
             coordinators: [
@@ -494,9 +494,12 @@ filterBtns.forEach(btn => {
 
             // --- 2. RESTORE VISIBILITY FOR STANDARD ELEMENTS ---
             // If it's NOT a combo, show the rules and metadata sections
-            const standardElements = document.querySelectorAll('#rules-toggle-btn, #rules-content, .flex-wrap.gap-4, .grid-cols-1.md\\:grid-cols-3');
-            standardElements.forEach(el => el.style.display = isCombo ? 'none' : 'flex');
-
+            const standardElements = document.querySelectorAll('#rules-toggle-btn, .flex-wrap.gap-4');
+            standardElements.forEach(el => {
+                el.style.opacity = isCombo ? '0' : '1';
+                el.style.pointerEvents = isCombo ? 'none' : 'auto';
+                el.style.visibility = isCombo ? 'hidden' : 'visible';
+            });
             // --- 3. APPLY CATEGORY SPECIFIC THEMES & BACKGROUNDS ---
             const regBtn = modal.querySelector('.cosmic-btn');
             
