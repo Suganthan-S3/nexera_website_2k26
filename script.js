@@ -1,3 +1,4 @@
+let isModalOpen = false;
 // --- 1. BACKGROUND & PARTICLES (MAIN PAGE) ---
 (function initNebula() {
     const canvas = document.getElementById('nebula-canvas');
@@ -30,8 +31,17 @@
         draw() { ctx.globalAlpha=this.a; ctx.fillStyle=this.c; ctx.beginPath(); ctx.arc(this.x,this.y,this.size,0,Math.PI*2); ctx.fill(); }
     }
     function initParticles() { particles=[]; mistParticles=[]; for(let i=0;i<6;i++) mistParticles.push(new Mist()); for(let i=0;i<80;i++) particles.push(new Sparkle()); }
-    function animate() { ctx.clearRect(0,0,width,height); mistParticles.forEach(p=>{p.update();p.draw()}); ctx.globalCompositeOperation='lighter'; particles.forEach(p=>{p.update();p.draw()}); ctx.globalCompositeOperation='source-over'; requestAnimationFrame(animate); }
-    resize(); animate();
+function animate() {
+        // PERFORMANCE FIX: Only draw background if modal is NOT open
+        if (!isModalOpen) {
+            ctx.clearRect(0,0,width,height);
+            mistParticles.forEach(p=>{p.update();p.draw()});
+            ctx.globalCompositeOperation='lighter';
+            particles.forEach(p=>{p.update();p.draw()});
+            ctx.globalCompositeOperation='source-over';
+        }
+        requestAnimationFrame(animate);
+    }    resize(); animate();
 })();
 
 // --- 2. GENERAL UI LOGIC ---
@@ -108,18 +118,31 @@ filterBtns.forEach(btn => {
         },
         'Hackathon': {
             title: 'Hackathon',
-            subtitle: 'CodeFest Arena',
-            badge: 'CODEFEST',
-            prizePool: '₹22,000+',
+            // subtitle: 'CODEFEST ARENA',
+            // badge: 'FLAGSHIP',
+            prizePool: '₹30,000',
+            entryFee: '₹200 / Team',
             teamSize: '2-4 Members',
-            description: '24-hour grueling test of endurance. Build innovative solutions to real-world problems.',
-            rules: ['Team size: 2-4 members', '24 hours duration', 'Themes announced on spot'],
-            image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop'
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfV1zlCc77pX2wi7KGaO61vqSTyNuE3dW0cRnNe6rXel7Z2XA/viewform?usp=header',
+            description: 'The Innovation Sprint is an elite three-stage challenge designed to catalyze creative problem-solving and rapid technical development. Participants must progress from conceptual abstracts to online architectural presentations, culminating in a physical prototype demonstration at the CIT campus. This flagship event evaluates originality, technical feasibility, and the ability to bridge the gap between ideation and working solutions.',
+            rules: [
+                'Round 1 (Abstract): Teams must submit a single PDF outlining the problem statement, solution, and impact.',
+                'Round 2 (Presentation): Shortlisted teams will be invited to a digital defense of their technical architecture.',
+                'Round 3 (Prototype): The grand finale requires a live working demo or physical prototype on the CIT campus.',
+                'Registration Phase 1: Initial registration covers both the Abstract submission rounds.',
+                'Registration Phase 2: A secondary registration protocol is required only for teams advancing to the Online Presentation stage.',
+                'Team Dynamics: Each squad must consist of 2–4 members; cross-disciplinary collaboration is encouraged.'
+            ],
+            image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Sanjay Viswan', phone: '90012 34567' }, // Update with specific coordinators
+                { name: 'Priya Mani', phone: '88776 65544' }
+            ]
         },
        'Cyber Kick': {
             title: 'Cyber Kick',
-            subtitle: 'ROBOVERSE SERIES',
-            badge: 'ROBOTICS',
+            // subtitle: 'ROBOVERSE SERIES',
+            // badge: 'ROBOTICS',
             prizePool: '₹10,000',
             entryFee: '₹150 / Team', 
             regLink: 'https://forms.gle/WWNiNaqffcK8xzoS6',
@@ -142,8 +165,8 @@ filterBtns.forEach(btn => {
         },
         'Maze Drift': {
             title: 'Maze Drift',
-            subtitle: 'ROBOVERSE SERIES',
-            badge: 'ROBOTICS',
+            // subtitle: 'ROBOVERSE SERIES',
+            // badge: 'ROBOTICS',
             prizePool: '₹10,000',
             entryFee: '₹150 / Team',
             teamSize: 'Up to 5 Members',
@@ -166,8 +189,8 @@ filterBtns.forEach(btn => {
         },
         'Lift-N-Shift': {
             title: 'Lift-N-Shift',
-            subtitle: 'ROBOVERSE SERIES',
-            badge: 'ROBOTICS',
+            // subtitle: 'ROBOVERSE SERIES',
+            // badge: 'ROBOTICS',
             prizePool: '₹10,000',
             entryFee: '₹150 / Team',
             teamSize: '1-4 Members',
@@ -189,12 +212,12 @@ filterBtns.forEach(btn => {
             ]
         },
         'Lab Lockdown': {
-            title: 'Lab Lockdown: The Engineering Gauntlet',
-            subtitle: 'CIRCUIT ESCAPE CHALLENGE',
-            badge: 'CIRCUITS',
+            title: 'Lab Lockdown',
+            // subtitle: 'CIRCUIT ESCAPE CHALLENGE',
+            // badge: 'CIRCUITS',
             prizePool: '₹2,000',
             entryFee: '₹200 / Team', // Added entry fee as requested
-            regLink: '#',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSepKLdMSU6M7CjMH-WQxCIc3MW5utn2QzAqT7YFbTtfz04bsA/viewform?usp=header',
             teamSize: '3 Members',
             description: 'Lab Lockdown is an elite technical simulation designed to evaluate engineering fundamentals, logical synthesis, and collaborative problem-solving across all disciplines. Participants are immersed in a high-pressure environment where they must decrypt technical locks and navigate a series of sequential challenges to successfully "unlock" the facility.',
             rules: [
@@ -215,10 +238,10 @@ filterBtns.forEach(btn => {
         },
         'Circuit Wars': {
             title: 'Circuit Chronicles: The Technical Gauntlet',
-            subtitle: 'Hardware Battle',
-            badge: 'HARDWARE',
-            prizePool: '₹2,000+',
-            regLink: '',
+            // subtitle: 'Hardware Battle',
+            // badge: 'HARDWARE',
+            prizePool: '₹2,000',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdLZMwZcbuRuV4rbxREqm0gFwBWnR6zoFPdVE6kdPFf18QuCQ/viewform?usp=header',
             teamSize: '2-3 Members',
             entryFee: '₹200 / team',
             description: 'A high-intensity, three-stage engineering challenge designed to test visual memory, diagnostic precision, and collaborative problem-solving. Teams must navigate through rapid-fire recalls and complex physical puzzles to prove their mastery over circuit theory and real-world electronics.',
@@ -239,8 +262,8 @@ filterBtns.forEach(btn => {
         },
         'Prompt Verse': {
             title: 'Prompt Verse',
-            subtitle: 'AI Mastery',
-            badge: 'AI/ML',
+            // subtitle: 'AI Mastery',
+            // badge: 'AI/ML',
             prizePool: '₹2,000',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfH_3tDdJz15R4BX4pjW7FkaXCVjUhzRQLLwEPTFHCWy5f2uQ/viewform?usp=header',
             teamSize: '2 Members', // Updated from Individual to match your new rules
@@ -260,13 +283,13 @@ filterBtns.forEach(btn => {
                 { name: 'Sasi M', phone: '+91 73971 77330' }
             ]
         },
-        'Coding Marathon': {
-            title: 'Coding Marathon: The Synergy Challenge',
-            subtitle: 'ALGORITHM SYNESTHESIA',
-            badge: 'SOFTWARE',
+        'Code Relay': {
+            title: 'Code Relay',
+            // subtitle: 'ALGORITHM SYNESTHESIA',
+            // badge: 'SOFTWARE',
             prizePool: '₹2,000',
             entryFee: '₹150 / Team',
-            regLink: 'https://link-here.com',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdTK3kXJZYoPk1WhDvsuzHfwWzjF-CulleHBkb7MtgoiFIjXg/viewform?usp=header',
             teamSize: 'Exactly 2 Members',
             description: 'The Synergy Challenge is an elite team-based gauntlet where two participants operate simultaneously on distinct problem sets in total isolation. At the midpoint, the "Swap Protocol" is initiated: partners exchange systems and must immediately adapt to, debug, and optimize their teammate’s remaining code. This event is a terminal test of individual logic, rapid adaptability, and technical code comprehension.',
             rules: [
@@ -286,11 +309,11 @@ filterBtns.forEach(btn => {
         },
         'Treasure Hunt': {
             title: 'Treasure Hunt',
-            subtitle: 'Investigation Challenge',
-            badge: 'MYSTERY',
+            // subtitle: 'Investigation Challenge',
+            // badge: 'MYSTERY',
             prizePool: '₹1,500',
             teamSize: 'Teams',
-            regLink: '',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeihMYHhZhKzjd_wqzwEThylefpt7eGUh6TqNRHlQ46DR73ow/viewform?usp=sharing&ouid=110963580985970388920',
             description: 'An immersive investigation-based challenge where participants analyze evidence, decode clues, and question assumptions to uncover hidden truths. The event tests critical thinking, observation, and decision-making under time pressure. Not all clues are reliable, making logical reasoning and judgment essential for success.',
             rules: [
                 'Teams must stay together throughout the investigation.',
@@ -310,30 +333,55 @@ filterBtns.forEach(btn => {
             ]
         },
         // Add these to eventData in script.js
-'Coding Combo': {
-    title: 'The Duo Pass',
-    subtitle: '',
-    badge: '',
-    regLink: 'https://link-here.com',
-    description: 'The Duo Pass is a premium cross-disciplinary uplink designed for participants who balance creative prompt engineering with tactical board-game mastery. This specialized protocol bridges the gap between digital innovation and classic competitive strategy. By initializing this pass, you gain simultaneous access to Prompt Verse (AI Mastery) and the Coding Challenge (Algorithmic Logic), plus Carrom for precision.',    
-    coordinators: [
-        { name: 'Sabreeshwaran', phone: '+91 8870247551' },
-        { name: '', phone: '+91 ' }
-    ]
-},
-'Circuit Combo': {
-    title: 'Circuit Combo',
-    subtitle: 'THE SILICON VORTEX',
-    badge: 'ELITE BUNDLE',
-    regLink:'#',
-    description: 'A dedicated uplink for Hardware Architects. Unlock both Circuit Wars and Lab Lockdown with one command. Debug the physical world and solve the laboratory mysteries in this high-voltage package.',
-    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070'
-},
+        'Trio Pass': {
+                    title: 'Trio Pass: The Collaborative Uplink',
+                    // subtitle: 'PREMIUM TEAM BUNDLE',
+                    // badge: 'ELITE BUNDLE',
+                    prizePool: 'Multi-Event Access',
+                    entryFee: '₹450 / Team', // Adjust price as per your requirements
+                    teamSize: '2-3 Members',
+                    regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScU8DvB7P1K0dc4vwk_10uZCQWNz9I7ByVlHvk4X-23QDf0Rw/viewform?usp=sharing&ouid=110963580985970388920',
+                    description: 'The Trio Pass is engineered for small tactical teams looking to maximize their impact across the symposium. This uplink provides full access to two high-intensity technical modules—Circuit Wars and Lab Lockdown—designed to push your problem-solving limits. To balance the technical rigor, teams can select one premium non-technical experience: either the high-speed trivia of Quizify or the immersive mystery of the Treasure Hunt.',
+                    rules: [
+                        'Technical Access (Fixed): Entry into both Circuit Wars and Lab Lockdown.',
+                        'Non-Technical Choice (1 of 2): Choice between Quizify or Treasure Hunt.',
+                        'Team Composition: Optimized for squads of 2 to 3 members; access is non-transferable.',
+                        'Scheduling: Teams must coordinate their presence at respective venues according to the live event timeline.',
+                        'Competition Integrity: Standard rules for each individual event must be followed.',
+                        'Collaborative Advantage: The ideal protocol for teams looking to compete, collaborate, and bond.'
+                    ],
+                    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070',
+                    coordinators: [
+                        { name: 'Sabreeshwaran', phone: '8870247551' }
+                    ]
+                },
+        'Duo Pass': {
+                    title: 'Duo Pass',
+                    // subtitle: 'ELITE PAIR BUNDLE',
+                    // badge: 'ELITE BUNDLE',
+                    prizePool: 'Multi-Event Access',
+                    entryFee: '₹400 / Pair', // Adjust price based on your requirements
+                    teamSize: 'Exactly 2 Members',
+                    regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeeB2CM_Bp1fqQJnAuEm6jgTgX2vQbM-D9uLj1SB7EYQ2jYFg/viewform?usp=header',
+                    description: 'The Duo Pass is a premium cross-disciplinary bundle designed specifically for pairs who aim to dominate both the technical and recreational arenas. This pass provides a high-octane mix of learning, competitive innovation, and entertainment. By initializing this uplink, pairs gain entry into two core technical challenges—Code Relay and Prompt Verse—plus one high-precision non-technical event: Carrom.',
+                    rules: [
+                        'Technical Access (Fixed): Entry into the Code Relay and Prompt Verse competitions.',
+                        'Non-Technical Access (Fixed): Entry into the Carrom tournament.',
+                        'Team Composition: The pass is strictly for a pair (2 participants) and cannot be split.',
+                        'Event Schedule: Participants must ensure their presence at the respective venues during the designated slots.',
+                        'Integrity: Standard event rules for each individual competition remain applicable.',
+                        'Advantage: A perfect streamlined protocol for an unforgettable fest experience.'
+                    ],
+                    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070',
+                    coordinators: [
+                        { name: 'Sabreeshwaran', phone: '8870247551' }
+                    ]
+                },
 
         'Carrom': {
             title: 'Carrom',
-            subtitle: 'Table Game',
-            badge: 'GAMING',
+            // subtitle: 'Table Game',
+            // badge: 'GAMING',
             prizePool: '₹1,500',
             entryFee: '₹50 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeCujORyc-wiRx917dg-GkGsuhCMMZVPHr4xo1_q3c2yINnfQ/viewform?usp=header',
@@ -354,12 +402,13 @@ filterBtns.forEach(btn => {
             ]
         },
         'Chess': {
-            title: 'Chess: The Grandmaster Protocol',
-            subtitle: 'STRATEGIC MIND GAME',
-            badge: 'STRATEGY',
+            title: 'Chess',
+            // subtitle: 'STRATEGIC MIND GAME',
+            // badge: 'STRATEGY',
             prizePool: '₹1,500',
             entryFee: '₹50 / Participant',
             teamSize: 'Individual',
+            regLink:'https://docs.google.com/forms/d/e/1FAIpQLSdjQDtznzVqg_2vu1F0hywcGkRIO80hgalCQXs2fY1ew_KqXQ/viewform?usp=header',
             description: 'Enter a high-stakes arena of foresight and cognitive endurance. This tournament is designed to test a player’s ability to calculate under pressure and outmaneuver rivals in a battle of pure logic. This event follows a competitive hierarchy system where every move dictates the path to victory or defeat.',
             rules: [
                 'FIDE Standards: The latest FIDE Rules in force shall apply throughout the tournament.',
@@ -378,9 +427,9 @@ filterBtns.forEach(btn => {
         },
         'Quizify': {
             title: 'Quizify',
-            subtitle: 'Knowledge Battle',
-            badge: 'TRIVIA',
-            prizePool: '₹8,000+',
+            // subtitle: 'Knowledge Battle',
+            // badge: 'TRIVIA',
+            prizePool: '₹1,500',
             entryFee: '₹50 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScrnKgmu8V4mpwp8e_qgt-_zdUhL9UYCrFaPr_rVVgDnPs_iQ/viewform?usp=header',
             teamSize: '2-3 Members',
@@ -399,12 +448,12 @@ filterBtns.forEach(btn => {
         },
         'IPL Auction': {
             title: 'IPL Auction',
-            subtitle: 'The Strategic Face-off',
-            badge: 'MANAGEMENT',
+            // subtitle: 'The Strategic Face-off',
+            // badge: 'MANAGEMENT',
             prizePool: '₹1,500+',
             teamSize: '3-5 Members',
             entryFee: '₹99 / team',
-            regLink: '',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeaIYuCu14qNhYriM03ihE8Q9zLkqNiXxYVXbmkYWqIFibavw/viewform?usp=header',
             description: 'A high-stakes bidding war where teams must balance a massive budget with statistical analysis to build a champion roster. Participants will step into the shoes of franchise owners, using historical data and tactical foresight to outmaneuver rivals in a premium auction environment.',
             rules: [
                 'Participation: Open to 12 teams with a mandatory composition of 3–5 members per squad.',
@@ -423,10 +472,11 @@ filterBtns.forEach(btn => {
         },
         'Free Fire': {
             title: 'Free Fire',
-            subtitle: 'BATTLE ROYALE TO CLASH SQUAD',
-            badge: 'ESPORTS',
-            prizePool: '₹22,000+',
+            // subtitle: 'BATTLE ROYALE TO CLASH SQUAD',
+            // badge: 'ESPORTS',
+            prizePool: '₹1,500+',
             teamSize: 'Squad (4 Members)',
+            regLink:'https://docs.google.com/forms/d/e/1FAIpQLSdZbqsc7fBA7kPmkOYzgpCRUSuXiJfL4AfyGJUXBX0e56ozzA/viewform?usp=header',
             entryFee: '₹50 / team',
             description: 'Experience the ultimate test of combat prowess in a high-stakes transition from tactical Battle Royale to intense Clash Squad finishers. Teams must first master the art of survival and elimination on the large map to earn their place in the final high-speed close-quarters showdown. This dual-format tournament identifies the most versatile squad capable of dominating both long-range strategy and face-to-face combat.',
             rules: [
@@ -445,20 +495,35 @@ filterBtns.forEach(btn => {
             ]
         },
         'E-Football': {
-            title: 'E-Football',
-            subtitle: 'Virtual Football',
-            badge: 'ESPORTS',
+            title: 'eFootball: The Pro-Series Tournament',
+            // subtitle: 'VIRTUAL PITCH GLORY',
+            // badge: 'ESPORTS',
             prizePool: '₹12,500+',
+            entryFee: '₹50 / Participant',
             teamSize: 'Individual',
-            entryFee: '₹50 / team',
-            description: 'Virtual pitch glory. 1v1 football simulation tournament.',
-            rules: ['FIFA game', 'Single matches', 'Skill demonstration'],
-            image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop'
+            regLink:'https://docs.google.com/forms/d/e/1FAIpQLScZit1f-04dstFeMpKeRN7dD6mEE0X_urssoB7K5GeQ9OkuZA/viewform?usp=header',
+            description: 'The Pro-Series Tournament is an elite virtual football simulation designed to test tactical depth, mechanical skill, and strategic squad management. Participants take full command of world-class footballers, navigating through a rigorous League Stage into a high-intensity Knockout Arena. The event emphasizes hyper-realistic ball physics and individual player mastery, challenging users to optimize their "Dream Team" protocols for competitive dominance.',
+            rules: [
+                'League Stage: Matches are strictly 8 minutes; extra time and penalties are disabled.',
+                'Knockout Stage: Matches are 10 minutes; extra time and penalties are enabled.',
+                'Squad Management: A maximum of 5 substitutions is permitted per match.',
+                'Match Environment: Both Home and Away conditions must be set to "Excellent" for competitive integrity.',
+                'Technical Protocol: No rematches will be provided for disconnections; the remaining active player will be awarded the victory.',
+                'Verification: Participants must capture and submit screenshots with player names immediately post-match.',
+                'Scoring (League): Wins award 3 points, Draws award 1 point, and Losses award 0 points.',
+                'Deadline: Matches must be initiated and completed within the designated tournament windows.'
+            ],
+            image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Dinesh Arumugam R', phone: '+91 9445261504' },
+                { name: 'Yogeshwaran PT', phone: '+91 7604848159' },
+                { name: 'Bhuvan Rohith R', phone: '+91 8778717442' }
+            ]
         },
         'IoT Grid': {
             title: 'IoT Grid',
-            subtitle: 'Connected World',
-            badge: 'TRAINING',
+            // subtitle: 'Connected World',
+            // badge: 'TRAINING',
             prizePool: 'Certification',
             teamSize: 'Individual',
             description: 'Interface with the ESP32 node. Establish global connectivity in IoT workshop.',
@@ -473,17 +538,12 @@ filterBtns.forEach(btn => {
     const rulesIcon = document.getElementById('rules-icon');
 
     rulesBtn.addEventListener('click', () => {
-        const isOpen = rulesContent.style.maxHeight !== '0px' && rulesContent.style.maxHeight !== '';
-        
-        if (isOpen) {
-            rulesContent.style.maxHeight = '0px';
-            rulesIcon.style.transform = 'rotate(0deg)';
-        } else {
-            rulesContent.style.maxHeight = rulesContent.scrollHeight + 'px';
-            rulesIcon.style.transform = 'rotate(180deg)';
-        }
-    });
-
+    const isOpening = rulesContent.style.maxHeight === '0px' || rulesContent.style.maxHeight === '';
+    
+    // Hard-coding a large enough height is much faster on mobile than scrollHeight
+    rulesContent.style.maxHeight = isOpening ? '1000px' : '0px'; 
+    rulesIcon.style.transform = isOpening ? 'rotate(180deg)' : 'rotate(0deg)';
+});
     // Important: Reset rules accordion when closing modal
     const closeBtn = document.getElementById('close-modal');
     closeBtn.addEventListener('click', () => {
@@ -493,6 +553,7 @@ filterBtns.forEach(btn => {
 
     // Function to close modal
 const closeModal = () => {
+    isModalOpen = false; // RESUME background
     const modal = document.getElementById('event-modal');
     modal.classList.add('hidden');
     document.body.style.overflow = 'auto';
@@ -518,44 +579,57 @@ window.addEventListener('popstate', () => {
         const data = eventData[eventName];
         
         if (data) {
-            const isCombo = (category === 'combo');
-            
-            // --- 1. RESET ALL THEMES AND BACKGROUNDS ---
-            modal.classList.remove('theme-tech', 'theme-non-tech', 'theme-flagship', 'theme-combo');
-            document.querySelectorAll('.modal-bg-mesh, .modal-bg-stars, .modal-bg-flagship, .modal-blob-tech, .modal-blob-nebula, .modal-blob-flagship')
-                .forEach(el => el.classList.add('hidden'));
-
-            // --- 2. RESTORE VISIBILITY FOR STANDARD ELEMENTS ---
-            // If it's NOT a combo, show the rules and metadata sections
-            const standardElements = document.querySelectorAll('#rules-toggle-btn, .flex-wrap.gap-4');
-            standardElements.forEach(el => {
-                el.style.opacity = isCombo ? '0' : '1';
-                el.style.pointerEvents = isCombo ? 'none' : 'auto';
-                el.style.visibility = isCombo ? 'hidden' : 'visible';
-            });
-            // --- 3. APPLY CATEGORY SPECIFIC THEMES & BACKGROUNDS ---
-            const regBtn = modal.querySelector('.cosmic-btn');
-            
-
-            if (category === 'tech') {
-                modal.classList.add('theme-tech');
-                document.querySelectorAll('.modal-bg-mesh-tech, .modal-blob-tech').forEach(el => el.classList.remove('hidden'));            } 
-            else if (category === 'non-tech') {
-                modal.classList.add('theme-non-tech');
-                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));            } 
-            else if (category === 'flagship') {
-                modal.classList.add('theme-flagship');
-                document.querySelectorAll('.modal-bg-flagship, .modal-blob-flagship').forEach(el => el.classList.remove('hidden'));            }
-            else if (category === 'combo') {
-                modal.classList.add('theme-combo');
-                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));                
-                // ADD THIS FIX HERE:
-                activeRegLink = data.regLink; 
-            }
+            isModalOpen = true; 
             window.history.pushState({ modalOpen: true }, '', '#event');
             
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+
+            const isCombo = (category === 'combo');
+            
+            // --- 1. RESET THEMES ---
+            modal.classList.remove('theme-tech', 'theme-non-tech', 'theme-flagship', 'theme-combo');
+            document.querySelectorAll('.modal-bg-mesh, .modal-bg-stars, .modal-bg-flagship, .modal-blob-tech, .modal-blob-nebula, .modal-blob-flagship')
+                .forEach(el => el.classList.add('hidden'));
+
+            // --- 2. DYNAMIC VISIBILITY LOGIC ---
+            // Metadata boxes (Prize, Team, Fee) always stay visible
+            const metadataContainer = document.querySelector('.flex-wrap.gap-4');
+            if (metadataContainer) {
+                metadataContainer.style.display = 'flex';
+                metadataContainer.classList.remove('hidden');
+                metadataContainer.style.opacity = '1';
+                metadataContainer.style.visibility = 'visible';
+                metadataContainer.style.pointerEvents = 'auto';
+            }
+
+            // Rules Accordion and Rulebooks only show for individual events
+            const rulesToggle = document.getElementById('rules-toggle-btn');
+            const rulebookContainer = document.getElementById('rulebook-container');
+
+            if (isCombo) {
+                if (rulesToggle) rulesToggle.style.display = 'none';
+                if (rulebookContainer) rulebookContainer.classList.add('hidden');
+            } else {
+                if (rulesToggle) rulesToggle.style.display = 'flex';
+                // Note: Rulebook logic below handles showing/hiding based on file existence
+            }
+
+            // --- 3. APPLY CATEGORY THEMES ---
+            if (category === 'tech') {
+                modal.classList.add('theme-tech');
+                document.querySelectorAll('.modal-bg-mesh-tech, .modal-blob-tech').forEach(el => el.classList.remove('hidden'));
+            } else if (category === 'non-tech') {
+                modal.classList.add('theme-non-tech');
+                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
+            } else if (category === 'flagship') {
+                modal.classList.add('theme-flagship');
+                document.querySelectorAll('.modal-bg-flagship, .modal-blob-flagship').forEach(el => el.classList.remove('hidden'));
+            } else if (category === 'combo') {
+                modal.classList.add('theme-combo');
+                document.querySelectorAll('.modal-stars-bg, .modal-blob-nebula').forEach(el => el.classList.remove('hidden'));
+                activeRegLink = data.regLink; 
+            }
 
             // --- 4. POPULATE CONTENT ---
             modalTitle.textContent = data.title;
@@ -564,32 +638,22 @@ window.addEventListener('popstate', () => {
             modalDescription.textContent = data.description;
             modalImage.style.backgroundImage = `url('${data.image}')`;
 
-            const rulebookContainer = document.getElementById('rulebook-container');
-            const rulebookLink = document.getElementById('modal-rulebook-link');
+            // Populate Metadata Boxes for BOTH combos and events
+            document.getElementById('modal-prize-pool').textContent = data.prizePool || 'Special Access';
+            document.getElementById('modal-team-size').textContent = data.teamSize || 'N/A';
+            document.getElementById('modal-entry-fee').textContent = data.entryFee || 'Contact Coordinator';
 
+            // Populate Rules ONLY for individual events
+            if (!isCombo && data.rules) {
+                modalRules.innerHTML = data.rules.map(rule => `<li>${rule}</li>`).join('');
+            }
+
+            // Rulebook logic (Only for events with files)
             if (data.rulebook) {
                 rulebookContainer.classList.remove('hidden'); 
                 rulebookLink.href = data.rulebook;
-                
-                const icon = rulebookLink.querySelector('i');
-                if (data.rulebook.endsWith('.docx')) {
-                    icon.className = 'fas fa-file-word text-blue-400 text-xl group-hover:scale-110 transition-transform';
-                } else {
-                    icon.className = 'fas fa-file-pdf text-red-400 text-xl group-hover:scale-110 transition-transform';
-                }
             } else {
                 rulebookContainer.classList.add('hidden'); 
-            }
-
-            // Inside the card click event listener in script.js
-            if (!isCombo) {
-                document.getElementById('modal-prize-pool').textContent = data.prizePool || 'TBA';
-                document.getElementById('modal-team-size').textContent = data.teamSize || 'TBA';
-                document.getElementById('modal-entry-fee').textContent = data.entryFee || 'Free'; // Add this line
-                
-                if (data.rules) {
-                    modalRules.innerHTML = data.rules.map(rule => `<li>${rule}</li>`).join('');
-                }
             }
                         
             modal.classList.remove('hidden');
