@@ -261,15 +261,28 @@ filterBtns.forEach(btn => {
             ]
         },
         'Coding Marathon': {
-            title: 'Coding Marathon',
-            subtitle: 'Algorithm Challenge',
+            title: 'Coding Marathon: The Synergy Challenge',
+            subtitle: 'ALGORITHM SYNESTHESIA',
             badge: 'SOFTWARE',
             prizePool: '₹2,000',
+            entryFee: '₹150 / Team',
             regLink: 'https://link-here.com',
-            teamSize: '1-2 Members',
-            description: 'Solve algorithmic challenges continuously. Test your coding endurance.',
-            rules: ['Individual or team', 'Multiple problems', 'Time and correctness'],
-            image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2070&auto=format&fit=crop'
+            teamSize: 'Exactly 2 Members',
+            description: 'The Synergy Challenge is an elite team-based gauntlet where two participants operate simultaneously on distinct problem sets in total isolation. At the midpoint, the "Swap Protocol" is initiated: partners exchange systems and must immediately adapt to, debug, and optimize their teammate’s remaining code. This event is a terminal test of individual logic, rapid adaptability, and technical code comprehension.',
+            rules: [
+                'Team Dynamics: Each squad must consist of exactly two members operating from different systems.',
+                'Isolation Protocol: Communication between team members is strictly prohibited throughout the session.',
+                'The Swap: At the midpoint, participants must exchange places and continue only with the code provided by their partner.',
+                'Development: Post-swap debugging, optimization, and resubmission of existing solutions are permitted.',
+                'Integrity: The use of unauthorized external assistance or unfair means will result in immediate disqualification.',
+                'Technical Note: Participants are encouraged to bring their own laptops for the competition.'
+            ],
+            image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2070&auto=format&fit=crop',
+            coordinators: [
+                { name: 'Dinesh Arumugam R', phone: '+91 9445261504' },
+                { name: 'Anish A', phone: '+91 6379590139' },
+                { name: 'Suganthan S', phone: '+91 8668043389' }
+            ]
         },
         'Treasure Hunt': {
             title: 'Treasure Hunt',
@@ -478,6 +491,26 @@ filterBtns.forEach(btn => {
         rulesIcon.style.transform = 'rotate(0deg)';
     });
 
+    // Function to close modal
+const closeModal = () => {
+    const modal = document.getElementById('event-modal');
+    modal.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    
+    // If the URL still has the #event hash, remove it without refreshing
+    if (window.location.hash === '#event') {
+        window.history.replaceState(null, null, ' ');
+    }
+};
+
+// Listen for the Browser Back Button
+window.addEventListener('popstate', () => {
+    const modal = document.getElementById('event-modal');
+    if (!modal.classList.contains('hidden')) {
+        closeModal();
+    }
+});
+
    eventCards.forEach(card => {
     card.addEventListener('click', () => {
         const eventName = card.querySelector('h3').textContent.trim();
@@ -486,7 +519,7 @@ filterBtns.forEach(btn => {
         
         if (data) {
             const isCombo = (category === 'combo');
-
+            
             // --- 1. RESET ALL THEMES AND BACKGROUNDS ---
             modal.classList.remove('theme-tech', 'theme-non-tech', 'theme-flagship', 'theme-combo');
             document.querySelectorAll('.modal-bg-mesh, .modal-bg-stars, .modal-bg-flagship, .modal-blob-tech, .modal-blob-nebula, .modal-blob-flagship')
@@ -503,6 +536,7 @@ filterBtns.forEach(btn => {
             // --- 3. APPLY CATEGORY SPECIFIC THEMES & BACKGROUNDS ---
             const regBtn = modal.querySelector('.cosmic-btn');
             
+
             if (category === 'tech') {
                 modal.classList.add('theme-tech');
                 document.querySelectorAll('.modal-bg-mesh-tech, .modal-blob-tech').forEach(el => el.classList.remove('hidden'));            } 
@@ -518,6 +552,11 @@ filterBtns.forEach(btn => {
                 // ADD THIS FIX HERE:
                 activeRegLink = data.regLink; 
             }
+            window.history.pushState({ modalOpen: true }, '', '#event');
+            
+            modal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+
             // --- 4. POPULATE CONTENT ---
             modalTitle.textContent = data.title;
             modalSubtitle.textContent = data.subtitle;
@@ -586,9 +625,10 @@ if (data.coordinators && data.coordinators.length > 0) {
 });
 
     closeModalBtn.addEventListener('click', () => {
-        modal.classList.add('hidden');
-        document.body.style.overflow = 'auto';
-    });
+        // Instead of just hiding, we trigger history back
+    // This will trigger the 'popstate' listener above
+    window.history.back();
+});
     closeModalBtn.addEventListener('mouseenter', () => {
     document.body.classList.add('hovering');
     // Optional: add a specific class to the cursor for the close button
@@ -601,11 +641,10 @@ closeModalBtn.addEventListener('mouseleave', () => {
 });
 
     modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.add('hidden');
-            document.body.style.overflow = 'auto';
-        }
-    });
+       if (e.target === modal) {
+        window.history.back();
+    }
+});
     
     // Inside your DOMContentLoaded block
     document.getElementById('close-modal').addEventListener('mouseenter', () => {
