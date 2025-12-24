@@ -116,12 +116,13 @@ filterBtns.forEach(btn => {
             rules: ['Team size: 2-4 members', '24 hours duration', 'Themes announced on spot'],
             image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop'
         },
-       'Robo Soccer': {
-            title: 'Cyber Kick: Robotic Football Challenge',
+       'Cyber Kick': {
+            title: 'Cyber Kick',
             subtitle: 'ROBOVERSE SERIES',
             badge: 'ROBOTICS',
             prizePool: '₹10,000',
             entryFee: '₹150 / Team', 
+            regLink: 'https://forms.gle/WWNiNaqffcK8xzoS6',
             rulebook: 'cyber_kick.docx',
             teamSize: 'Up to 4 Members',
             description: 'Cyber Kick is an elite competitive arena where engineering meets athletic strategy. This event challenges teams to design and build manually controlled robots capable of high-speed maneuvers, precise ball handling, and tactical real-time gameplay. It serves as a rigorous test of system integration, wireless communication reliability, and operational stability under match conditions.',
@@ -139,13 +140,14 @@ filterBtns.forEach(btn => {
                 { name: 'Gautham Raj H', phone: '+91 8668021608' }
             ]
         },
-        'Line Rush': {
-            title: 'Maze Drift: Autonomous Navigation',
+        'Maze Drift': {
+            title: 'Maze Drift',
             subtitle: 'ROBOVERSE SERIES',
             badge: 'ROBOTICS',
             prizePool: '₹10,000',
             entryFee: '₹150 / Team',
             teamSize: 'Up to 5 Members',
+            regLink: 'https://forms.gle/VsK9cbYpfSDF9qZf9',
             rulebook: 'MAZEDRIFT-26-FINAL.pdf',
             description: 'Maze Drift is a sophisticated autonomous robotics competition requiring participants to develop bots capable of high-precision line following and maze mapping. The challenge is divided into a "Dry Run" for environmental analysis and memory storage, followed by an "Actual Run" where the bot must calculate and execute the shortest possible path to the terminal zone in minimum time.',
             rules: [
@@ -162,13 +164,14 @@ filterBtns.forEach(btn => {
                 { name: 'BHUVAN RAJ M', phone: '+91 9677564359' }
             ]
         },
-        'Pick N Place': {
-            title: 'Lift-N-Shift: Precision Logistics',
+        'Lift-N-Shift': {
+            title: 'Lift-N-Shift',
             subtitle: 'ROBOVERSE SERIES',
             badge: 'ROBOTICS',
             prizePool: '₹10,000',
             entryFee: '₹150 / Team',
             teamSize: '1-4 Members',
+            regLink: 'https://forms.gle/rCNZyKSWk5rh7nZx9',
             rulebook: 'pick_n_place.docx',
             description: 'Lift-N-Shift is a flagship robotics challenge designed to evaluate mechanical ingenuity and manual precision. Participants must engineer a manually operated bot capable of sophisticated object handling, navigating a dynamic obstacle-filled arena, and accurately depositing blocks into designated high-value zones under strict time constraints.',
             rules: [
