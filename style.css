@@ -87,9 +87,10 @@ body {
 
 /* --- 2. Modal Specific Tweaks --- */
 #modal-content-wrapper {
-    scroll-behavior: smooth;
+    will-change: transform, opacity; /* Hints the browser to optimize */
+    backface-visibility: hidden;    /* Prevents flickering */
+    -webkit-font-smoothing: antialiased;
 }
-
 
 /* Specific button update for "Register Now" */
 .cosmic-btn {
@@ -865,6 +866,15 @@ header {
     #contact p, #contact h4 {
         text-align: left !important;
     }
+}
+#event-modal {
+    transition: opacity 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+#event-modal.hidden {
+    display: none;
+    opacity: 0;
+    backdrop-filter: blur(0px);
 }
 
 /* Opening effect persistence */
