@@ -324,7 +324,7 @@ filterBtns.forEach(btn => {
             ]
         },
         'Treasure Hunt:The Hidden Truth': {
-            title: 'Treasure Hunt:the Hidden truth',
+            title: 'Treasure Hunt:The Hidden Truth',
             // subtitle: 'Investigation Challenge',
             // badge: 'MYSTERY',
             prizePool: '₹1,500+',
