@@ -124,7 +124,7 @@ filterBtns.forEach(btn => {
                 'Judging Criteria: Rankings are determined by a predefined marks split-up focusing on innovation, feasibility, and clarity.',
                 'Finality: The jury’s assessment is absolute and will determine the top three overall winners.'
             ],
-            image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop',
+            image: 'paper.png',
             coordinators: [
                 { name: 'GOKUL K', phone: '9042403815' },
                 { name: 'JASMINE BANU A', phone: '8778418889' },
