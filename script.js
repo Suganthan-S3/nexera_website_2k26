@@ -62,11 +62,39 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Menu
-    const menuBtn = document.getElementById('menu-btn'); const menuPopup = document.getElementById('menu-popup');
-    menuBtn.addEventListener('click', (e) => { e.stopPropagation(); menuPopup.classList.toggle('opacity-0'); menuPopup.classList.toggle('pointer-events-none'); menuPopup.classList.toggle('scale-90'); menuPopup.classList.toggle('scale-100'); });
-    document.addEventListener('click', (e) => { if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) { menuPopup.classList.add('opacity-0', 'pointer-events-none', 'scale-90'); menuPopup.classList.remove('scale-100'); } });
+   // --- Updated Menu Logic ---
+const menuBtn = document.getElementById('menu-btn'); 
+const menuPopup = document.getElementById('menu-popup');
+const navLinks = document.querySelectorAll('.nav-link'); // Select all navigation links
 
+// Helper function to close the menu
+const closeMenu = () => {
+    menuPopup.classList.add('opacity-0', 'pointer-events-none', 'scale-90');
+    menuPopup.classList.remove('scale-100');
+};
+
+// 1. Toggle menu when button is clicked
+menuBtn.addEventListener('click', (e) => { 
+    e.stopPropagation(); 
+    menuPopup.classList.toggle('opacity-0'); 
+    menuPopup.classList.toggle('pointer-events-none'); 
+    menuPopup.classList.toggle('scale-90'); 
+    menuPopup.classList.toggle('scale-100'); 
+});
+
+// 2. SINGLE CLICK FIX: Close menu when any nav link is clicked
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        closeMenu();
+    });
+});
+
+// 3. Close menu when clicking anywhere outside
+document.addEventListener('click', (e) => { 
+    if (!menuPopup.contains(e.target) && !menuBtn.contains(e.target)) { 
+        closeMenu();
+    } 
+});
     // Locate the Filters section in your DOMContentLoaded block
 const filterBtns = document.querySelectorAll('.filter-btn'); 
 const eventCards = document.querySelectorAll('.event-card');
