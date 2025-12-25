@@ -391,7 +391,8 @@ filterBtns.forEach(btn => {
             },
             image: 'circuitpass.jpeg',
             coordinators: [
-                { name: 'Sabreeshwaran', phone: '8870247551' }
+                { name: 'Sabreeshwaran', phone: '8870247551' },
+                {name:'Kanishkar S',phone:'7418994553' }
             ]
         },
         'Cipher Pass': {
@@ -410,7 +411,8 @@ filterBtns.forEach(btn => {
             },
             image: 'cipher.jpeg',
             coordinators: [
-                { name: 'Sabreeshwaran', phone: '8870247551' }
+                { name: 'Sabreeshwaran', phone: '8870247551' },
+                {name:'Kanishkar S',phone:'7418994553' }
             ]
         },
 
