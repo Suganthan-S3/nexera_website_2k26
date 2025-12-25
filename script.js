@@ -323,8 +323,8 @@ filterBtns.forEach(btn => {
                 { name: 'Suganthan S', phone: '+91 8668043389' }
             ]
         },
-        'Treasure Hunt': {
-            title: 'Treasure Hunt',
+        'Treasure Hunt:The Hidden Truth': {
+            title: 'Treasure Hunt:the Hidden truth',
             // subtitle: 'Investigation Challenge',
             // badge: 'MYSTERY',
             prizePool: '₹1,500+',
@@ -350,8 +350,8 @@ filterBtns.forEach(btn => {
             ]
         },
         // Add these to eventData in script.js
-    'Trio Pass': {
-            title: 'Trio Pass',
+    'Circuitry Pass': {
+            title: 'Circuitry Pass',
             prizePool: 'Multi-Event Access',
             entryFee: '₹399 / Team',
             teamSize: '2-3 Members',
@@ -359,15 +359,15 @@ filterBtns.forEach(btn => {
             description: 'Ideal for small teams of 2 to 3 members, this pass offers access to two technical events to test your knowledge and problem-solving skills. The perfect choice for groups looking to compete, collaborate, and enjoy the fest together!',
             includedEvents: {
                 technical: ['Circuit Wars', 'Lab Lockdown'],
-                nonTechnical: ['Quizify', 'Treasure Hunt (Choose 1)']
+                // nonTechnical: []
             },
-            image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070',
+            image: 'circuitpass.jpeg',
             coordinators: [
                 { name: 'Sabreeshwaran', phone: '8870247551' }
             ]
         },
-        'Duo Pass': {
-            title: 'Duo Pass',
+        'Cipher Pass': {
+            title: 'Cipher Pass',
             prizePool: 'Multi-Event Access',
             entryFee: '₹349 / team', 
             teamSize: 'Exactly 2 Members',
@@ -380,7 +380,7 @@ filterBtns.forEach(btn => {
                     'Carrom, Chess, or Quizify'
                 ]
             },
-            image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070',
+            image: 'cipher.jpeg',
             coordinators: [
                 { name: 'Sabreeshwaran', phone: '8870247551' }
             ]
@@ -632,42 +632,65 @@ eventCards.forEach(card => {
             // Handle Rulebook
             const rulebookContainer = document.getElementById('rulebook-container');
             const rulebookLink = document.getElementById('modal-rulebook-link');
+            const rulebookText = rulebookLink.querySelector('.text-white'); // Selects the text span
 
             if (data.rulebook && !isCombo) {
                 rulebookContainer.classList.remove('hidden'); 
                 rulebookLink.href = data.rulebook;
+                
+                // Change text dynamically
+                rulebookText.textContent = (eventName === 'Paper Presentation') 
+                    ? 'Download Paper Template' 
+                    : 'Download Official Rulebook';
+
+                // Handle Icons
                 const icon = rulebookLink.querySelector('i');
-                icon.className = data.rulebook.endsWith('.docx') ? 'fas fa-file-word text-blue-400 text-xl' : 'fas fa-file-pdf text-red-400 text-xl';
+                if (data.rulebook.endsWith('.pptx') || data.rulebook.endsWith('.ppt')) {
+                    icon.className = 'fas fa-file-powerpoint text-orange-400 text-xl';
+                } else if (data.rulebook.endsWith('.docx')) {
+                    icon.className = 'fas fa-file-word text-blue-400 text-xl';
+                } else {
+                    icon.className = 'fas fa-file-pdf text-red-400 text-xl';
+                }
             } else {
                 rulebookContainer.classList.add('hidden'); 
             }
-
             // --- 4. COMBO VS STANDARD RULES LOGIC ---
+            // --- Inside the modal opening logic in script.js ---
             if (isCombo && data.includedEvents) {
-                // Hide the "View Rules" button and show content directly
                 rulesToggleBtn.style.display = 'none';
                 rulesContent.style.maxHeight = '1000px'; 
                 rulesContent.style.opacity = '1';
 
                 const techItems = data.includedEvents.technical.map(e => `<li>${e}</li>`).join('');
-                const nonTechItems = data.includedEvents.nonTechnical.map(e => `<li>${e}</li>`).join('');
+                
+                // Check if non-technical events exist before creating the HTML string
+                const nonTechItems = data.includedEvents.nonTechnical && data.includedEvents.nonTechnical.length > 0 
+                    ? data.includedEvents.nonTechnical.map(e => `<li>${e}</li>`).join('') 
+                    : "";
 
-                modalRules.innerHTML = `
+                let comboHtml = `
                     <div class="space-y-4 pt-4 border-t border-white/10 mt-4">
                         <div>
                             <h4 class="text-blue-400 font-bold text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
                                 <i class="fas fa-microchip"></i> Technical Modules Included
                             </h4>
                             <ul class="list-disc list-inside text-gray-300 text-sm space-y-1 ml-2">${techItems}</ul>
-                        </div>
+                        </div>`;
+
+                // ONLY add this block if nonTechItems is not an empty string
+                if (nonTechItems) {
+                    comboHtml += `
                         <div>
                             <h4 class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-2 flex items-center gap-2">
                                 <i class="fas fa-star"></i> Non-Technical Access
                             </h4>
                             <ul class="list-disc list-inside text-gray-300 text-sm space-y-1 ml-2">${nonTechItems}</ul>
-                        </div>
-                    </div>
-                `;
+                        </div>`;
+                }
+
+                comboHtml += `</div>`;
+                modalRules.innerHTML = comboHtml;
 
                 // Set metadata for combo
                 document.getElementById('modal-prize-pool').textContent = 'Event Access';
@@ -752,7 +775,7 @@ const proceedRegBtn = document.getElementById('proceed-reg-link');
 const eventModalRegBtn = document.querySelector('#event-modal .cosmic-btn');
 
 let activeRegLink = ""; // Temporary storage for the current event's link
-const comboTriggerEvents = ['Circuit Wars', 'Lab Lockdown', 'Coding Marathon', 'Prompt Verse', 'Carrom'];
+const comboTriggerEvents = ['Circuit Wars', 'Lab Lockdown', 'Coding Marathon', 'Prompt Verse'];
 
 eventModalRegBtn.addEventListener('click', (e) => {
     // 1. Stop any default behavior
