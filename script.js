@@ -237,7 +237,7 @@ filterBtns.forEach(btn => {
             ]
         },
         'Circuit Wars': {
-            title: 'Circuit Chronicles: The Technical Gauntlet',
+            title: 'Circuit Wars',
             // subtitle: 'Hardware Battle',
             // badge: 'HARDWARE',
             prizePool: '₹2,000',
@@ -334,7 +334,7 @@ filterBtns.forEach(btn => {
         },
         // Add these to eventData in script.js
         'Trio Pass': {
-                    title: 'Trio Pass: The Collaborative Uplink',
+                    title: 'Trio Pass',
                     // subtitle: 'PREMIUM TEAM BUNDLE',
                     // badge: 'ELITE BUNDLE',
                     prizePool: 'Multi-Event Access',
@@ -495,7 +495,7 @@ filterBtns.forEach(btn => {
             ]
         },
         'E-Football': {
-            title: 'eFootball: The Pro-Series Tournament',
+            title: 'E-Football',
             // subtitle: 'VIRTUAL PITCH GLORY',
             // badge: 'ESPORTS',
             prizePool: '₹12,500+',
