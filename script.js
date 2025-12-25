@@ -109,10 +109,11 @@ filterBtns.forEach(btn => {
             title: 'Paper Presentation',
             // subtitle: 'INNOVATION SHOWCASE',
             // badge: 'FLAGSHIP',
-            prizePool: '₹10,000',
+            prizePool: '₹6K+',
             entryFee: '₹299 / team',
             teamSize: '3-4 Members',
             rulebook: 'Paper presentation template.pptx',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSe8x2DUBUwJnjFt-GHpMm-MNrsz4K7dUQRKwFvhYDO6yQT-wg/viewform?usp=sharing&ouid=110963580985970388920',
             description: 'The Ideathon Summit is a premier technical arena where participants engineer innovative solutions to high-impact thematic problem statements. Operating as a high-stakes ideation challenge, teams must synthesize their research into a professional architectural defense. A distinguished jury panel evaluates each proposal based on technical feasibility, systemic impact, and presentation precision to identify the top three engineering solutions.',
             rules: [
                 'Team Composition: Each squad must consist of a minimum of 3 and a maximum of 4 members.',
@@ -147,7 +148,7 @@ filterBtns.forEach(btn => {
                 'Registration Phase 2: A secondary registration protocol is required only for teams advancing to the Online Presentation stage.',
                 'Team Dynamics: Each squad must consist of 2–4 members; cross-disciplinary collaboration is encouraged.'
             ],
-            image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=2069&auto=format&fit=crop',
+            image: 'hackathon.jpeg',
             coordinators: [
                 { name: 'Sanjay Viswan', phone: '90012 34567' }, // Update with specific coordinators
                 { name: 'Priya Mani', phone: '88776 65544' }
@@ -314,7 +315,7 @@ filterBtns.forEach(btn => {
                 'Integrity: The use of unauthorized external assistance or unfair means will result in immediate disqualification.',
                 'Technical Note: Participants are encouraged to bring their own laptops for the competition.'
             ],
-            image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2070&auto=format&fit=crop',
+            image: 'coding relay.jpeg',
             coordinators: [
                 { name: 'Dinesh Arumugam R', phone: '+91 9445261504' },
                 { name: 'Anish A', phone: '+91 6379590139' },
