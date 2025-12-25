@@ -110,7 +110,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'INNOVATION SHOWCASE',
             // badge: 'FLAGSHIP',
             prizePool: '₹6K+',
-            entryFee: '₹299 / team',
+            entryFee: '₹249 / team',
             teamSize: '3-4 Members',
             rulebook: 'Paper presentation template.pptx',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSe8x2DUBUwJnjFt-GHpMm-MNrsz4K7dUQRKwFvhYDO6yQT-wg/viewform?usp=sharing&ouid=110963580985970388920',
@@ -231,7 +231,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'CIRCUIT ESCAPE CHALLENGE',
             // badge: 'CIRCUITS',
             prizePool: '₹2,000+',
-            entryFee: '₹299 / Team', // Added entry fee as requested
+            entryFee: '₹249 / Team', // Added entry fee as requested
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSepKLdMSU6M7CjMH-WQxCIc3MW5utn2QzAqT7YFbTtfz04bsA/viewform?usp=header',
             teamSize: '3 Members',
             description: 'Lab Lockdown is an elite technical simulation designed to evaluate engineering fundamentals, logical synthesis, and collaborative problem-solving across all disciplines. Participants are immersed in a high-pressure environment where they must decrypt technical locks and navigate a series of sequential challenges to successfully "unlock" the facility.',
@@ -258,7 +258,7 @@ filterBtns.forEach(btn => {
             prizePool: '₹2,000+',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdLZMwZcbuRuV4rbxREqm0gFwBWnR6zoFPdVE6kdPFf18QuCQ/viewform?usp=header',
             teamSize: '2-3 Members',
-            entryFee: '₹299 / team',
+            entryFee: '₹249 / team',
             description: 'A high-intensity, three-stage engineering challenge designed to test visual memory, diagnostic precision, and collaborative problem-solving. Teams must navigate through rapid-fire recalls and complex physical puzzles to prove their mastery over circuit theory and real-world electronics.',
             rules: [
                 'Team Dynamics: Each team must consist of exactly 2–3 participants; report 10 minutes prior to start time.',
@@ -903,5 +903,6 @@ const initTimeline = () => {
 // Call the function inside your existing DOMContentLoaded
 initTimeline();
 });
+
 
 
