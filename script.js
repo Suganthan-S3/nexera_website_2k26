@@ -110,7 +110,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'INNOVATION SHOWCASE',
             // badge: 'FLAGSHIP',
             prizePool: '₹6K+',
-            entryFee: '₹249 / team',
+            entryFee: '₹250 / team',
             teamSize: '3-4 Members',
             rulebook: 'Paper presentation template.pptx',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSe8x2DUBUwJnjFt-GHpMm-MNrsz4K7dUQRKwFvhYDO6yQT-wg/viewform?usp=sharing&ouid=110963580985970388920',
@@ -136,7 +136,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'CODEFEST ARENA',
             // badge: 'FLAGSHIP',
             prizePool: '₹30K+',
-            entryFee: '₹199 / Team',
+            entryFee: '₹200 / Team',
             teamSize: '2-4 Members',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfV1zlCc77pX2wi7KGaO61vqSTyNuE3dW0cRnNe6rXel7Z2XA/viewform?usp=header',
             description: 'The Innovation Sprint is an elite three-stage challenge designed to catalyze creative problem-solving and rapid technical development. Participants must progress from conceptual abstracts to online architectural presentations, culminating in a physical prototype demonstration at the CIT campus. This flagship event evaluates originality, technical feasibility, and the ability to bridge the gap between ideation and working solutions.',
@@ -158,8 +158,8 @@ filterBtns.forEach(btn => {
             title: 'Cyber Kick',
             // subtitle: 'ROBOVERSE SERIES',
             // badge: 'ROBOTICS',
-            prizePool: '₹10K+',
-            entryFee: '₹499 / Team', 
+            prizePool: '₹9K+',
+            entryFee: '₹500 / Team', 
             regLink: 'https://forms.gle/WWNiNaqffcK8xzoS6',
             rulebook: 'cyber_kick.docx',
             teamSize: 'Up to 4 Members',
@@ -182,8 +182,8 @@ filterBtns.forEach(btn => {
             title: 'Maze Drift',
             subtitle: 'ROBOVERSE SERIES',
             badge: 'ROBOTICS',
-            prizePool: '₹10K+',
-            entryFee: '₹499 / Team',
+            prizePool: '₹9K+',
+            entryFee: '₹500 / Team',
             teamSize: 'Up to 5 Members',
             regLink: 'https://forms.gle/VsK9cbYpfSDF9qZf9',
             rulebook: 'MAZEDRIFT.pdf',
@@ -206,8 +206,8 @@ filterBtns.forEach(btn => {
             title: 'Lift-N-Shift',
             // subtitle: 'ROBOVERSE SERIES',
             // badge: 'ROBOTICS',
-            prizePool: '₹10K+',
-            entryFee: '₹499 / Team',
+            prizePool: '₹9K+',
+            entryFee: '₹500 / Team',
             teamSize: '1-4 Members',
             regLink: 'https://forms.gle/rCNZyKSWk5rh7nZx9',
             rulebook: 'pick n place.docx',
@@ -230,8 +230,8 @@ filterBtns.forEach(btn => {
             title: 'Lab Lockdown',
             // subtitle: 'CIRCUIT ESCAPE CHALLENGE',
             // badge: 'CIRCUITS',
-            prizePool: '₹2,000+',
-            entryFee: '₹249 / Team', // Added entry fee as requested
+            prizePool: '₹2K+',
+            entryFee: '₹250 / Team', // Added entry fee as requested
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSepKLdMSU6M7CjMH-WQxCIc3MW5utn2QzAqT7YFbTtfz04bsA/viewform?usp=header',
             teamSize: '3 Members',
             description: 'Lab Lockdown is an elite technical simulation designed to evaluate engineering fundamentals, logical synthesis, and collaborative problem-solving across all disciplines. Participants are immersed in a high-pressure environment where they must decrypt technical locks and navigate a series of sequential challenges to successfully "unlock" the facility.',
@@ -255,10 +255,10 @@ filterBtns.forEach(btn => {
             title: 'Circuit Wars',
             // subtitle: 'Hardware Battle',
             // badge: 'HARDWARE',
-            prizePool: '₹2,000+',
+            prizePool: '₹2K+',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdLZMwZcbuRuV4rbxREqm0gFwBWnR6zoFPdVE6kdPFf18QuCQ/viewform?usp=header',
             teamSize: '2-3 Members',
-            entryFee: '₹249 / team',
+            entryFee: '₹250 / team',
             description: 'A high-intensity, three-stage engineering challenge designed to test visual memory, diagnostic precision, and collaborative problem-solving. Teams must navigate through rapid-fire recalls and complex physical puzzles to prove their mastery over circuit theory and real-world electronics.',
             rules: [
                 'Team Dynamics: Each team must consist of exactly 2–3 participants; report 10 minutes prior to start time.',
@@ -279,10 +279,10 @@ filterBtns.forEach(btn => {
             title: 'Prompt Verse',
             // subtitle: 'AI Mastery',
             // badge: 'AI/ML',
-            prizePool: '₹2,000+',
+            prizePool: '₹2K+ ',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfH_3tDdJz15R4BX4pjW7FkaXCVjUhzRQLLwEPTFHCWy5f2uQ/viewform?usp=header',
             teamSize: '2 Members', // Updated from Individual to match your new rules
-            entryFee: '₹199 / team',
+            entryFee: '₹200 / team',
             description: 'A fast-paced competition challenging teams to master AI prompt engineering through memory, speed, and creative precision. Teams must bridge the gap between human observation and digital generation across three increasingly difficult rounds.',
             rules: [
                 'Teams & Tools: Exactly two members using text-only prompts; no image uploads or external edits allowed.',
@@ -302,8 +302,8 @@ filterBtns.forEach(btn => {
             title: 'Coding Relay',
             // subtitle: 'ALGORITHM SYNESTHESIA',
             // badge: 'SOFTWARE',
-            prizePool: '₹2k+',
-            entryFee: '₹199 / Team',
+            prizePool: '₹2K+',
+            entryFee: '₹200 / Team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSdTK3kXJZYoPk1WhDvsuzHfwWzjF-CulleHBkb7MtgoiFIjXg/viewform?usp=header',
             teamSize: 'Exactly 2 Members',
             description: 'The Synergy Challenge is an elite team-based gauntlet where two participants operate simultaneously on distinct problem sets in total isolation. At the midpoint, the "Swap Protocol" is initiated: partners exchange systems and must immediately adapt to, debug, and optimize their teammate’s remaining code. This event is a terminal test of individual logic, rapid adaptability, and technical code comprehension.',
@@ -328,7 +328,7 @@ filterBtns.forEach(btn => {
             // badge: 'MYSTERY',
             prizePool: '₹1,500+',
             teamSize: 'Teams',
-            entryFee: '₹99 / team',
+            entryFee: '₹150 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeihMYHhZhKzjd_wqzwEThylefpt7eGUh6TqNRHlQ46DR73ow/viewform?usp=sharing&ouid=110963580985970388920',
             description: 'An immersive investigation-based challenge where participants analyze evidence, decode clues, and question assumptions to uncover hidden truths. The event tests critical thinking, observation, and decision-making under time pressure. Not all clues are reliable, making logical reasoning and judgment essential for success.',
             rules: [
@@ -354,7 +354,7 @@ filterBtns.forEach(btn => {
                     // subtitle: 'PREMIUM TEAM BUNDLE',
                     // badge: 'ELITE BUNDLE',
                     prizePool: 'Multi-Event Access',
-                    entryFee: '₹499 / Team', // Adjust price as per your requirements
+                    entryFee: '₹399 / Team', // Adjust price as per your requirements
                     teamSize: '2-3 Members',
                     regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScU8DvB7P1K0dc4vwk_10uZCQWNz9I7ByVlHvk4X-23QDf0Rw/viewform?usp=sharing&ouid=110963580985970388920',
                     includedEvents: {
@@ -373,7 +373,7 @@ filterBtns.forEach(btn => {
                     // subtitle: 'ELITE PAIR BUNDLE',
                     // badge: 'ELITE BUNDLE',
                     prizePool: 'Multi-Event Access',
-                    entryFee: '₹499 / Pair', // Adjust price based on your requirements
+                    entryFee: '₹349 / team', // Adjust price based on your requirements
                     teamSize: 'Exactly 2 Members',
                     regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeeB2CM_Bp1fqQJnAuEm6jgTgX2vQbM-D9uLj1SB7EYQ2jYFg/viewform?usp=header',
                     description: 'The Duo Pass is a premium cross-disciplinary bundle designed specifically for pairs who aim to dominate both the technical and recreational arenas. This pass provides a high-octane mix of learning, competitive innovation, and entertainment. By initializing this uplink, pairs gain entry into two core technical challenges—Code Relay and Prompt Verse—plus one high-precision non-technical event: Carrom.',
@@ -392,7 +392,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'Table Game',
             // badge: 'GAMING',
             prizePool: '₹1,500+',
-            entryFee: '₹99 / team',
+            entryFee: '₹100 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeCujORyc-wiRx917dg-GkGsuhCMMZVPHr4xo1_q3c2yINnfQ/viewform?usp=header',
             teamSize: '2 Members',
             description: 'A high-stakes, knockout-style tournament where mixed teams must demonstrate precision and speed within a strict 15-minute blitz window. Success depends on strategic puck control and scoring efficiency to outpace the opposition before the buzzer sounds.',
@@ -415,7 +415,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'STRATEGIC MIND GAME',
             // badge: 'STRATEGY',
             prizePool: '₹1,500+',
-            entryFee: '₹99 / Participant',
+            entryFee: '₹100 / Participant',
             teamSize: 'Individual',
             regLink:'https://docs.google.com/forms/d/e/1FAIpQLSdjQDtznzVqg_2vu1F0hywcGkRIO80hgalCQXs2fY1ew_KqXQ/viewform?usp=header',
             description: 'Enter a high-stakes arena of foresight and cognitive endurance. This tournament is designed to test a player’s ability to calculate under pressure and outmaneuver rivals in a battle of pure logic. This event follows a competitive hierarchy system where every move dictates the path to victory or defeat.',
@@ -439,7 +439,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'Knowledge Battle',
             // badge: 'TRIVIA',
             prizePool: '₹1,500+',
-            entryFee: '₹99 / team',
+            entryFee: '₹150 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScrnKgmu8V4mpwp8e_qgt-_zdUhL9UYCrFaPr_rVVgDnPs_iQ/viewform?usp=header',
             teamSize: '2-3 Members',
             description: 'Quizify is a general quiz hosted in 2 rounds. The quiz consists of questions from general fields such as current affairs, sports, movies, technology, business and many more.',
@@ -461,7 +461,7 @@ filterBtns.forEach(btn => {
             // badge: 'MANAGEMENT',
             prizePool: '₹1,500+',
             teamSize: '3-5 Members',
-            entryFee: '₹99 / team',
+            entryFee: '₹150 / team',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeaIYuCu14qNhYriM03ihE8Q9zLkqNiXxYVXbmkYWqIFibavw/viewform?usp=header',
             description: 'A high-stakes bidding war where teams must balance a massive budget with statistical analysis to build a champion roster. Participants will step into the shoes of franchise owners, using historical data and tactical foresight to outmaneuver rivals in a premium auction environment.',
             rules: [
@@ -485,7 +485,7 @@ filterBtns.forEach(btn => {
             // badge: 'ESPORTS',
             prizePool: '₹1,500+',
             teamSize: 'Squad',
-            entryFee: '₹99 / team',
+            entryFee: '₹150 / team',
             regLink:'https://docs.google.com/forms/d/e/1FAIpQLSdZbqsc7fBA7kPmkOYzgpCRUSuXiJfL4AfyGJUXBX0e56ozzA/viewform?usp=header',
             description: 'Experience the ultimate test of combat prowess in a high-stakes transition from tactical Battle Royale to intense Clash Squad finishers. Teams must first master the art of survival and elimination on the large map to earn their place in the final high-speed close-quarters showdown. This dual-format tournament identifies the most versatile squad capable of dominating both long-range strategy and face-to-face combat.',
             rules: [
@@ -508,7 +508,7 @@ filterBtns.forEach(btn => {
             // subtitle: 'VIRTUAL PITCH GLORY',
             // badge: 'ESPORTS',
             prizePool: '₹1,500+',
-            entryFee: '₹99 / Participant',
+            entryFee: '₹50 / Participant',
             teamSize: 'Individual',
             regLink:'https://docs.google.com/forms/d/e/1FAIpQLScZit1f-04dstFeMpKeRN7dD6mEE0X_urssoB7K5GeQ9OkuZA/viewform?usp=header',
             description: 'The Pro-Series Tournament is an elite virtual football simulation designed to test tactical depth, mechanical skill, and strategic squad management. Participants take full command of world-class footballers, navigating through a rigorous League Stage into a high-intensity Knockout Arena. The event emphasizes hyper-realistic ball physics and individual player mastery, challenging users to optimize their "Dream Team" protocols for competitive dominance.',
@@ -903,6 +903,5 @@ const initTimeline = () => {
 // Call the function inside your existing DOMContentLoaded
 initTimeline();
 });
-
 
 
