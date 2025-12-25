@@ -150,8 +150,9 @@ filterBtns.forEach(btn => {
             ],
             image: 'hackathon.jpeg',
             coordinators: [
-                { name: 'Sanjay Viswan', phone: '90012 34567' }, // Update with specific coordinators
-                { name: 'Priya Mani', phone: '88776 65544' }
+                { name: 'AJAY B', phone: '+91 9597041310' },
+                { name: 'DAKSHINESGWAR SD', phone: '+91 97917 34682' },
+                { name: 'SRIYAA GB', phone: '+91 81222 64800' }
             ]
         },
        'Cyber Kick': {
@@ -172,7 +173,7 @@ filterBtns.forEach(btn => {
                 'A maximum of 3 restarts are permitted per match, with the timer remaining active throughout.',
                 'Note: Refer to "cyber_kick.docx" for full technical arena specifications.'
             ],
-            image: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=2070&auto=format&fit=crop',
+            image: 'cyber.png',
             coordinators: [
                 { name: 'Pooja N', phone: '+91 8220510532' },
                 { name: 'Gautham Raj H', phone: '+91 8668021608' }
@@ -196,7 +197,7 @@ filterBtns.forEach(btn => {
                 'Points are awarded for checkpoint crossing, successful dry runs, and shortest path optimization.',
                 'Note: Refer to "MAZEDRIFT.pdf" for arena dimensions and logic rules.'
             ],
-            image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?q=80&w=2070&auto=format&fit=crop',
+            image: 'maze.png',
             coordinators: [
                 { name: 'GOBIKA NS', phone: '+91 9345531715' },
                 { name: 'BHUVAN RAJ M', phone: '+91 9677564359' }
@@ -220,7 +221,7 @@ filterBtns.forEach(btn => {
                 'Human intervention is strictly limited to repositioning the bot at designated checkpoints.',
                 'Note: Refer to "pick n place.docx" for detailed scoring and penalty criteria.'
             ],
-            image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop',
+            image: 'lift.png',
             coordinators: [
                 { name: 'Shageetha Johnson A', phone: '+91 9360002955' },
                 { name: 'Raghubathi Raja T K', phone: '+91 9363170477' }
@@ -349,43 +350,41 @@ filterBtns.forEach(btn => {
             ]
         },
         // Add these to eventData in script.js
-'Trio Pass': {
-                    title: 'Trio Pass',
-                    // subtitle: 'PREMIUM TEAM BUNDLE',
-                    // badge: 'ELITE BUNDLE',
-                    prizePool: 'Multi-Event Access',
-                    entryFee: '₹399 / Team', // Adjust price as per your requirements
-                    teamSize: '2-3 Members',
-                    regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScU8DvB7P1K0dc4vwk_10uZCQWNz9I7ByVlHvk4X-23QDf0Rw/viewform?usp=sharing&ouid=110963580985970388920',
-                    includedEvents: {
-                        technical: ['Circuit Wars', 'Lab Lockdown'],
-                        nonTechnical: ['Quizify', 'Treasure Hunt (Choose 1)']
-                    },
-                    description: 'The Trio Pass is engineered for small tactical teams looking to maximize their impact across the symposium. This uplink provides full access to two high-intensity technical modules—Circuit Wars and Lab Lockdown—designed to push your problem-solving limits. To balance the technical rigor, teams can select one premium non-technical experience: either the high-speed trivia of Quizify or the immersive mystery of the Treasure Hunt.',
-                    
-                    image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070',
-                    coordinators: [
-                        { name: 'Sabreeshwaran', phone: '8870247551' }
-                    ]
-                },
-'Duo Pass': {
-                    title: 'Duo Pass',
-                    // subtitle: 'ELITE PAIR BUNDLE',
-                    // badge: 'ELITE BUNDLE',
-                    prizePool: 'Multi-Event Access',
-                    entryFee: '₹349 / team', // Adjust price based on your requirements
-                    teamSize: 'Exactly 2 Members',
-                    regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeeB2CM_Bp1fqQJnAuEm6jgTgX2vQbM-D9uLj1SB7EYQ2jYFg/viewform?usp=header',
-                    description: 'The Duo Pass is a premium cross-disciplinary bundle designed specifically for pairs who aim to dominate both the technical and recreational arenas. This pass provides a high-octane mix of learning, competitive innovation, and entertainment. By initializing this uplink, pairs gain entry into two core technical challenges—Code Relay and Prompt Verse—plus one high-precision non-technical event: Carrom.',
-                    includedEvents: {
-                        technical: ['Code Relay', 'Prompt Verse'],
-                        nonTechnical: ['Carrom']
-                    },
-                    image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070',
-                    coordinators: [
-                        { name: 'Sabreeshwaran', phone: '8870247551' }
-                    ]
-                },
+    'Trio Pass': {
+            title: 'Trio Pass',
+            prizePool: 'Multi-Event Access',
+            entryFee: '₹399 / Team',
+            teamSize: '2-3 Members',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLScU8DvB7P1K0dc4vwk_10uZCQWNz9I7ByVlHvk4X-23QDf0Rw/viewform?usp=sharing&ouid=110963580985970388920',
+            description: 'Ideal for small teams of 2 to 3 members, this pass offers access to two technical events to test your knowledge and problem-solving skills. The perfect choice for groups looking to compete, collaborate, and enjoy the fest together!',
+            includedEvents: {
+                technical: ['Circuit Wars', 'Lab Lockdown'],
+                nonTechnical: ['Quizify', 'Treasure Hunt (Choose 1)']
+            },
+            image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070',
+            coordinators: [
+                { name: 'Sabreeshwaran', phone: '8870247551' }
+            ]
+        },
+        'Duo Pass': {
+            title: 'Duo Pass',
+            prizePool: 'Multi-Event Access',
+            entryFee: '₹349 / team', 
+            teamSize: 'Exactly 2 Members',
+            regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSeeB2CM_Bp1fqQJnAuEm6jgTgX2vQbM-D9uLj1SB7EYQ2jYFg/viewform?usp=header',
+            description: 'Designed for pairs, this pass gives two participants entry to two technical events to showcase skills and innovation, additionally with 50% off on one non-technical event to relax and have fun. A perfect mix of learning, competition, and entertainment for an unforgettable fest experience.',
+            includedEvents: {
+                technical: ['Coding Relay', 'Prompt Verse'],
+                nonTechnical: [
+                    '50% OFF (On-Spot) for any ONE:',
+                    'Carrom, Chess, or Quizify'
+                ]
+            },
+            image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070',
+            coordinators: [
+                { name: 'Sabreeshwaran', phone: '8870247551' }
+            ]
+        },
 
         'Carrom': {
             title: 'Carrom',
@@ -428,7 +427,7 @@ filterBtns.forEach(btn => {
                 'Certification: Participation certificates will be awarded to all registered players.',
                 'Finality: Prize distribution will take place immediately at the conclusion of the event.'
             ],
-            image: 'https://images.unsplash.com/photo-1529699211952-734e80c4d42b?q=80&w=2070&auto=format&fit=crop',
+            image: 'chess.png',
             coordinators: [
                 { name: 'Kanishkar S', phone: '7418994553' },
                 { name: 'Suganthan S', phone: '8668043389' }
@@ -448,7 +447,7 @@ filterBtns.forEach(btn => {
                     'First round consists of 20 questions.',
                     'Second round consists of 15 questions.',
                     'The final score will be a consolidation of both rounds.'],
-            image: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=2070&auto=format&fit=crop',
+            image: 'quiz.png',
             coordinators: [
                 { name: 'Kritheeka K', phone: '+91 9679523479' },
                 { name: 'Mithula C', phone: '+91 8056666226' },
@@ -472,7 +471,7 @@ filterBtns.forEach(btn => {
                 'Auction Protocol: Standard bidding increments apply; the highest bidder at the fall of the hammer secures the player.',
                 'Entry Requirement: A registration fee of ₹150 per team must be settled prior to the commencement.'
             ],
-            image: 'https://images.unsplash.com/photo-1543326727-cf6c39e8f84c?q=80&w=2070&auto=format&fit=crop',
+            image: 'ipl.png',
             coordinators: [
                 { name: 'Dharun', phone: '+91 9361940800' },
                 { name: 'Abinanthan', phone: '+91 9344236570' },
@@ -522,7 +521,7 @@ filterBtns.forEach(btn => {
                 'Scoring (League): Wins award 3 points, Draws award 1 point, and Losses award 0 points.',
                 'Deadline: Matches must be initiated and completed within the designated tournament windows.'
             ],
-            image: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?q=80&w=2070&auto=format&fit=crop',
+            image: 'efootball.png',
             coordinators: [
                 { name: 'Dinesh Arumugam R', phone: '+91 9445261504' },
                 { name: 'Yogeshwaran PT', phone: '+91 7604848159' },
