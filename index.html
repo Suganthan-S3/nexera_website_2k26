@@ -42,11 +42,10 @@
             </svg>
         </button>
 
-        <div id="menu-popup" class="glass-panel absolute left-0 top-14 w-48 rounded-xl p-2 flex flex-col space-y-1 opacity-0 pointer-events-none transition-all duration-300 transform scale-90 origin-top-left">
-            <a href="#about" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">About</a>
+<div id="menu-popup" class="bg-black/40 backdrop-blur-xl absolute left-0 top-14 w-48 rounded-xl p-2 flex flex-col space-y-1 opacity-0 pointer-events-none transition-all duration-300 transform scale-90 origin-top-left border border-blue-500/30">            <a href="#about" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">About</a>
             <a href="#events" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Events</a>
             <a href="#timeline" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Timeline</a>
-            <a href="#sponsors" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Sponsors</a>
+            <!-- <a href="#sponsors" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Sponsors</a> -->
             <a href="#contact" class="interactable nav-link block px-4 py-3 rounded-lg hover:bg-blue-600/20 hover:text-white text-gray-300 text-sm font-semibold transition-all">Contact</a>
         </div>
     </nav>
@@ -56,30 +55,54 @@
         </div>
         
     </div>         -->
-    <header id="home"> 
-        <div id="header-content" class="text-center z-10 flex flex-col items-center">
-            <!-- <div class="flex justify-center items-center gap-6 mb-4">
-                <img src="cit_logo.png" alt="CIT" class="h-10 w-auto ">
-            </div> -->
-    <div class="anim-text-slide">
-                <h2 class="text-xs md:text-sm font-bold tracking-[0.2em] text-blue-400 uppercase mb-2 tech-font">
-                    Coimbatore Institute of Technology
-                </h2>
-                <h3 class="text-sm md:text-base font-semibold tracking-wide text-gray-400 uppercase mb-6">
-                    Department of Electronics & Communication Engineering
-                </h3>
-            </div>
-            <h1 class="anim-title text-6xl md:text-8xl lg:text-9xl font-black orbitron tracking-tighter crisp-title mb-6">
-                NEXERA
+   <div id="flash"></div>
+
+    <section id="intro-stage" class="fixed inset-0 flex flex-col items-center justify-center text-center p-6 z-[100] pointer-events-none">
+        <div class="space-y-8 md:space-y-12">
+            <h2 id="line1" class="cascade-item text-blue-400 tracking-[0.3em] md:tracking-[0.5em] uppercase text-[10px] md:text-sm font-bold">
+                Coimbatore Institute of Technology
+            </h2>
+            <div id="line-sep" class="cascade-item h-[1px] w-16 md:w-24 bg-white/30 mx-auto"></div>
+            <h1 id="line2" class="cascade-item text-lg md:text-4xl font-light tracking-widest leading-snug max-w-4xl text-white orbitron px-4">
+                DEPARTMENT OF ELECTRONICS AND <br class="hidden md:block"> COMMUNICATION ENGINEERING
             </h1>
-            <div class="anim-btn flex flex-col items-center space-y-20">
-                <a href="#events" class="interactable group relative px-8 py-3 rounded-full bg-transparent border border-blue-400 text-blue-400 font-semibold overflow-hidden transition-all hover:text-white mt-4 hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
-                    <div class="absolute inset-0 w-0 bg-blue-600 transition-all duration-[250ms] ease-out group-hover:w-full opacity-90"></div>
-                    <span class="relative z-10 flex items-center gap-2">Explore Events</span>
-                </a>
+            <p id="line3" class="cascade-item text-white tracking-[0.5em] md:tracking-[1em] uppercase text-[9px] md:text-xs italic">
+                Presents
+            </p>
+        </div>
+    </section>
+
+    <header id="home" class="relative min-h-screen flex items-center justify-center">
+    <div class="hud-grid"></div>
+    <div id="timer-wrapper" class="timer-fixed-pos">
+        <div id="main-timer" class="flex flex-row items-center gap-3 md:gap-5">
+            <div class="text-center">
+                <div id="days" class="text-lg md:text-2xl font-black text-white orbitron">00</div>
+                <div class="text-[7px] md:text-[9px] uppercase text-blue-400 tech-font">Days</div>
+            </div>
+            <div class="text-center">
+                <div id="hours" class="text-lg md:text-2xl font-black text-white orbitron">00</div>
+                <div class="text-[7px] md:text-[9px] uppercase text-blue-400 tech-font">Hours</div>
+            </div>
+            <div class="text-center">
+                <div id="minutes" class="text-lg md:text-2xl font-black text-white orbitron">00</div>
+                <div class="text-[7px] md:text-[9px] uppercase text-blue-400 tech-font">Mins</div>
+            </div>
+            <div class="text-center">
+                <div id="seconds" class="text-lg md:text-2xl font-black text-white orbitron">00</div>
+                <div class="text-[7px] md:text-[9px] uppercase text-blue-400 tech-font">Secs</div>
             </div>
         </div>
-    </header>
+        </div>
+    <div id="header-content" class="text-center z-10 flex flex-col items-center w-full">
+        <h1 class="reveal-title text-5xl md:text-8xl lg:text-9xl font-black orbitron tracking-tighter crisp-title mb-6" data-value="NEXERA">
+            
+        </h1>
+
+        
+    
+    </div>
+</header>
 
     <main class="relative z-20">
         
