@@ -166,6 +166,8 @@ filterBtns.forEach(btn => {
             prizePool: '₹30K+',
             entryFee: '₹200 / Team',
             teamSize: '2-4 Members',
+            rulebook: 'Technova.pdf',
+            deadline:'18 Jan 2026',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfV1zlCc77pX2wi7KGaO61vqSTyNuE3dW0cRnNe6rXel7Z2XA/viewform?usp=header',
             description: 'The Innovation Sprint is an elite three-stage challenge designed to catalyze creative problem-solving and rapid technical development. Participants must progress from conceptual abstracts to online architectural presentations, culminating in a physical prototype demonstration at the CIT campus. This flagship event evaluates originality, technical feasibility, and the ability to bridge the gap between ideation and working solutions.',
             rules: [
@@ -669,10 +671,13 @@ eventCards.forEach(card => {
                 rulebookLink.href = data.rulebook;
                 
                 // Change text dynamically
-                rulebookText.textContent = (eventName === 'Paper Presentation') 
-                    ? 'Download Paper Template' 
-                    : 'Download Official Rulebook';
-
+                if (eventName === 'Paper Presentation') {
+                    rulebookText.textContent = 'Download Paper Template';
+                } else if (eventName === "TechNova'26") { 
+                    rulebookText.textContent = 'Download Brochure';
+                } else {
+                    rulebookText.textContent = 'Download Official Rulebook';
+                }
                 // Handle Icons
                 const icon = rulebookLink.querySelector('i');
                 if (data.rulebook.endsWith('.pptx') || data.rulebook.endsWith('.ppt')) {
@@ -730,7 +735,18 @@ eventCards.forEach(card => {
                 // Restore standard rules behavior
                 rulesToggleBtn.style.display = 'flex';
                 rulesContent.style.maxHeight = '0px';
-                
+                // Inside the 'else' block for standard rules behavior (around line 475)
+
+                const deadlineContainer = document.getElementById('deadline-container');
+                const modalDeadline = document.getElementById('modal-deadline');
+
+                if (data.deadline) {
+                    deadlineContainer.classList.remove('hidden');
+                    modalDeadline.textContent = data.deadline;
+                } else {
+                    deadlineContainer.classList.add('hidden');
+                }
+
                 document.getElementById('modal-prize-pool').textContent = data.prizePool || 'TBA';
                 document.getElementById('modal-team-size').textContent = data.teamSize || 'TBA';
                 document.getElementById('modal-entry-fee').textContent = data.entryFee || 'Free';
@@ -878,8 +894,8 @@ verifyModal.addEventListener('click', (e) => {
     // Reveal Animation
     // --- Enhanced Reveal Observer ---
 const observerOptions = {
-    threshold: 0.15, // Trigger when 15% of the section is visible
-    rootMargin: "0px 0px -50px 0px" // Trigger slightly before it hits the viewport
+    threshold: 0.1, // Trigger when 15% of the section is visible
+    rootMargin: "0px 0px 10px 0px" // Trigger slightly before it hits the viewport
 };
 
 const observer = new IntersectionObserver((entries) => { 
