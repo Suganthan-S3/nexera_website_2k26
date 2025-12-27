@@ -165,7 +165,7 @@ filterBtns.forEach(btn => {
             // badge: 'FLAGSHIP',
             prizePool: '₹30K+',
             entryFee: '₹200 / Team',
-            teamSize: '2-4 Members',
+            teamSize: '2-5 Members',
             rulebook: 'Technova.pdf',
             deadline:'18 Jan 2026',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfV1zlCc77pX2wi7KGaO61vqSTyNuE3dW0cRnNe6rXel7Z2XA/viewform?usp=header',
@@ -181,7 +181,7 @@ filterBtns.forEach(btn => {
             image: 'hackathon.jpeg',
             coordinators: [
                 { name: 'AJAY B', phone: '+91 9597041310' },
-                { name: 'DAKSHINESGWAR SD', phone: '+91 97917 34682' },
+                { name: 'DAKSHINESHWAR SD', phone: '+91 97917 34682' },
                 { name: 'SRIYAA GB', phone: '+91 81222 64800' }
             ]
         },
@@ -971,5 +971,6 @@ const initTimeline = () => {
 // Call the function inside your existing DOMContentLoaded
 initTimeline();
 });
+
 
 
