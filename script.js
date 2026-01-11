@@ -165,23 +165,23 @@ filterBtns.forEach(btn => {
             // badge: 'FLAGSHIP',
             prizePool: '₹30K+',
             entryFee: '₹200 / Team',
-            teamSize: '2-5 Members',
-            rulebook: 'Technova.pdf',
-            deadline:'18 Jan 2026',
+            teamSize: '1-5 Members',
+            rulebook: 'Technova_26.pdf',
+            deadline:'12 Feb 2026',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfV1zlCc77pX2wi7KGaO61vqSTyNuE3dW0cRnNe6rXel7Z2XA/viewform?usp=header',
-            description: 'The Innovation Sprint is an elite three-stage challenge designed to catalyze creative problem-solving and rapid technical development. Participants must progress from conceptual abstracts to online architectural presentations, culminating in a physical prototype demonstration at the CIT campus. This flagship event evaluates originality, technical feasibility, and the ability to bridge the gap between ideation and working solutions.',
+            description: 'TECHNOVA provides a platform for students to innovate, collaborate, and develop real-world engineering solutions across emerging technologies like IoT, 5G, Robotics, and Green Tech.',            
             rules: [
-                'Round 1 (Abstract): Teams must submit a single PDF outlining the problem statement, solution, and impact.',
-                'Round 2 (Presentation): Shortlisted teams will be invited to a digital defense of their technical architecture.',
-                'Round 3 (Prototype): The grand finale requires a live working demo or physical prototype on the CIT campus.',
-                'Registration Phase 1: Initial registration covers both the Abstract submission rounds.',
-                'Registration Phase 2: A secondary registration protocol is required only for teams advancing to the Online Presentation stage.',
-                'Team Dynamics: Each squad must consist of 2–4 members; cross-disciplinary collaboration is encouraged.'
+                'Team Composition: 1 to 5 members per team from any stream of a university/college.',
+                'Inter-College Teams: A team can consist of members from different colleges.',
+                'Registration Fee: ₹200 for Round 1 Registration (Abstract Submission); shortlisted teams need to pay ₹300 during Round 2 Registration.',
+                'Timeline: Registration deadline is 12th FEB 2026; Grand Finale on 28th FEB 2026.',
+                'Themes: Smart Automation, Healthtech, Agriculture, IoT, 5G, Robotics, Smart Vehicles, and more.',
+                'Certificates: Participation certificates will be provided to all registered participants.'              
             ],
             image: 'hackathon.jpeg',
             coordinators: [
                 { name: 'AJAY B', phone: '+91 9597041310' },
-                { name: 'DAKSHINESHWAR SD', phone: '+91 97917 34682' },
+                { name: 'DAKSHINESHWAR S D', phone: '+91 97917 34682' },
                 { name: 'SRIYAA GB', phone: '+91 81222 64800' }
             ]
         },
@@ -211,8 +211,8 @@ filterBtns.forEach(btn => {
         },
         'Maze Drift': {
             title: 'Maze Drift',
-            subtitle: 'ROBOVERSE SERIES',
-            badge: 'ROBOTICS',
+            // subtitle: 'ROBOVERSE SERIES',
+            // badge: 'ROBOTICS',
             prizePool: '₹9K+',
             entryFee: '₹500 / Team',
             teamSize: 'Up to 5 Members',
@@ -971,6 +971,5 @@ const initTimeline = () => {
 // Call the function inside your existing DOMContentLoaded
 initTimeline();
 });
-
 
 
