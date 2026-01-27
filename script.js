@@ -165,13 +165,13 @@ filterBtns.forEach(btn => {
             // badge: 'FLAGSHIP',
             prizePool: '₹30K+',
             entryFee: '₹200 / Team',
-            teamSize: '1-5 Members',
+            teamSize: '2-5 Members',
             rulebook: 'Technova_26.pdf',
             deadline:'12 Feb 2026',
             regLink: 'https://docs.google.com/forms/d/e/1FAIpQLSfV1zlCc77pX2wi7KGaO61vqSTyNuE3dW0cRnNe6rXel7Z2XA/viewform?usp=header',
             description: 'TECHNOVA provides a platform for students to innovate, collaborate, and develop real-world engineering solutions across emerging technologies like IoT, 5G, Robotics, and Green Tech.',            
             rules: [
-                'Team Composition: 1 to 5 members per team from any stream of a university/college.',
+                'Team Composition: 2 to 5 members per team from any stream of a university/college.',
                 'Inter-College Teams: A team can consist of members from different colleges.',
                 'Registration Fee: ₹200 for Round 1 Registration (Abstract Submission); shortlisted teams need to pay ₹300 during Round 2 Registration.',
                 'Timeline: Registration deadline is 12th FEB 2026; Grand Finale on 28th FEB 2026.',
@@ -971,5 +971,6 @@ const initTimeline = () => {
 // Call the function inside your existing DOMContentLoaded
 initTimeline();
 });
+
 
 
