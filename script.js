@@ -514,7 +514,7 @@ filterBtns.forEach(btn => {
             title: 'Free Fire',
             // subtitle: 'BATTLE ROYALE TO CLASH SQUAD',
             // badge: 'ESPORTS',
-            prizePool: '₹1,500+',
+            prizePool: '₹750+',
             teamSize: 'Squad',
             entryFee: '₹50 / team',
             regLink:'https://docs.google.com/forms/d/e/1FAIpQLSdZbqsc7fBA7kPmkOYzgpCRUSuXiJfL4AfyGJUXBX0e56ozzA/viewform?usp=header',
@@ -538,7 +538,7 @@ filterBtns.forEach(btn => {
             title: 'E-Football',
             // subtitle: 'VIRTUAL PITCH GLORY',
             // badge: 'ESPORTS',
-            prizePool: '₹1,500+',
+            prizePool: '₹750+',
             entryFee: '₹50 / Participant',
             teamSize: 'Individual',
             regLink:'https://docs.google.com/forms/d/e/1FAIpQLScZit1f-04dstFeMpKeRN7dD6mEE0X_urssoB7K5GeQ9OkuZA/viewform?usp=header',
@@ -971,6 +971,7 @@ const initTimeline = () => {
 // Call the function inside your existing DOMContentLoaded
 initTimeline();
 });
+
 
 
 
